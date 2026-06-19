@@ -5,7 +5,7 @@
       "default": true
     }
   ],
-  "name": "custom-related-list",
+  "name": "lwc-related-list",
   "namespace": "",
   "sfdcLoginUrl": "https://login.salesforce.com",
   "sourceApiVersion": "66.0"
