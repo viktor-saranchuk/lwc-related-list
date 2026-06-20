@@ -1,4 +1,40 @@
 <template>
-    <c-custom-related-list-header></c-custom-related-list-header>
-    <c-custom-related-list-body></c-custom-related-list-body>
+    <div class="slds-box slds-p-around_none">
+        <template lwc:if={formFactor.isLarge}>
+            <template lwc:if={viewMode.isCompact}>
+                <c-custom-related-list-header mode={mode} type={type}>
+                    <lightning-icon icon-name={iconName} size="small" slot="icon"></lightning-icon>
+                    <h2 slot="title" class="slds-card__header-title compact-title">
+                        <a href={url} class="slds-text-color_default">
+                            <span>{compactTitle}</span>
+                        </a>
+                    </h2>
+                    <div slot="controls" class="slds-grid slds-gutters_xx-small">
+                        <lightning-button-menu alternative-text="List View Controls" variant="border-filled" icon-name="utility:settings" menu-alignment="right" tooltip="List View Controls" class="slds-col">
+                            <lightning-menu-item value="ResetColumnWidths" label="Reset Column Widths" disabled></lightning-menu-item>
+                        </lightning-button-menu>
+                        <div class="slds-col">
+                            <div class="button-icon-wrapper">
+                                <lightning-button-icon icon-name="utility:refresh" alternative-text="Refresh" title="Refresh" tooltip="Refresh"></lightning-button-icon>
+                            </div>
+                        </div>
+                    </div>
+                    <template lwc:if={showListViewActionBar}>
+                        
+                    </template>
+                </c-custom-related-list-header>
+            </template>
+            <template lwc:if={viewMode.isFull}>
+                LARGE FULL
+            </template>
+        </template>
+        <template lwc:else>
+            <template lwc:if={viewMode.isCompact}>
+                MOBILE COMPACT
+            </template>
+            <template lwc:if={viewMode.isFull}>
+                MOBILE FULL
+            </template>
+        </template>
+    </div>
 </template>
