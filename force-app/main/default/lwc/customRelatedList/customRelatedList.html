@@ -1,7 +1,7 @@
 <template>
     <div class="slds-tabs_card slds-box slds-p-around_none">
         <template lwc:if={formFactor.isLarge}>
-            <div class="slds-border_bottom">
+            <div>
                 <c-custom-related-list-header mode={mode} type={type}>
                     <template lwc:if={viewMode.isCompact}>
                         <lightning-icon icon-name={iconName} size="small" slot="icon"></lightning-icon>
@@ -79,11 +79,8 @@
                     </div>
                 </c-custom-related-list-header>
             </div>
-            <div>
-                <c-custom-related-list-body>
-
-                </c-custom-related-list-body>
-            </div>
+            <c-custom-related-list-body mode={mode} type={type} columns={columns} data={data}>
+            </c-custom-related-list-body>
         </template>
         <template lwc:else>
             <template lwc:if={viewMode.isCompact}>

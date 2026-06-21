@@ -55,6 +55,7 @@ export default class CustomRelatedList extends LightningElement {
     _mode;
     _type;
     _data;
+    _columns;
     _breadcrumbs;
     _numberOfRecordsToDisplay;
     _showListViewActionBar;
@@ -98,6 +99,16 @@ export default class CustomRelatedList extends LightningElement {
     set data(value) {
         if (Array.isArray(value)) {
             this._data = value;
+        }
+    }
+
+    @api
+    get columns() {
+        return this._columns;
+    }
+    set columns(value) {
+        if (Array.isArray(value)) {
+            this._columns = value;
         }
     }
 

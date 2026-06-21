@@ -13,8 +13,10 @@ const TYPE = {
 }
 
 export default class CustomRelatedListBody extends LightningElement {
-   _mode;
+    _mode;
     _type;
+    _data;
+    _columns;
 
     @api
     get mode() {
@@ -33,6 +35,29 @@ export default class CustomRelatedListBody extends LightningElement {
     set type(value) {
         if (value && Object.values(TYPE).includes(value)) {
             this._type = value;
+        }
+    }
+
+    @api
+    get data() {
+        return this._data;
+    }
+    set data(value) {
+        if (Array.isArray(value)) {
+            this._data = value;
+        }
+    }
+
+    @api
+    get columns() {
+        return this._columns?.map((item, index) => ({
+            ...item,
+            key: `item-${index}`
+        }));
+    }
+    set columns(value) {
+        if (Array.isArray(value)) {
+            this._columns = value;
         }
     }
 
@@ -57,5 +82,9 @@ export default class CustomRelatedListBody extends LightningElement {
             isEnhanced: this.type === TYPE.enhanced,
             isTiles: this.type === TYPE.tiles
         }
+    }
+
+    get skeletonLines() {
+        return Array.from({length: (this.viewMode.isCompact ? 6 : 50) - 1}, (_, i) => i + 1);
     }
 }
