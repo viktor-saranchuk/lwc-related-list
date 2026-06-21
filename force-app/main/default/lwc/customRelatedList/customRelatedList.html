@@ -1,52 +1,51 @@
 <template>
     <div class="slds-tabs_card slds-box slds-p-around_none">
         <template lwc:if={formFactor.isLarge}>
-            <template lwc:if={viewMode.isCompact}>
-                <c-custom-related-list-header mode={mode} type={type}>
-                    <lightning-icon icon-name={iconName} size="small" slot="icon"></lightning-icon>
-                    <h2 slot="title" class="slds-card__header-title compact-title">
-                        <a href={url} class="slds-text-color_default">
-                            <span>{compactTitle}</span>
+            <c-custom-related-list-header mode={mode} type={type}>
+                <lightning-icon icon-name={iconName} size="small" slot="icon"></lightning-icon>
+                <h2 slot="title" class="slds-card__header-title">
+                    <template lwc:if={viewMode.isCompact}>
+                        <a href={url} class="slds-text-color_default title-link">
+                            <span>{title}</span>
                         </a>
-                    </h2>
-                    <div slot="controls" class="slds-grid slds-gutters_xx-small">
-                        <lightning-button-menu alternative-text="List View Controls" variant="border-filled" icon-name="utility:settings" menu-alignment="right" tooltip="List View Controls" class="slds-col">
-                            <lightning-menu-item value="ResetColumnWidths" label="Reset Column Widths" disabled></lightning-menu-item>
-                        </lightning-button-menu>
-                        <div class="slds-col">
-                            <div class="button-icon-wrapper">
-                                <lightning-button-icon icon-name="utility:refresh" alternative-text="Refresh" title="Refresh" tooltip="Refresh"></lightning-button-icon>
-                            </div>
+                    </template>
+                    <template lwc:if={viewMode.isFull}>
+                        <span>{title}</span>
+                    </template>
+                </h2>
+                <span slot="info" class="slds-text-body--small">{info}</span>
+                <div slot="controls" class="slds-grid slds-gutters_xx-small">
+                    <lightning-button-menu alternative-text="List View Controls" variant="border-filled" icon-name="utility:settings" menu-alignment="right" tooltip="List View Controls" class="slds-col">
+                        <lightning-menu-item value="ResetColumnWidths" label="Reset Column Widths" disabled></lightning-menu-item>
+                    </lightning-button-menu>
+                    <div class="slds-col">
+                        <div class="button-icon-wrapper">
+                            <lightning-button-icon icon-name="utility:refresh" alternative-text="Refresh" title="Refresh" tooltip="Refresh"></lightning-button-icon>
                         </div>
                     </div>
-                    <div slot="actions">
-                        <template lwc:if={showListViewActionBar}>
-                            <div class="button-icon-wrapper">
-                                <lightning-button-group>
-                                    <template for:each={listViewActionButtons} for:item="action">
-                                        <lightning-button key={action.value} label={action.label}></lightning-button>
+                </div>
+                <div slot="actions">
+                    <template lwc:if={showListViewActionBar}>
+                        <div class="button-icon-wrapper">
+                            <lightning-button-group>
+                                <template for:each={listViewActionButtons} for:item="action">
+                                    <lightning-button key={action.value} label={action.label}></lightning-button>
+                                </template>
+                                <template lwc:if={listViewActionMenuItems}>
+                                    <template lwc:if={listViewActionMenuItems.length}>
+                                        <lightning-button-menu menu-alignment="right">
+                                            <template for:each={listViewActionMenuItems} for:item="action">
+                                                <lightning-menu-item key={action.value} label={action.label} value={action.value}></lightning-menu-item>
+                                            </template>
+                                        </lightning-button-menu>
                                     </template>
-                                    <template lwc:if={listViewActionMenuItems}>
-                                        <template lwc:if={listViewActionMenuItems.length}>
-                                            <lightning-button-menu menu-alignment="right">
-                                                <template for:each={listViewActionMenuItems} for:item="action">
-                                                    <lightning-menu-item key={action.value} label={action.label} value={action.value}></lightning-menu-item>
-                                                </template>
-                                            </lightning-button-menu>
-                                        </template>
-                                    </template>
-                                </lightning-button-group>
-                            </div>
-                        </template>
-                    </div>
-                </c-custom-related-list-header>
-                
-            </template>
-            <template lwc:if={viewMode.isFull}>
-                <c-custom-related-list-header mode={mode} type={type}>
-                    
-                </c-custom-related-list-header>
-            </template>
+                                </template>
+                            </lightning-button-group>
+                        </div>
+                    </template>
+                </div>
+            </c-custom-related-list-header>
+            DESKTOP BOTH
         </template>
         <template lwc:else>
             <template lwc:if={viewMode.isCompact}>

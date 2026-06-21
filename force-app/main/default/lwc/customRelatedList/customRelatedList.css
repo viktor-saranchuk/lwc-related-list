@@ -2,11 +2,11 @@ h2.slds-card__header-title {
     width: max-content;
 }
 
-.compact-title {
+.title-link {
     cursor: pointer;
 }
 
-.compact-title:hover, .compact-title:active, .compact-title:focus {
+.title-link:hover, .title-link:active, .title-link:focus {
     color: var(--slds-g-color-palette-blue-30);
     text-decoration: underline;
 }

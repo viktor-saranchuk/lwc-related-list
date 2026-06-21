@@ -85,10 +85,19 @@ export default class CustomRelatedList extends LightningElement {
     }
 
     @api
-    iconName;
+    get title() {
+        if (this.viewMode.isCompact) {
+            return `${this._title}${this.data ? ` (${this.data.length > this.numberOfRecordsToDisplay ? `${this.numberOfRecordsToDisplay}+` : this.data.length})` : ''}`;
+        }
+
+        return this._title
+    }
+    set title(value) {
+        this._title = value;
+    }
 
     @api
-    title;
+    iconName;
 
     @api
     url;
@@ -114,8 +123,12 @@ export default class CustomRelatedList extends LightningElement {
         }
     }
 
-    get compactTitle() {
-        return `${this.title}${this.data ? ` (${this.data.length > this.numberOfRecordsToDisplay ? `${this.numberOfRecordsToDisplay}+` : this.data.length})` : ''}`
+    get info() {
+        if (!this.data) {
+            return null;
+        }
+
+        return `${this.data.length} item${this.data.length !== 1 ? 's' : ''}`
     }
 
     get listViewActionButtons() {

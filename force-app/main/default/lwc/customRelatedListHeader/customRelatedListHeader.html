@@ -1,32 +1,44 @@
 <template>
-    <div class="slds-page-header slds-is-relative">
+    <div class="slds-page-header slds-is-relative slds-p-bottom_x-small no-bottom-border-radius">
         <template lwc:if={formFactor.isLarge}>
-            <template lwc:if={viewMode.isCompact}>
-                <div class="slds-grid slds-wrap slds-gutters_xxxx-small slds-grid_vertical-align-center">
-                    <div class="slds-col slds-media">
-                        <div class="slds-media__figure">
-                            <slot name="icon"></slot>
-                        </div>
-                        <div class="slds-media__body">
-                            <slot name="title"></slot>
-                        </div>
+            <div class="slds-grid slds-wrap slds-gutters_xxxx-small slds-grid_vertical-align-center">
+                <div class="slds-col slds-media">
+                    <div class="slds-media__figure">
+                        <slot name="icon"></slot>
                     </div>
+                    <div class="slds-media__body">
+                        <template lwc:if={viewMode.isFull}>
+                            <slot name="breadcrumbs"></slot>
+                        </template>
+                        <slot name="title"></slot>
+                    </div>
+                </div>
+                <template lwc:if={viewMode.isCompact}>
                     <template lwc:if={listType.isEnhanced}>
                         <div class="slds-col slds-col_bump-left controls">
                             <slot name="controls"></slot>
                         </div>
                     </template>
-                    <div class="slds-col slds-col_bump-left actions">
-                        <slot name="actions"></slot>
-                    </div>
-                </div>
-                <template lwc:if={listType.isEnhanced}>
-                    <slot name="info"></slot>
                 </template>
-            </template>
-            <template lwc:elseif={viewMode.isFull}>
+                <div class="slds-col slds-col_bump-left actions">
+                    <slot name="actions"></slot>
+                </div>
+            </div>
 
-            </template>
+            <div class="slds-grid slds-wrap slds-gutters_xxxx-small slds-m-top_xx-small slds-grid_vertical-align-end">
+                <template lwc:if={listType.isEnhanced}>
+                    <div class="slds-col">
+                        <slot name="info"></slot>
+                    </div>
+                    <template lwc:if={viewMode.isFull}>
+                        <template lwc:if={listType.isEnhanced}>
+                            <div class="slds-col slds-col_bump-left controls">
+                                <slot name="controls"></slot>
+                            </div>
+                        </template>
+                    </template>
+                </template>
+            </div>
         </template>
         <template lwc:else>
             <template lwc:if={viewMode.isFull}>

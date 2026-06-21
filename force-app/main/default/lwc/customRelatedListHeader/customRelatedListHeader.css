@@ -2,6 +2,11 @@
     --slds-c-card-shadow: none;
 }
 
+.slds-page-header.no-bottom-border-radius {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
 .actions, .controls {
     max-width: max-content;
 }
