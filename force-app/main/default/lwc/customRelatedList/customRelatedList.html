@@ -1,51 +1,89 @@
 <template>
     <div class="slds-tabs_card slds-box slds-p-around_none">
         <template lwc:if={formFactor.isLarge}>
-            <c-custom-related-list-header mode={mode} type={type}>
-                <lightning-icon icon-name={iconName} size="small" slot="icon"></lightning-icon>
-                <h2 slot="title" class="slds-card__header-title">
+            <div class="slds-border_bottom">
+                <c-custom-related-list-header mode={mode} type={type}>
                     <template lwc:if={viewMode.isCompact}>
-                        <a href={url} class="slds-text-color_default title-link">
-                            <span>{title}</span>
-                        </a>
+                        <lightning-icon icon-name={iconName} size="small" slot="icon"></lightning-icon>
                     </template>
                     <template lwc:if={viewMode.isFull}>
-                        <span>{title}</span>
+                        <lightning-icon icon-name={iconName} size="medium" slot="icon"></lightning-icon>
                     </template>
-                </h2>
-                <span slot="info" class="slds-text-body--small">{info}</span>
-                <div slot="controls" class="slds-grid slds-gutters_xx-small">
-                    <lightning-button-menu alternative-text="List View Controls" variant="border-filled" icon-name="utility:settings" menu-alignment="right" tooltip="List View Controls" class="slds-col">
-                        <lightning-menu-item value="ResetColumnWidths" label="Reset Column Widths" disabled></lightning-menu-item>
-                    </lightning-button-menu>
-                    <div class="slds-col">
-                        <div class="button-icon-wrapper">
-                            <lightning-button-icon icon-name="utility:refresh" alternative-text="Refresh" title="Refresh" tooltip="Refresh"></lightning-button-icon>
+                    {breadcrumbs}
+                    <template lwc:if={breadcrumbs}>
+                        <div slot="breadcrumbs">
+                            <lightning-breadcrumbs>
+                                <template for:each={breadcrumbs} for:item="breadcrumb">
+                                    <lightning-breadcrumb key={breadcrumb.key} label={breadcrumb.label} href={breadcrumb.href}></lightning-breadcrumb>
+                                </template>
+                            </lightning-breadcrumbs>
+                        </div>
+                    </template>
+                    <div slot="title" class="slds-truncate">
+                        <template lwc:if={viewMode.isCompact}>
+                            <h2 class="slds-card__header-title">
+                                <a href={url} class="slds-text-color_default title-link">
+                                    <span>{title}</span>
+                                </a>
+                            </h2>
+                        </template>
+                        <template lwc:if={viewMode.isFull}>
+                            <h1 class="slds-page-header__title">
+                                <span>{title}</span>
+                            </h1>
+                        </template>
+                    </div>
+                    <span slot="info" class="slds-text-body--small">{info}</span>
+                    <div slot="controls" class="slds-grid slds-gutters_xx-small">
+                        <div class="slds-col">
+                            <lightning-button-menu alternative-text={controls.listViewControls.label} variant="border-filled" icon-name={controls.listViewControls.iconName} menu-alignment="right" tooltip={controls.listViewControls.label} onselect={handleControlClick}>
+                                <tempalte lwc:if={viewMode.isFull}>
+                                    <lightning-menu-item value={controls.resetColumnSorting.name} label={controls.resetColumnSorting.label} disabled></lightning-menu-item>
+                                </tempalte>
+                                <lightning-menu-item value={controls.resetColumnWidths.name} label={controls.resetColumnWidths.label} disabled></lightning-menu-item>
+                            </lightning-button-menu>
+                        </div>
+                        <div class="slds-grid slds-col">
+                            <div class="slds-col slds-p-around_none button-icon-wrapper">
+                                <lightning-button-icon icon-name={controls.refresh.iconName} name={controls.refresh.name} alternative-text={controls.refresh.label} title={controls.refresh.label} tooltip={controls.refresh.label} onclick={handleControlClick}></lightning-button-icon>
+                            </div>
+                            <template lwc:if={viewMode.isFull}>
+                                <div class="slds-col slds-p-around_none slds-m-left_xx-small button-icon-wrapper">
+                                    <lightning-button-icon icon-name={controls.columnSort.iconName} name={controls.columnSort.name} alternative-text={controls.columnSort.label} title={controls.columnSort.label} tooltip={controls.columnSort.label} onclick={handleControlClick}></lightning-button-icon>
+                                </div>
+                                <div class="slds-col slds-p-around_none slds-m-left_xx-small button-icon-wrapper">
+                                    <lightning-button-icon icon-name={controls.showQuickFilters.iconName} name={controls.showQuickFilters.name} alternative-text={controls.showQuickFilters.label} title={controls.showQuickFilters.label} tooltip={controls.showQuickFilters.label} onclick={handleControlClick}></lightning-button-icon>
+                                </div>
+                            </template>
                         </div>
                     </div>
-                </div>
-                <div slot="actions">
-                    <template lwc:if={showListViewActionBar}>
-                        <div class="button-icon-wrapper">
-                            <lightning-button-group>
-                                <template for:each={listViewActionButtons} for:item="action">
-                                    <lightning-button key={action.value} label={action.label}></lightning-button>
-                                </template>
-                                <template lwc:if={listViewActionMenuItems}>
-                                    <template lwc:if={listViewActionMenuItems.length}>
-                                        <lightning-button-menu menu-alignment="right">
-                                            <template for:each={listViewActionMenuItems} for:item="action">
-                                                <lightning-menu-item key={action.value} label={action.label} value={action.value}></lightning-menu-item>
-                                            </template>
-                                        </lightning-button-menu>
+                    <div slot="actions">
+                        <template lwc:if={showListViewActionBar}>
+                            <div class="button-icon-wrapper">
+                                <lightning-button-group>
+                                    <template for:each={listViewActionButtons} for:item="action">
+                                        <lightning-button key={action.value} label={action.label} name={action.name} onclick={handleActionClick}></lightning-button>
                                     </template>
-                                </template>
-                            </lightning-button-group>
-                        </div>
-                    </template>
-                </div>
-            </c-custom-related-list-header>
-            DESKTOP BOTH
+                                    <template lwc:if={listViewActionMenuItems}>
+                                        <template lwc:if={listViewActionMenuItems.length}>
+                                            <lightning-button-menu menu-alignment="right" onselect={handleActionClick}>
+                                                <template for:each={listViewActionMenuItems} for:item="action">
+                                                    <lightning-menu-item key={action.name} label={action.label} value={action.name}></lightning-menu-item>
+                                                </template>
+                                            </lightning-button-menu>
+                                        </template>
+                                    </template>
+                                </lightning-button-group>
+                            </div>
+                        </template>
+                    </div>
+                </c-custom-related-list-header>
+            </div>
+            <div>
+                <c-custom-related-list-body>
+
+                </c-custom-related-list-body>
+            </div>
         </template>
         <template lwc:else>
             <template lwc:if={viewMode.isCompact}>

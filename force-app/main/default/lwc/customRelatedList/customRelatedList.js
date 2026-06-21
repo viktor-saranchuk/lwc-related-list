@@ -18,14 +18,48 @@ const TYPE = {
     tiles: 'tiles'
 }
 
+const CONTROLS = {
+    columnSort: {
+        label: 'Column Sort',
+        name: 'columnsort',
+        iconName: 'utility:sort'
+    },
+    listViewControls: {
+        label: 'List View Controls',
+        name: 'listviewcontrols',
+        iconName: 'utility:settings'
+    },
+    refresh: {
+        label: 'Refresh',
+        name: 'refresh',
+        iconName: 'utility:refresh'
+    },
+    resetColumnSorting: {
+        label: 'Reset Column Sorting',
+        name: 'resetcolumnsorting'
+    },
+    resetColumnWidths: {
+        label: 'Reset Column Widths',
+        name: 'resetcolumnwidths'
+    },
+    showQuickFilters: {
+        label: 'Show Quick Filters',
+        name: 'showquickfilters',
+        iconName: 'utility:filterList'
+    }
+}
+
 const DEFAULT_NUMBER_OF_RECORDS_TO_DISPLAY = 10;
 const DEFAULT_NUMBER_OF_ACTION_BUTTONS = 3;
 export default class CustomRelatedList extends LightningElement {
     _mode;
     _type;
     _data;
+    _breadcrumbs;
     _numberOfRecordsToDisplay;
     _showListViewActionBar;
+
+    controls = CONTROLS;
 
     @api
     get mode() {
@@ -62,7 +96,22 @@ export default class CustomRelatedList extends LightningElement {
         return this._data;
     }
     set data(value) {
-        this._data = value;
+        if (Array.isArray(value)) {
+            this._data = value;
+        }
+    }
+
+    @api
+    get breadcrumbs() {
+        return this._breadcrumbs?.map((item, index) => ({
+            ...item,
+            key: `item-${index}`
+        }));
+    }
+    set breadcrumbs(value) {
+        if (Array.isArray(value) && !!value.length) {
+            this._breadcrumbs = value;
+        }
     }
 
     @api
@@ -145,5 +194,13 @@ export default class CustomRelatedList extends LightningElement {
 
     get listViewActionMenuItems() {
         return this.listViewActions?.slice(this.listViewActionButtons?.length);
+    }
+
+    handleActionClick(event) {
+        this.dispatchEvent(new CustomEvent('action', { detail: { name: event.target.name || event.detail.value } }));
+    }
+
+    handleControlClick(event) {
+        console.log(event.target.name || event.detail.value)
     }
 }

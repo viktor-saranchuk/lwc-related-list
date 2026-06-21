@@ -11,6 +11,10 @@
     max-width: max-content;
 }
 
-.slds-grid {
+.vertical-gap {
     gap: var(--slds-g-spacing-2);
+}
+
+.slds-media__body.slds-grid.slds-grid_vertical {
+    line-height: var(--slds-g-font-lineheight-1);
 }

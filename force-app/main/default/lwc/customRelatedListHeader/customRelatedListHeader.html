@@ -1,16 +1,20 @@
 <template>
     <div class="slds-page-header slds-is-relative slds-p-bottom_x-small no-bottom-border-radius">
         <template lwc:if={formFactor.isLarge}>
-            <div class="slds-grid slds-wrap slds-gutters_xxxx-small slds-grid_vertical-align-center">
+            <div class="slds-grid slds-wrap slds-gutters_xxxx-small slds-grid_vertical-align-center vertical-gap">
                 <div class="slds-col slds-media">
                     <div class="slds-media__figure">
                         <slot name="icon"></slot>
                     </div>
-                    <div class="slds-media__body">
+                    <div class="slds-media__body slds-grid slds-grid_vertical">
                         <template lwc:if={viewMode.isFull}>
-                            <slot name="breadcrumbs"></slot>
+                            <div class="slds-col">
+                                <slot name="breadcrumbs"></slot>
+                            </div>
                         </template>
-                        <slot name="title"></slot>
+                        <div class="slds-col">
+                            <slot name="title"></slot>
+                        </div>
                     </div>
                 </div>
                 <template lwc:if={viewMode.isCompact}>
@@ -25,7 +29,7 @@
                 </div>
             </div>
 
-            <div class="slds-grid slds-wrap slds-gutters_xxxx-small slds-m-top_xx-small slds-grid_vertical-align-end">
+            <div class="slds-grid slds-wrap slds-gutters_xxxx-small slds-m-top_xx-small slds-grid_vertical-align-end vertical-gap">
                 <template lwc:if={listType.isEnhanced}>
                     <div class="slds-col">
                         <slot name="info"></slot>

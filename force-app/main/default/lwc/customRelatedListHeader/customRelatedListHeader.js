@@ -18,13 +18,7 @@ export default class CustomRelatedListHeader extends LightningElement {
 
     @api
     get mode() {
-        if (!!this._mode) {
-            return this._mode;
-        } else if (this.currentPageReference?.type === PAGE_TYPE.standardRecordPage) {
-            return VIEW_MODE.compact;
-        } else if (this.currentPageReference?.type === PAGE_TYPE.standardComponent) {
-            return VIEW_MODE.full;
-        }
+        return this._mode || VIEW_MODE.compact;
     }
     set mode(value) {
         if (value && Object.values(VIEW_MODE).includes(value)) {
@@ -34,11 +28,7 @@ export default class CustomRelatedListHeader extends LightningElement {
 
     @api
     get type() {
-        if (!!this._type) {
-            return this._type;
-        }
-
-        return TYPE.basic;
+        return this._type || TYPE.basic;
     }
     set type(value) {
         if (value && Object.values(TYPE).includes(value)) {
