@@ -19,13 +19,32 @@
                             </div>
                         </div>
                     </div>
-                    <template lwc:if={showListViewActionBar}>
-                        
-                    </template>
+                    <div slot="actions">
+                        <template lwc:if={showListViewActionBar}>
+                            <div class="button-icon-wrapper">
+                                <lightning-button-group>
+                                    <template for:each={listViewActionButtons} for:item="action">
+                                        <lightning-button key={action.value} label={action.label}></lightning-button>
+                                    </template>
+                                    <template lwc:if={listViewActionMenuItems}>
+                                        <template lwc:if={listViewActionMenuItems.length}>
+                                            <lightning-button-menu menu-alignment="right">
+                                                <template for:each={listViewActionMenuItems} for:item="action">
+                                                    <lightning-menu-item key={action.value} label={action.label} value={action.value}></lightning-menu-item>
+                                                </template>
+                                            </lightning-button-menu>
+                                        </template>
+                                    </template>
+                                </lightning-button-group>
+                            </div>
+                        </template>
+                    </div>
                 </c-custom-related-list-header>
             </template>
             <template lwc:if={viewMode.isFull}>
-                LARGE FULL
+                <c-custom-related-list-header mode={mode} type={type}>
+                    
+                </c-custom-related-list-header>
             </template>
         </template>
         <template lwc:else>

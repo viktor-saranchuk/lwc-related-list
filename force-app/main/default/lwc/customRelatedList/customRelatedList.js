@@ -19,6 +19,7 @@ const TYPE = {
 }
 
 const DEFAULT_NUMBER_OF_RECORDS_TO_DISPLAY = 10;
+const DEFAULT_NUMBER_OF_ACTION_BUTTONS = 3;
 export default class CustomRelatedList extends LightningElement {
     _mode;
     _type;
@@ -77,10 +78,10 @@ export default class CustomRelatedList extends LightningElement {
 
     @api
     get showListViewActionBar() {
-        return this._showListViewActionBar;
+        return this._showListViewActionBar && Array.isArray(this.listViewActions) && !!this.listViewActions?.length;
     }
     set showListViewActionBar(value) {
-        this._showListViewActionBar = !!value && value !== 'false' && this.listViewActions && Array.isArray(this.listViewActions) && this.listViewActions.length
+        this._showListViewActionBar = !!value && value !== 'false';
     }
 
     @api
@@ -117,11 +118,19 @@ export default class CustomRelatedList extends LightningElement {
         return `${this.title}${this.data ? ` (${this.data.length > this.numberOfRecordsToDisplay ? `${this.numberOfRecordsToDisplay}+` : this.data.length})` : ''}`
     }
 
-    get firtsListViewActions() {
-        return this.listViewActions?.slice(0, 3);
+    get listViewActionButtons() {
+        let numberOfButtons = DEFAULT_NUMBER_OF_ACTION_BUTTONS;
+
+        if (this.viewMode.isCompact) {
+            numberOfButtons = this.formFactor.isLarge ? 3 : 1;
+        } else if (this.viewMode.isFull) {
+            numberOfButtons = this.formFactor.isLarge ? 5 : 3;
+        }
+
+        return this.listViewActions?.slice(0, numberOfButtons);
     }
 
-    get remainingListViewAction() {
-        return this.listViewActions?.slice(this.firtsListViewActions?.length);
+    get listViewActionMenuItems() {
+        return this.listViewActions?.slice(this.listViewActionButtons?.length);
     }
 }

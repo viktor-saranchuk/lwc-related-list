@@ -1,3 +1,7 @@
 .actions, .controls {
     max-width: max-content;
 }
+
+.slds-grid {
+    gap: var(--slds-g-spacing-2);
+}

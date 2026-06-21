@@ -13,5 +13,5 @@ h2.slds-card__header-title {
 
 .button-icon-wrapper {
     background-color: white;
-    border-radius: var(--slds-g-radius-border-3);
+    border-radius: var(--slds-g-radius-border-2);
 }
