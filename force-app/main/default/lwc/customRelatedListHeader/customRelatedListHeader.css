@@ -1,3 +1,7 @@
+:host {
+    --slds-c-card-shadow: none;
+}
+
 .actions, .controls {
     max-width: max-content;
 }

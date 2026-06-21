@@ -1,5 +1,5 @@
 <template>
-    <div class="slds-box slds-p-around_none">
+    <div class="slds-tabs_card slds-box slds-p-around_none">
         <template lwc:if={formFactor.isLarge}>
             <template lwc:if={viewMode.isCompact}>
                 <c-custom-related-list-header mode={mode} type={type}>
@@ -40,6 +40,7 @@
                         </template>
                     </div>
                 </c-custom-related-list-header>
+                
             </template>
             <template lwc:if={viewMode.isFull}>
                 <c-custom-related-list-header mode={mode} type={type}>
