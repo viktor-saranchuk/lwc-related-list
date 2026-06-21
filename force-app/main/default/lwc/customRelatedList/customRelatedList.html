@@ -80,6 +80,9 @@
                 </c-custom-related-list-header>
             </div>
             <c-custom-related-list-body mode={mode} type={type} columns={columns} data={data}>
+                <div slot="datatable">
+                    <lightning-datatable columns={columns} data={data} key-field="Id"></lightning-datatable>
+                </div>
             </c-custom-related-list-body>
         </template>
         <template lwc:else>
