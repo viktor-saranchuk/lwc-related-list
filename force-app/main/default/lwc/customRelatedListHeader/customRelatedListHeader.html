@@ -9,7 +9,12 @@
                     <div class="slds-media__body slds-grid slds-grid_vertical">
                         <template lwc:if={viewMode.isFull}>
                             <div class="slds-col">
-                                <slot name="breadcrumbs"></slot>
+                                <template lwc:if={isDataLoaded}>
+                                    <slot name="breadcrumbs"></slot>
+                                </template>
+                                <template lwc:else>
+                                    <div class="slds-skeleton shimmer"></div>
+                                </template>
                             </div>
                         </template>
                         <div class="slds-col">
@@ -32,7 +37,12 @@
             <div class="slds-grid slds-wrap slds-gutters_xxxx-small slds-m-top_xx-small slds-grid_vertical-align-end vertical-gap">
                 <template lwc:if={listType.isEnhanced}>
                     <div class="slds-col">
-                        <slot name="info"></slot>
+                        <template lwc:if={isDataLoaded}>
+                            <slot name="info"></slot>
+                        </template>
+                        <tempalte lwc:else>
+                            <div class="slds-skeleton shimmer"></div>
+                        </tempalte>
                     </div>
                     <template lwc:if={viewMode.isFull}>
                         <template lwc:if={listType.isEnhanced}>

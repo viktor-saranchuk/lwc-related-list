@@ -3,12 +3,12 @@
     height: inherit;
     overflow: hidden;
 
-    border-bottom-right-radius: 4px;
-    border-bottom-left-radius: 4px;
+    border-radius: var(--slds-g-radius-border-1);
+
+    background-color: var(--slds-g-color-neutral-base-95);
 }
 
 .slds-tabs_card {
-    display: block;
     height: inherit;
 }
 
@@ -29,3 +29,11 @@ h2.slds-card__header-title {
     background-color: white;
     border-radius: var(--slds-g-radius-border-2);
 }
+
+.slds-card__footer.slds-m-top_none {
+    border-top: none;
+}
+
+.body-table-container {
+    background-color: var(--slds-g-color-surface-2);
+ }

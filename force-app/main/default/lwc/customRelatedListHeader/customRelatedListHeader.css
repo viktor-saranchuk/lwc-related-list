@@ -2,6 +2,23 @@
     --slds-c-card-shadow: none;
 }
 
+.shimmer {
+    background: linear-gradient(90deg, #f3f3f3 25%, #dcdcdc 50%, #f3f3f3 75%);
+    background-size: 400% 100%;
+    animation: shimmer 1.2s ease-in-out infinite;
+    border-radius: 4px;
+    width: 30%;
+    height: 1rem;
+    }
+    @keyframes shimmer {
+    0% {
+        background-position: -400px 0;
+    }
+    100% {
+        background-position: 400px 0;
+    }
+}
+
 .slds-page-header.no-bottom-border-radius {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;

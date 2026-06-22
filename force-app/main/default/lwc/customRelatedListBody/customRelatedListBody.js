@@ -15,8 +15,13 @@ const TYPE = {
 export default class CustomRelatedListBody extends LightningElement {
     _mode;
     _type;
-    _data;
     _columns;
+
+    @api
+    isDataLoaded;
+
+    @api
+    hasData;
 
     @api
     get mode() {
@@ -35,16 +40,6 @@ export default class CustomRelatedListBody extends LightningElement {
     set type(value) {
         if (value && Object.values(TYPE).includes(value)) {
             this._type = value;
-        }
-    }
-
-    @api
-    get data() {
-        return this._data;
-    }
-    set data(value) {
-        if (Array.isArray(value)) {
-            this._data = value;
         }
     }
 

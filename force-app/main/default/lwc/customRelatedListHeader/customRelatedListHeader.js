@@ -17,6 +17,9 @@ export default class CustomRelatedListHeader extends LightningElement {
     _type;
 
     @api
+    isDataLoaded;
+
+    @api
     get mode() {
         return this._mode || VIEW_MODE.compact;
     }

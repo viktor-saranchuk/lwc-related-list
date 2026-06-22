@@ -1,8 +1,8 @@
 <template>
-    <div class="slds-tabs_card slds-box slds-p-around_none">
+    <div class="slds-tabs_card slds-grid slds-grid_vertical slds-box slds-p-around_none">
         <template lwc:if={formFactor.isLarge}>
             <div>
-                <c-custom-related-list-header mode={mode} type={type}>
+                <c-custom-related-list-header mode={mode} type={type} is-data-loaded={isDataLoaded}>
                     <template lwc:if={viewMode.isCompact}>
                         <lightning-icon icon-name={iconName} size="small" slot="icon"></lightning-icon>
                     </template>
@@ -22,7 +22,7 @@
                     <div slot="title" class="slds-truncate">
                         <template lwc:if={viewMode.isCompact}>
                             <h2 class="slds-card__header-title">
-                                <a href={url} class="slds-text-color_default title-link">
+                                <a href={viewAllUrl} class="slds-text-color_default title-link">
                                     <span>{title}</span>
                                 </a>
                             </h2>
@@ -38,9 +38,9 @@
                         <div class="slds-col">
                             <lightning-button-menu alternative-text={controls.listViewControls.label} variant="border-filled" icon-name={controls.listViewControls.iconName} menu-alignment="right" tooltip={controls.listViewControls.label} onselect={handleControlClick}>
                                 <tempalte lwc:if={viewMode.isFull}>
-                                    <lightning-menu-item value={controls.resetColumnSorting.name} label={controls.resetColumnSorting.label} disabled></lightning-menu-item>
+                                    <lightning-menu-item value={controls.resetColumnSorting.name} label={controls.resetColumnSorting.label} disabled={isResetColumnSortingDisabled}></lightning-menu-item>
                                 </tempalte>
-                                <lightning-menu-item value={controls.resetColumnWidths.name} label={controls.resetColumnWidths.label} disabled></lightning-menu-item>
+                                <lightning-menu-item value={controls.resetColumnWidths.name} label={controls.resetColumnWidths.label} disabled={isResetColumnWidthsDisabled}></lightning-menu-item>
                             </lightning-button-menu>
                         </div>
                         <div class="slds-grid slds-col">
@@ -79,11 +79,22 @@
                     </div>
                 </c-custom-related-list-header>
             </div>
-            <c-custom-related-list-body mode={mode} type={type} columns={columns} data={data}>
-                <div slot="datatable">
-                    <lightning-datatable columns={columns} data={data} key-field="Id"></lightning-datatable>
-                </div>
-            </c-custom-related-list-body>
+            <div class="slds-col slds-border_top slds-scrollable_y body-table-container">
+                <c-custom-related-list-body mode={mode} type={type} columns={columns} is-data-loaded={isDataLoaded} has-data={hasData}>
+                    <div slot="datatable">
+                        <lightning-datatable columns={columns} data={data} key-field="Id" show-row-number-column hide-checkbox-column={viewMode.isCompact} sortable sorted-by={sortingConfig.fieldNames} sorted-direction={sortingConfig.sortDirections} onresize={handleColumnsResize} onsort={applySorting}></lightning-datatable>
+                    </div>
+                </c-custom-related-list-body>
+            </div>
+            <template lwc:if={viewMode.isCompact}>
+                <template lwc:if={data}>
+                    <template lwc:if={data.length}>
+                        <div class="slds-card__footer slds-m-top_none">
+                            <lightning-formatted-url value={viewAllUrl} label="View All"></lightning-formatted-url>
+                        </div>
+                    </template>
+                </template>
+            </template>
         </template>
         <template lwc:else>
             <template lwc:if={viewMode.isCompact}>

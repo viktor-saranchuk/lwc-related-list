@@ -1,8 +1,8 @@
 <template>
     <template lwc:if={formFactor.isLarge}>
         <template lwc:if={columns}>
-            <template lwc:if={data}>
-                <template lwc:if={data.length}>
+            <template lwc:if={isDataLoaded}>
+                <template lwc:if={hasData}>
                     <slot name="datatable"></slot>
                 </template>
                 <template lwc:else>
@@ -130,7 +130,6 @@
                     <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-max-medium-table_stacked">
                         <thead>
                             <tr class="slds-line-height_reset skeleton-table-header-row">
-                                <th lwc:if={viewMode.isFull} scope="col"></th>
                                 <template for:each={columns} for:item="column">
                                     <th scope="col" key={column.key}>
                                         <div class="slds-truncate" title={column.label}>{column.label}</div>
@@ -141,9 +140,8 @@
                         <tbody class="skeleton-table-body">
                             <template for:each={skeletonLines} for:item="line">
                                 <tr key={line} class="slds-line-height_reset skeleton-table-body-row">
-                                    <td lwc:if={viewMode.isFull}></td>
                                     <template for:each={columns} for:item="column">
-                                        <td data-label={column.label} key={column}>
+                                        <td data-label={column.label} key={column.key}>
                                             <div class="slds-skeleton shimmer" style="width: 70%; height: 1rem;"></div>
                                         </td>
                                     </template>

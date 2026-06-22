@@ -51,6 +51,14 @@ const CONTROLS = {
 
 const DEFAULT_NUMBER_OF_RECORDS_TO_DISPLAY = 10;
 const DEFAULT_NUMBER_OF_ACTION_BUTTONS = 3;
+
+const DEFAULT_SORTING_INFO = {
+    isMultiColumnSort: false,
+    fieldName: 'Id',
+    fieldNames: ['Id'],
+    sortDirection: 'asc',
+    sortDirections: ['asc']
+};
 export default class CustomRelatedList extends LightningElement {
     _mode;
     _type;
@@ -59,8 +67,13 @@ export default class CustomRelatedList extends LightningElement {
     _breadcrumbs;
     _numberOfRecordsToDisplay;
     _showListViewActionBar;
+    _sortingConfig = DEFAULT_SORTING_INFO;
 
     controls = CONTROLS;
+
+    isInitialResize = true;
+    isResetColumnWidthsDisabled = true;
+    isResetColumnSortingDisabled = true;
 
     @api
     get mode() {
@@ -160,7 +173,7 @@ export default class CustomRelatedList extends LightningElement {
     iconName;
 
     @api
-    url;
+    viewAllUrl;
 
     @api
     listViewActions;
@@ -207,11 +220,80 @@ export default class CustomRelatedList extends LightningElement {
         return this.listViewActions?.slice(this.listViewActionButtons?.length);
     }
 
+    get isDataLoaded() {
+        return !!this.data;
+    }
+
+    get hasData() {
+        return !!this.data?.length;
+    }
+
+    get sortingConfig() {
+        return this._sortingConfig || DEFAULT_SORTING_INFO;
+    }
+    set sortingConfig(value) {
+        this.sortData(value);
+        this._sortingConfig = value;
+    }
+
     handleActionClick(event) {
         this.dispatchEvent(new CustomEvent('action', { detail: { name: event.target.name || event.detail.value } }));
     }
 
     handleControlClick(event) {
-        console.log(event.target.name || event.detail.value)
+        if (event.detail.value === CONTROLS.resetColumnWidths.name) {
+            this.isResetColumnWidthsDisabled = true;
+            this.columns = [...this.columns];
+        } else if (event.detail.value === CONTROLS.resetColumnSorting.name) {
+            this.isResetColumnSortingDisabled = true;
+            this.sortingConfig = DEFAULT_SORTING_INFO;
+        }
+    }
+
+    handleColumnsResize(event) {
+        if (this.isInitialResize) {
+            this.isInitialResize = false;
+            return;
+        }
+        this.isResetColumnWidthsDisabled = false;
+    }
+
+    applySorting(event) {
+        this.isResetColumnSortingDisabled = false;
+        this.sortingConfig = event.detail;
+    }
+
+    sortData(sortingConfig) {
+        const clonedData = [...this.data];
+        clonedData.sort(this.sortByMulti(sortingConfig));
+
+        this.data = clonedData;
+    }
+
+    sortByMulti({ fieldNames, sortDirections }) {
+        return (a, b) => {
+            for (let i = 0; i < fieldNames.length; i++) {
+                const field = fieldNames[i];
+                const direction = sortDirections[i] === 'asc' ? 1 : -1;
+
+                let aVal = a[field];
+                let bVal = b[field];
+
+                aVal = aVal ?? '';
+                bVal = bVal ?? '';
+
+                const isNumber =
+                    typeof aVal === 'number' && typeof bVal === 'number';
+
+                const comparison = isNumber
+                    ? aVal - bVal
+                    : String(aVal).localeCompare(String(bVal));
+
+                if (comparison !== 0) {
+                    return comparison * direction;
+                }
+            }
+            return 0;
+        };
     }
 }
