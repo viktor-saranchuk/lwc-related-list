@@ -68,9 +68,11 @@ export default class CustomRelatedList extends LightningElement {
     _numberOfRecordsToDisplay;
     _showListViewActionBar;
     _sortConfig;
+    _lastDataSetAt;
+    _lastDataSetAtCheckedAt;
+    _lastDataSetAtCheckedAtTimoutId;
 
     controls = CONTROLS;
-
     initialColumnWidths;
     isResetColumnWidthsDisabled = true;
     isRefresh = false;
@@ -111,6 +113,7 @@ export default class CustomRelatedList extends LightningElement {
     }
     set data(value) {
         this.isRefresh = false;
+        this.lastDataSetAt = Date.now();
         if (Array.isArray(value)) {
             this._data = JSON.parse(JSON.stringify(value));
         }
@@ -210,7 +213,15 @@ export default class CustomRelatedList extends LightningElement {
             return null;
         }
 
-        return `${this.data.length} item${this.data.length !== 1 ? 's' : ''}`
+        return [
+            `${this.data.length} item${this.data.length !== 1 ? 's' : ''}`,
+            `${
+                !!this.sortConfig.fieldNames?.length
+                ? `Sorted by ${this.columns.filter(({fieldName}) => this.sortConfig.fieldNames.includes(fieldName)).map(({label}) => label).join(', ')}`
+                : ''
+            }`,
+            this.dataUpdatedAgo
+        ].filter(Boolean).join(' • ')
     }
 
     get listViewActionButtons() {
@@ -239,6 +250,73 @@ export default class CustomRelatedList extends LightningElement {
 
     get isResetColumnSortingDisabled() {
         return this.sortConfig === DEFAULT_SORT_CONFIG;
+    }
+
+    get lastDataSetAt() {
+        return this._lastDataSetAt || Date.now();
+    }
+    set lastDataSetAt(value) {
+        if (Number.isInteger(value)) {
+            this._lastDataSetAt = value;
+            this.setLastDataSetAtCheckedAt();
+        }
+    }
+
+    get lastDataSetAtCheckedAt() {
+        return this._lastDataSetAtCheckedAt >= this.lastDataSetAt  ? this._lastDataSetAtCheckedAt : this.lastDataSetAt;
+    }
+    set lastDataSetAtCheckedAt(value) {
+        if (Number.isInteger(value)) {
+            this._lastDataSetAtCheckedAt = value;
+        }
+    }
+
+    get dataUpdatedAgo() {
+        const diffMs = this.lastDataSetAtCheckedAt - this.lastDataSetAt;
+        const diffMinutes = Math.floor(diffMs / (1000 * 60));
+        const diffHours = Math.floor(diffMinutes / 60);
+
+        let updatedAgo;
+
+        if (diffHours >= 24) {
+            updatedAgo = `Long time ago`;
+        }  else if (diffHours > 1) {
+            updatedAgo = `Updated ${diffHours} hours ago`;
+        } else if (diffHours == 1) {
+            updatedAgo = `Updated an hour ago`;
+        } else if (diffMinutes > 1) {
+            updatedAgo = `Updated ${diffMinutes} minutes ago`;
+        } else if (diffMinutes == 1) {
+            updatedAgo = `Updated a minute ago`;
+        } else {
+            updatedAgo = `Updated a few seconds ago`;
+        }
+
+        return updatedAgo;
+    }
+
+    setLastDataSetAtCheckedAt = () => {
+        this.lastDataSetAtCheckedAt = Date.now();
+
+        if (this._lastDataSetAtCheckedAtTimoutId) {
+            clearTimeout(this._lastDataSetAtCheckedAtTimoutId);
+        }
+
+        const diffMs = this.lastDataSetAtCheckedAt - this.lastDataSetAt;
+        const diffMinutes = Math.floor(diffMs / (1000 * 60));
+        const diffHours = Math.floor(diffMinutes / 60);
+
+        let delay;
+
+        if (diffHours < 1) {
+            delay = 1000 * 60;
+        } else if (diffHours < 24) {
+            delay = 1000 * 60 * 60;
+        } else {
+            return;
+        }
+
+        this._lastDataSetAtCheckedAtTimoutId = setTimeout(this.setLastDataSetAtCheckedAt, delay);
     }
 
     handleActionClick(event) {
@@ -271,4 +349,9 @@ export default class CustomRelatedList extends LightningElement {
         this.sortConfig = event.detail;
     }
 
+    disconnectedCallback() {
+        if (this._lastDataSetAtCheckedAtTimoutId) {
+            clearTimeout(this._lastDataSetAtCheckedAtTimoutId);
+        }
+    }
 }

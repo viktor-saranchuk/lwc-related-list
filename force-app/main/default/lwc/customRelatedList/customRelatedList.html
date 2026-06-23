@@ -37,9 +37,9 @@
                     <div slot="controls" class="slds-grid slds-gutters_xx-small">
                         <div class="slds-col">
                             <lightning-button-menu alternative-text={controls.listViewControls.label} variant="border-filled" icon-name={controls.listViewControls.iconName} menu-alignment="right" tooltip={controls.listViewControls.label} onselect={handleControlClick}>
-                                <tempalte lwc:if={viewMode.isFull}>
+                                <template lwc:if={viewMode.isFull}>
                                     <lightning-menu-item value={controls.resetColumnSorting.name} label={controls.resetColumnSorting.label} disabled={isResetColumnSortingDisabled}></lightning-menu-item>
-                                </tempalte>
+                                </template>
                                 <lightning-menu-item value={controls.resetColumnWidths.name} label={controls.resetColumnWidths.label} disabled={isResetColumnWidthsDisabled}></lightning-menu-item>
                             </lightning-button-menu>
                         </div>
@@ -62,7 +62,7 @@
                             <div class="button-icon-wrapper">
                                 <lightning-button-group>
                                     <template for:each={listViewActionButtons} for:item="action">
-                                        <lightning-button key={action.value} label={action.label} name={action.name} onclick={handleActionClick}></lightning-button>
+                                        <lightning-button key={action.name} label={action.label} name={action.name} onclick={handleActionClick}></lightning-button>
                                     </template>
                                     <template lwc:if={listViewActionMenuItems}>
                                         <template lwc:if={listViewActionMenuItems.length}>
