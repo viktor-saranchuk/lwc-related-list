@@ -2,6 +2,25 @@ import { LightningElement, api, wire } from 'lwc';
 import { CurrentPageReference } from "lightning/navigation";
 import FORM_FACTOR from "@salesforce/client/formFactor";
 
+const LABELS = {
+    apply: 'Apply',
+    cancel: 'Cancel',
+    clearAllFilters: 'Clear All Filters',
+    close: 'Close',
+    columnSort: 'Column Sort',
+    filters: 'Filters',
+    listViewControls: 'List View Controls',
+    loading: 'Loading',
+    quickFilters: 'Quick Filters',
+    quickFiltersHelpText: 'Quick filters can\'t be saved and apply only to your current session. Quick filters that you apply don\'t affect anyone else\'s view',
+    refresh: 'Refresh',
+    resetColumnSorting: 'Reset Column Sorting',
+    resetColumnWidths: 'Reset Column Widths',
+    showQuickFilters: 'Show Quick Filters',
+    updatedAFewSecondsAgo: 'Updated a few seconds ago',
+    viewAll: 'View All'
+}
+
 const PAGE_TYPE = {
     standardRecordPage: 'standard__recordPage',
     standardComponent: 'standard__component'
@@ -20,30 +39,30 @@ const TYPE = {
 
 const CONTROLS = {
     columnSort: {
-        label: 'Column Sort',
+        label: LABELS.columnSort,
         name: 'columnsort',
         iconName: 'utility:sort'
     },
     listViewControls: {
-        label: 'List View Controls',
+        label: LABELS.listViewControls,
         name: 'listviewcontrols',
         iconName: 'utility:settings'
     },
     refresh: {
-        label: 'Refresh',
+        label: LABELS.refresh,
         name: 'refresh',
         iconName: 'utility:refresh'
     },
     resetColumnSorting: {
-        label: 'Reset Column Sorting',
+        label: LABELS.resetColumnSorting,
         name: 'resetcolumnsorting'
     },
     resetColumnWidths: {
-        label: 'Reset Column Widths',
+        label: LABELS.resetColumnWidths,
         name: 'resetcolumnwidths'
     },
     showQuickFilters: {
-        label: 'Show Quick Filters',
+        label: LABELS.showQuickFilters,
         name: 'showquickfilters',
         iconName: 'utility:filterList'
     }
@@ -67,19 +86,22 @@ export default class CustomRelatedList extends LightningElement {
     _mode;
     _type;
     _data;
+    _hasMoreData;
     _columns;
     _breadcrumbs;
-    _numberOfRecordsTotal;
     _showListViewActionBar;
     _sortConfig;
     _lastDataSetAt;
     _lastDataSetAtCheckedAt;
     _lastDataSetAtCheckedAtTimoutId;
 
+    labels = LABELS;
     controls = CONTROLS;
     initialColumnWidths;
     isResetColumnWidthsDisabled = true;
     isRefresh = false;
+    showQuickFilters = false;
+    focusQuickFiltersClose = false;
 
     @api
     get mode() {
@@ -147,13 +169,11 @@ export default class CustomRelatedList extends LightningElement {
     }
 
     @api
-    get numberOfRecordsTotal() {
-        return this._numberOfRecordsTotal || 0;
+    get hasMoreData() {
+        return !!(this.data && this._hasMoreData);
     }
-    set numberOfRecordsTotal(value) {
-        if (Number.isInteger(value) && value >= 0) {
-            this._numberOfRecordsTotal = value;
-        }
+    set hasMoreData(value) {
+        this._hasMoreData = value;
     }
 
     @api
@@ -261,10 +281,6 @@ export default class CustomRelatedList extends LightningElement {
         return !!this.data?.length;
     }
 
-    get hasMoreData() {
-        return this.data ? this.numberOfRecordsTotal > this.data?.length : false;
-    }
-
     get isResetColumnSortingDisabled() {
         return this.sortConfig === DEFAULT_SORT_CONFIG;
     }
@@ -296,7 +312,7 @@ export default class CustomRelatedList extends LightningElement {
         let updatedAgo;
 
         if (diffHours >= 24) {
-            updatedAgo = `Long time ago`;
+            updatedAgo = `Updated long time ago`;
         }  else if (diffHours > 1) {
             updatedAgo = `Updated ${diffHours} hours ago`;
         } else if (diffHours == 1) {
@@ -350,6 +366,9 @@ export default class CustomRelatedList extends LightningElement {
         } else if (event.target.name === CONTROLS.refresh.name) {
             this.isRefresh = true;
             this.dispatchEvent(new CustomEvent('refresh'));
+        } else if (event.target.name === CONTROLS.showQuickFilters.name) {
+            this.showQuickFilters = !this.showQuickFilters;
+            this.focusQuickFiltersClose = !this.focusQuickFiltersClose;
         }
     }
 
@@ -364,6 +383,30 @@ export default class CustomRelatedList extends LightningElement {
     handleColumnsSort(event) {
         this.dispatchEvent(new CustomEvent('sort', {detail: event.detail}))
         this.sortConfig = event.detail;
+    }
+
+    handleCloseFilters() {
+        this.showQuickFilters = !this.showQuickFilters;
+        this.template.querySelector(`lightning-button-icon-stateful[data-name="${CONTROLS.showQuickFilters.name}"]`)?.focus();
+    }
+
+    handleClearFilters() {
+        console.warn('NOT IMPLEMENTED');
+    }
+
+    handleApplyFilters() {
+        console.warn('NOT IMPLEMENTED');
+    }
+
+    renderedCallback() {
+        if (this.focusQuickFiltersClose) {
+            const button = this.template.querySelector('lightning-button-icon[data-name="closeQuickFilters"]');
+
+            if (button) {
+                button.focus();
+                this.focusQuickFiltersClose = false;
+            }
+        }
     }
 
     disconnectedCallback() {

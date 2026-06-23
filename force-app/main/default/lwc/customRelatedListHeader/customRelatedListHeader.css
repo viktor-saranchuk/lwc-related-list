@@ -19,6 +19,10 @@
     }
 }
 
+.slds-page-header {
+    border-radius: var(--slds-g-radius-border-1);
+}
+
 .slds-page-header.no-bottom-border-radius {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;

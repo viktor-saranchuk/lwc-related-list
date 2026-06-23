@@ -46,7 +46,7 @@
                                     <lightning-button-icon icon-name={controls.columnSort.iconName} name={controls.columnSort.name} alternative-text={controls.columnSort.label} title={controls.columnSort.label} tooltip={controls.columnSort.label} onclick={handleControlClick}></lightning-button-icon>
                                 </div>
                                 <div class="slds-col slds-p-around_none slds-m-left_xx-small button-icon-wrapper">
-                                    <lightning-button-icon icon-name={controls.showQuickFilters.iconName} name={controls.showQuickFilters.name} alternative-text={controls.showQuickFilters.label} title={controls.showQuickFilters.label} tooltip={controls.showQuickFilters.label} onclick={handleControlClick}></lightning-button-icon>
+                                    <lightning-button-icon-stateful icon-name={controls.showQuickFilters.iconName} data-name={controls.showQuickFilters.name} name={controls.showQuickFilters.name} alternative-text={controls.showQuickFilters.label} title={controls.showQuickFilters.label} tooltip={controls.showQuickFilters.label} selected={showQuickFilters} onclick={handleControlClick}></lightning-button-icon-stateful>
                                 </div>
                             </template>
                         </div>
@@ -72,13 +72,43 @@
                         </template>
                     </div>
                 </c-custom-related-list-header>
+                <template lwc:if={showQuickFilters}>
+                    <div class="slds-is-absolute slds-panel_docked-right slds-grid slds-grid_vertical slds-box slds-p-around_none quick-filters-pane">
+                        <div class="slds-col slds-p-around_small slds-grid slds-grid_align-spread slds-border_bottom">
+                            <div class="slds-col slds-panel__header-title slds-text-heading_small slds-truncate">
+                                {labels.filters}
+                            </div>
+                            <div class="slds-col">
+                                <lightning-button-icon icon-name="utility:close" data-name="closeQuickFilters" variant="container" size="small" alternative-text={labels.close} title={labels.close} onclick={handleCloseFilters}></lightning-button-icon>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-grid slds-grid_vertical slds-grow slds-p-around_small slds-scrollable quick-filter-items">
+                            <div class="slds-col slds-grid slds-grid_vertical-align-center">
+                                {labels.quickFilters}<lightning-helptext content={labels.quickFiltersHelpText} class="slds-m-left_xx-small slds-m-bottom_xxx-small"></lightning-helptext>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-grid slds-p-around_small slds-border_top">
+                            <div class="slds-col slds-grid">
+                                <div class="slds-col">
+                                    <lightning-button name="cancel" label={labels.cancel} onclick={handleClearFilters}></lightning-button>
+                                </div>
+                                <div class="slds-col">
+                                    <lightning-button name="clear" label={labels.clearAllFilters} onclick={handleClearFilters}></lightning-button>
+                                </div>
+                            </div>
+                            <div class="sdls-col">
+                                <lightning-button name="apply" label={labels.apply} variant="brand" onclick={handleApplyFilters}></lightning-button>
+                            </div>
+                        </div>
+                    </div>
+                </template>
             </div>
             <div class="slds-col slds-border_top slds-scrollable_y body-table-container slds-is-relative">
                 <c-custom-related-list-body mode={mode} type={type} columns={columns} is-data-loaded={isDataLoaded} has-data={hasData}>
                     <div slot="datatable">
                         <lightning-datatable columns={columns} data={data} key-field="Id" show-row-number-column hide-checkbox-column={viewMode.isCompact} sortable sorted-by={sortConfig.fieldNames} sorted-direction={sortConfig.sortDirections} onresize={handleColumnsResize} onsort={handleColumnsSort}></lightning-datatable>
                         <template lwc:if={isRefresh}>
-                            <lightning-spinner alternative-text="Loading" variant="brand"></lightning-spinner>
+                            <lightning-spinner alternative-text={labels.loading} variant="brand"></lightning-spinner>
                         </template>
                     </div>
                 </c-custom-related-list-body>
@@ -87,7 +117,7 @@
                 <template lwc:if={data}>
                     <template lwc:if={data.length}>
                         <div class="slds-card__footer slds-m-top_none">
-                            <lightning-formatted-url value={viewAllUrl} label="View All"></lightning-formatted-url>
+                            <lightning-formatted-url value={viewAllUrl} label={labels.viewAll}></lightning-formatted-url>
                         </div>
                     </template>
                 </template>
