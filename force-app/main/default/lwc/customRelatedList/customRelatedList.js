@@ -52,12 +52,12 @@ const CONTROLS = {
 const DEFAULT_NUMBER_OF_RECORDS_TO_DISPLAY = 10;
 const DEFAULT_NUMBER_OF_ACTION_BUTTONS = 3;
 
-const DEFAULT_SORTING_INFO = {
+const DEFAULT_SORT_CONFIG = {
     isMultiColumnSort: false,
-    fieldName: 'Id',
-    fieldNames: ['Id'],
-    sortDirection: 'asc',
-    sortDirections: ['asc']
+    fieldName: null,
+    fieldNames: null,
+    sortDirection: null,
+    sortDirections: null
 };
 export default class CustomRelatedList extends LightningElement {
     _mode;
@@ -67,13 +67,13 @@ export default class CustomRelatedList extends LightningElement {
     _breadcrumbs;
     _numberOfRecordsToDisplay;
     _showListViewActionBar;
-    _sortingConfig = DEFAULT_SORTING_INFO;
+    _sortConfig;
 
     controls = CONTROLS;
 
     initialColumnWidths;
     isResetColumnWidthsDisabled = true;
-    isResetColumnSortingDisabled = true;
+    isRefresh = false;
 
     @api
     get mode() {
@@ -107,11 +107,12 @@ export default class CustomRelatedList extends LightningElement {
 
     @api
     get data() {
-        return this._data;
+        return this._data?.slice(0, this.numberOfRecordsToDisplay);
     }
     set data(value) {
+        this.isRefresh = false;
         if (Array.isArray(value)) {
-            this._data = value;
+            this._data = JSON.parse(JSON.stringify(value));
         }
     }
 
@@ -167,6 +168,14 @@ export default class CustomRelatedList extends LightningElement {
     }
     set title(value) {
         this._title = value;
+    }
+
+    @api
+    get sortConfig() {
+        return this._sortConfig || DEFAULT_SORT_CONFIG;
+    }
+    set sortConfig(value) {
+        this._sortConfig = value;
     }
 
     @api
@@ -228,12 +237,8 @@ export default class CustomRelatedList extends LightningElement {
         return !!this.data?.length;
     }
 
-    get sortingConfig() {
-        return this._sortingConfig || DEFAULT_SORTING_INFO;
-    }
-    set sortingConfig(value) {
-        this.sortData(value);
-        this._sortingConfig = value;
+    get isResetColumnSortingDisabled() {
+        return this.sortConfig === DEFAULT_SORT_CONFIG;
     }
 
     handleActionClick(event) {
@@ -245,8 +250,11 @@ export default class CustomRelatedList extends LightningElement {
             this.isResetColumnWidthsDisabled = true;
             this.columns = [...this.columns];
         } else if (event.detail.value === CONTROLS.resetColumnSorting.name) {
-            this.isResetColumnSortingDisabled = true;
-            this.sortingConfig = DEFAULT_SORTING_INFO;
+            this.dispatchEvent(new CustomEvent('sort'))
+            this.sortConfig = null;
+        } else if (event.target.name === CONTROLS.refresh.name) {
+            this.isRefresh = true;
+            this.dispatchEvent(new CustomEvent('refresh'));
         }
     }
 
@@ -258,42 +266,9 @@ export default class CustomRelatedList extends LightningElement {
         this.isResetColumnWidthsDisabled = false;
     }
 
-    applySorting(event) {
-        this.isResetColumnSortingDisabled = false;
-        this.sortingConfig = event.detail;
+    handleColumnsSort(event) {
+        this.dispatchEvent(new CustomEvent('sort', {detail: event.detail}))
+        this.sortConfig = event.detail;
     }
 
-    sortData(sortingConfig) {
-        const clonedData = [...this.data];
-        clonedData.sort(this.sortByMulti(sortingConfig));
-
-        this.data = clonedData;
-    }
-
-    sortByMulti({ fieldNames, sortDirections }) {
-        return (a, b) => {
-            for (let i = 0; i < fieldNames.length; i++) {
-                const field = fieldNames[i];
-                const direction = sortDirections[i] === 'asc' ? 1 : -1;
-
-                let aVal = a[field];
-                let bVal = b[field];
-
-                aVal = aVal ?? '';
-                bVal = bVal ?? '';
-
-                const isNumber =
-                    typeof aVal === 'number' && typeof bVal === 'number';
-
-                const comparison = isNumber
-                    ? aVal - bVal
-                    : String(aVal).localeCompare(String(bVal));
-
-                if (comparison !== 0) {
-                    return comparison * direction;
-                }
-            }
-            return 0;
-        };
-    }
 }

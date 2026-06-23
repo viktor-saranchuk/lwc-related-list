@@ -79,10 +79,13 @@
                     </div>
                 </c-custom-related-list-header>
             </div>
-            <div class="slds-col slds-border_top slds-scrollable_y body-table-container">
+            <div class="slds-col slds-border_top slds-scrollable_y body-table-container slds-is-relative">
                 <c-custom-related-list-body mode={mode} type={type} columns={columns} is-data-loaded={isDataLoaded} has-data={hasData}>
                     <div slot="datatable">
-                        <lightning-datatable columns={columns} data={data} key-field="Id" show-row-number-column hide-checkbox-column={viewMode.isCompact} sortable sorted-by={sortingConfig.fieldNames} sorted-direction={sortingConfig.sortDirections} onresize={handleColumnsResize} onsort={applySorting}></lightning-datatable>
+                        <lightning-datatable columns={columns} data={data} key-field="Id" show-row-number-column hide-checkbox-column={viewMode.isCompact} sortable sorted-by={sortConfig.fieldNames} sorted-direction={sortConfig.sortDirections} onresize={handleColumnsResize} onsort={handleColumnsSort}></lightning-datatable>
+                        <template lwc:if={isRefresh}>
+                            <lightning-spinner alternative-text="Loading" variant="brand"></lightning-spinner>
+                        </template>
                     </div>
                 </c-custom-related-list-body>
             </div>
