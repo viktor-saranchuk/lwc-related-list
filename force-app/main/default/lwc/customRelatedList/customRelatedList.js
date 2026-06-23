@@ -167,7 +167,7 @@ export default class CustomRelatedList extends LightningElement {
     @api
     get title() {
         if (this.viewMode.isCompact) {
-            return `${this._title}${this.data ? ` (${this.hasMoreData ? `${this.data.length}+` : this.data.length})` : ''}`;
+            return `${this._title}${this.data ? ` (${this.data.length}${this.hasMoreData ? '+' : ''})` : ''}`;
         }
 
         return this._title
@@ -227,7 +227,7 @@ export default class CustomRelatedList extends LightningElement {
         }
 
         return [
-            `${this.data.length} item${this.data.length !== 1 ? 's' : ''}`,
+            `${this.data.length}${this.hasMoreData ? '+' : ''} item${this.data.length !== 1 ? 's' : ''}`,
             `${
                 !!this.sortConfig.fieldNames?.length
                 ? `Sorted by ${this.columns.filter(({fieldName}) => this.sortConfig.fieldNames.includes(fieldName)).map(({label}) => label).join(', ')}`
