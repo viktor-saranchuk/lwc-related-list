@@ -71,7 +71,7 @@ export default class CustomRelatedList extends LightningElement {
 
     controls = CONTROLS;
 
-    isInitialResize = true;
+    initialColumnWidths;
     isResetColumnWidthsDisabled = true;
     isResetColumnSortingDisabled = true;
 
@@ -251,8 +251,8 @@ export default class CustomRelatedList extends LightningElement {
     }
 
     handleColumnsResize(event) {
-        if (this.isInitialResize) {
-            this.isInitialResize = false;
+        if (!this.initialColumnWidths) {
+            this.initialColumnWidths = event.detail;
             return;
         }
         this.isResetColumnWidthsDisabled = false;
