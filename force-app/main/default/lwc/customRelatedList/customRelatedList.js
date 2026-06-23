@@ -59,6 +59,11 @@ const DEFAULT_SORT_CONFIG = {
     sortDirection: null,
     sortDirections: null
 };
+
+const ICON_SIZE = {
+    small: 'small',
+    medium: 'medium'
+}
 export default class CustomRelatedList extends LightningElement {
     _mode;
     _type;
@@ -192,6 +197,16 @@ export default class CustomRelatedList extends LightningElement {
 
     @wire(CurrentPageReference)
     currentPageReference;
+
+    get iconSize() {
+        if (this.viewMode.isCompact) {
+            return ICON_SIZE.small;
+        } else if (this.viewMode.isFull) {
+            return ICON_SIZE.medium;
+        }
+
+        return ICON_SIZE.medium;
+    }
 
     get formFactor() {
         return {

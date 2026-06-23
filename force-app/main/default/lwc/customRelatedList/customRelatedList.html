@@ -3,13 +3,7 @@
         <template lwc:if={formFactor.isLarge}>
             <div>
                 <c-custom-related-list-header mode={mode} type={type} is-data-loaded={isDataLoaded}>
-                    <template lwc:if={viewMode.isCompact}>
-                        <lightning-icon icon-name={iconName} size="small" slot="icon"></lightning-icon>
-                    </template>
-                    <template lwc:if={viewMode.isFull}>
-                        <lightning-icon icon-name={iconName} size="medium" slot="icon"></lightning-icon>
-                    </template>
-                    {breadcrumbs}
+                    <lightning-icon icon-name={iconName} size={iconSize} slot="icon"></lightning-icon>
                     <template lwc:if={breadcrumbs}>
                         <div slot="breadcrumbs">
                             <lightning-breadcrumbs>
