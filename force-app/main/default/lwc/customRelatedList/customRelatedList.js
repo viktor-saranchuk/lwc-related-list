@@ -49,7 +49,6 @@ const CONTROLS = {
     }
 }
 
-const DEFAULT_NUMBER_OF_RECORDS_TO_DISPLAY = 10;
 const DEFAULT_NUMBER_OF_ACTION_BUTTONS = 3;
 
 const DEFAULT_SORT_CONFIG = {
@@ -70,7 +69,7 @@ export default class CustomRelatedList extends LightningElement {
     _data;
     _columns;
     _breadcrumbs;
-    _numberOfRecordsToDisplay;
+    _numberOfRecordsTotal;
     _showListViewActionBar;
     _sortConfig;
     _lastDataSetAt;
@@ -114,7 +113,7 @@ export default class CustomRelatedList extends LightningElement {
 
     @api
     get data() {
-        return this._data?.slice(0, this.numberOfRecordsToDisplay);
+        return this._data;
     }
     set data(value) {
         this.isRefresh = false;
@@ -148,13 +147,12 @@ export default class CustomRelatedList extends LightningElement {
     }
 
     @api
-    get numberOfRecordsToDisplay() {
-        return this._numberOfRecordsToDisplay || DEFAULT_NUMBER_OF_RECORDS_TO_DISPLAY;
+    get numberOfRecordsTotal() {
+        return this._numberOfRecordsTotal || 0;
     }
-    set numberOfRecordsToDisplay(value) {
-        const numberOfRecords = Number(value);
-        if (Number.isInteger(numberOfRecords) && numberOfRecords >= 0) {
-            this._numberOfRecordsToDisplay = numberOfRecords;
+    set numberOfRecordsTotal(value) {
+        if (Number.isInteger(value) && value >= 0) {
+            this._numberOfRecordsTotal = value;
         }
     }
 
@@ -169,7 +167,7 @@ export default class CustomRelatedList extends LightningElement {
     @api
     get title() {
         if (this.viewMode.isCompact) {
-            return `${this._title}${this.data ? ` (${this.data.length > this.numberOfRecordsToDisplay ? `${this.numberOfRecordsToDisplay}+` : this.data.length})` : ''}`;
+            return `${this._title}${this.data ? ` (${this.hasMoreData ? `${this.data.length}+` : this.data.length})` : ''}`;
         }
 
         return this._title
@@ -261,6 +259,10 @@ export default class CustomRelatedList extends LightningElement {
 
     get hasData() {
         return !!this.data?.length;
+    }
+
+    get hasMoreData() {
+        return this.data ? this.numberOfRecordsTotal > this.data?.length : false;
     }
 
     get isResetColumnSortingDisabled() {
