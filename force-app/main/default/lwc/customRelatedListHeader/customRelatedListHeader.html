@@ -9,12 +9,10 @@
                     <div class="slds-media__body slds-grid slds-grid_vertical">
                         <template lwc:if={viewMode.isFull}>
                             <div class="slds-col">
-                                <template lwc:if={isDataLoaded}>
-                                    <slot name="breadcrumbs"></slot>
-                                </template>
-                                <template lwc:else>
+                                <tempalte lwc:if={showSkeleton}>
                                     <div class="slds-skeleton shimmer"></div>
-                                </template>
+                                </tempalte>
+                                <slot name="breadcrumbs" onslotchange={hideSkeleton}></slot>
                             </div>
                         </template>
                         <div class="slds-col">
@@ -24,8 +22,8 @@
                 </div>
                 <template lwc:if={viewMode.isCompact}>
                     <template lwc:if={listType.isEnhanced}>
-                        <div class="slds-col slds-col_bump-left controls">
-                            <slot name="controls"></slot>
+                        <div class="slds-col slds-col_bump-left slds-grid controls">
+                            <slot name="controls" onslotchange={handleControlsAdded}></slot>
                         </div>
                     </template>
                 </template>
@@ -37,19 +35,15 @@
             <div class="slds-grid slds-wrap slds-gutters_xxxx-small slds-m-top_xx-small slds-grid_vertical-align-end vertical-gap">
                 <template lwc:if={listType.isEnhanced}>
                     <div class="slds-col">
-                        <template lwc:if={isDataLoaded}>
-                            <slot name="info"></slot>
-                        </template>
-                        <tempalte lwc:else>
+                        <tempalte lwc:if={showSkeleton}>
                             <div class="slds-skeleton shimmer"></div>
                         </tempalte>
+                        <slot name="info" onslotchange={hideSkeleton}></slot>
                     </div>
                     <template lwc:if={viewMode.isFull}>
-                        <template lwc:if={listType.isEnhanced}>
-                            <div class="slds-col slds-col_bump-left controls">
-                                <slot name="controls"></slot>
-                            </div>
-                        </template>
+                        <div class="slds-col slds-col_bump-left slds-grid controls">
+                            <slot name="controls" onslotchange={handleControlsAdded}></slot>
+                        </div>
                     </template>
                 </template>
             </div>
@@ -59,8 +53,5 @@
 
             </template>
         </template>
-        
-        
-
     </div>
 </template>

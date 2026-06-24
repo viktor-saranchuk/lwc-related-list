@@ -1,124 +1,130 @@
 <template>
     <div class="slds-tabs_card slds-grid slds-grid_vertical slds-box slds-p-around_none">
-        <template lwc:if={formFactor.isLarge}>
-            <div>
-                <c-custom-related-list-header mode={mode} type={type} is-data-loaded={isDataLoaded}>
-                    <lightning-icon icon-name={iconName} size={iconSize} slot="icon"></lightning-icon>
-                    <template lwc:if={breadcrumbs}>
-                        <div slot="breadcrumbs">
-                            <lightning-breadcrumbs>
-                                <template for:each={breadcrumbs} for:item="breadcrumb">
-                                    <lightning-breadcrumb key={breadcrumb.key} label={breadcrumb.label} href={breadcrumb.href}></lightning-breadcrumb>
-                                </template>
-                            </lightning-breadcrumbs>
-                        </div>
-                    </template>
-                    <div slot="title" class="slds-truncate">
-                        <template lwc:if={viewMode.isCompact}>
-                            <h2 class="slds-card__header-title">
-                                <a href={viewAllUrl} class="slds-text-color_default title-link">
-                                    <span>{title}</span>
-                                </a>
-                            </h2>
-                        </template>
-                        <template lwc:if={viewMode.isFull}>
-                            <h1 class="slds-page-header__title">
-                                <span>{title}</span>
-                            </h1>
-                        </template>
-                    </div>
-                    <span slot="info" class="slds-text-body--small">{info}</span>
-                    <div slot="controls" class="slds-grid slds-gutters_xx-small">
-                        <div class="slds-col">
-                            <lightning-button-menu alternative-text={controls.listViewControls.label} variant="border-filled" icon-name={controls.listViewControls.iconName} menu-alignment="right" tooltip={controls.listViewControls.label} onselect={handleControlClick}>
-                                <template lwc:if={viewMode.isFull}>
-                                    <lightning-menu-item value={controls.resetColumnSorting.name} label={controls.resetColumnSorting.label} disabled={isResetColumnSortingDisabled}></lightning-menu-item>
-                                </template>
-                                <lightning-menu-item value={controls.resetColumnWidths.name} label={controls.resetColumnWidths.label} disabled={isResetColumnWidthsDisabled}></lightning-menu-item>
-                            </lightning-button-menu>
-                        </div>
-                        <div class="slds-grid slds-col">
-                            <div class="slds-col slds-p-around_none button-icon-wrapper">
-                                <lightning-button-icon icon-name={controls.refresh.iconName} name={controls.refresh.name} alternative-text={controls.refresh.label} title={controls.refresh.label} tooltip={controls.refresh.label} onclick={handleControlClick}></lightning-button-icon>
-                            </div>
-                            <template lwc:if={viewMode.isFull}>
-                                <div class="slds-col slds-p-around_none slds-m-left_xx-small button-icon-wrapper">
-                                    <lightning-button-icon icon-name={controls.columnSort.iconName} name={controls.columnSort.name} alternative-text={controls.columnSort.label} title={controls.columnSort.label} tooltip={controls.columnSort.label} onclick={handleControlClick}></lightning-button-icon>
-                                </div>
-                                <div class="slds-col slds-p-around_none slds-m-left_xx-small button-icon-wrapper">
-                                    <lightning-button-icon-stateful icon-name={controls.showQuickFilters.iconName} data-name={controls.showQuickFilters.name} name={controls.showQuickFilters.name} alternative-text={controls.showQuickFilters.label} title={controls.showQuickFilters.label} tooltip={controls.showQuickFilters.label} selected={showQuickFilters} onclick={handleControlClick}></lightning-button-icon-stateful>
-                                </div>
+        <c-custom-related-list-header mode={mode} type={type}>
+            <lightning-icon slot="icon" icon-name={iconName} size={iconSize} ></lightning-icon>
+
+            <template lwc:if={data}>
+                <template lwc:if={breadcrumbs}>
+                    <lightning-breadcrumbs slot="breadcrumbs">
+                            <template for:each={breadcrumbs} for:item="breadcrumb">
+                                <lightning-breadcrumb key={breadcrumb.key} label={breadcrumb.label} href={breadcrumb.href}></lightning-breadcrumb>
                             </template>
-                        </div>
-                    </div>
-                    <div slot="actions">
-                        <template lwc:if={showListViewActionBar}>
-                            <div class="button-icon-wrapper">
-                                <lightning-button-group>
-                                    <template for:each={listViewActionButtons} for:item="action">
-                                        <lightning-button key={action.name} label={action.label} name={action.name} onclick={handleActionClick}></lightning-button>
-                                    </template>
-                                    <template lwc:if={listViewActionMenuItems}>
-                                        <template lwc:if={listViewActionMenuItems.length}>
-                                            <lightning-button-menu menu-alignment="right" onselect={handleActionClick}>
-                                                <template for:each={listViewActionMenuItems} for:item="action">
-                                                    <lightning-menu-item key={action.name} label={action.label} value={action.name}></lightning-menu-item>
-                                                </template>
-                                            </lightning-button-menu>
-                                        </template>
-                                    </template>
-                                </lightning-button-group>
-                            </div>
-                        </template>
-                    </div>
-                </c-custom-related-list-header>
-                <template lwc:if={showQuickFilters}>
-                    <div class="slds-is-absolute slds-panel_docked-right slds-grid slds-grid_vertical slds-box slds-p-around_none quick-filters-pane">
-                        <div class="slds-col slds-p-around_small slds-grid slds-grid_align-spread slds-border_bottom">
-                            <div class="slds-col slds-panel__header-title slds-text-heading_small slds-truncate">
-                                {labels.filters}
-                            </div>
-                            <div class="slds-col">
-                                <lightning-button-icon icon-name="utility:close" data-name="closeQuickFilters" variant="container" size="small" alternative-text={labels.close} title={labels.close} onclick={handleCloseFilters}></lightning-button-icon>
-                            </div>
-                        </div>
-                        <div class="slds-col slds-grid slds-grid_vertical slds-grow slds-p-around_small slds-scrollable quick-filter-items">
-                            <div class="slds-col slds-grid slds-grid_vertical-align-center">
-                                {labels.quickFilters}<lightning-helptext content={labels.quickFiltersHelpText} class="slds-m-left_xx-small slds-m-bottom_xxx-small"></lightning-helptext>
-                            </div>
-                        </div>
-                        <div class="slds-col slds-grid slds-p-around_small slds-border_top">
-                            <div class="slds-col slds-grid">
-                                <div class="slds-col">
-                                    <lightning-button name="cancel" label={labels.cancel} onclick={handleClearFilters}></lightning-button>
-                                </div>
-                                <div class="slds-col">
-                                    <lightning-button name="clear" label={labels.clearAllFilters} onclick={handleClearFilters}></lightning-button>
-                                </div>
-                            </div>
-                            <div class="sdls-col">
-                                <lightning-button name="apply" label={labels.apply} variant="brand" onclick={handleApplyFilters}></lightning-button>
-                            </div>
-                        </div>
-                    </div>
+                    </lightning-breadcrumbs>
+                </template>
+            </template>
+
+            <div slot="title" class="slds-truncate">
+                <template lwc:if={viewMode.isCompact}>
+                    <h2 class="slds-card__header-title">
+                        <a href={viewAllUrl} class="slds-text-color_default title-link">
+                            <span>{title}</span>
+                        </a>
+                    </h2>
+                </template>
+                <template lwc:if={viewMode.isFull}>
+                    <h1 class="slds-page-header__title">
+                        <span>{title}</span>
+                    </h1>
                 </template>
             </div>
-            <div class="slds-col slds-border_top slds-scrollable_y body-table-container slds-is-relative">
-                <tempalte lwc:if={data}>
-                    <template lwc:if={data.length}>
+
+            <template lwc:if={data}>
+                <span slot="info">
+                    <template lwc:if={viewMode.isFull}>{info}</template>
+                    <template lwc:if={viewMode.isCompact}>
+                        <tempalte lwc:if={data.length}>{info}</tempalte>
+                    </template>
+                </span>
+            </template>
+
+            <lightning-button-menu slot="controls" alternative-text={controls.listViewControls.label} variant="border-filled" icon-name={controls.listViewControls.iconName} menu-alignment="right" tooltip={controls.listViewControls.label} onselect={handleControlClick}>
+                <template lwc:if={viewMode.isFull}>
+                    <lightning-menu-item value={controls.resetColumnSorting.name} label={controls.resetColumnSorting.label} disabled={isResetColumnSortingDisabled}></lightning-menu-item>
+                </template>
+                <lightning-menu-item value={controls.resetColumnWidths.name} label={controls.resetColumnWidths.label} disabled={isResetColumnWidthsDisabled}></lightning-menu-item>
+            </lightning-button-menu>
+
+            <div slot="controls" class="slds-p-around_none slds-m-left_xx-small button-icon-wrapper">
+                <lightning-button-icon icon-name={controls.refresh.iconName} name={controls.refresh.name} alternative-text={controls.refresh.label} title={controls.refresh.label} tooltip={controls.refresh.label} onclick={handleControlClick}></lightning-button-icon>
+            </div>
+            <template lwc:if={viewMode.isFull}>
+                <div slot="controls" class="slds-p-around_none slds-m-left_xx-small button-icon-wrapper">
+                    <lightning-button-icon icon-name={controls.columnSort.iconName} name={controls.columnSort.name} alternative-text={controls.columnSort.label} title={controls.columnSort.label} tooltip={controls.columnSort.label} onclick={handleControlClick}></lightning-button-icon>
+                </div>
+                <div slot="controls" class="slds-p-around_none slds-m-left_xx-small button-icon-wrapper">
+                    <lightning-button-icon-stateful icon-name={controls.showQuickFilters.iconName} data-name={controls.showQuickFilters.name} name={controls.showQuickFilters.name} alternative-text={controls.showQuickFilters.label} title={controls.showQuickFilters.label} tooltip={controls.showQuickFilters.label} selected={showQuickFilters} onclick={handleControlClick}></lightning-button-icon-stateful>
+                </div>
+            </template>
+
+            <template lwc:if={listViewActionButtons.length}>
+                <div slot="actions" class="button-icon-wrapper">
+                    <lightning-button-group>
+                        <template for:each={listViewActionButtons} for:item="action">
+                            <lightning-button key={action.name} label={action.label} name={action.name} onclick={handleActionClick}></lightning-button>
+                        </template>
+                        <template lwc:if={listViewActionMenuItems.length}>
+                            <lightning-button-menu menu-alignment="right" onselect={handleActionClick}>
+                                <template for:each={listViewActionMenuItems} for:item="action">
+                                    <lightning-menu-item key={action.name} label={action.label} value={action.name}></lightning-menu-item>
+                                </template>
+                            </lightning-button-menu>
+                        </template>
+                    </lightning-button-group>
+                </div>
+            </template>
+        </c-custom-related-list-header>
+
+        <template lwc:if={formFactor.isLarge}>
+            <template lwc:if={showQuickFilters}>
+                <div class="slds-is-absolute slds-panel_docked-right slds-grid slds-grid_vertical slds-box slds-p-around_none quick-filters-pane">
+                    <div class="slds-col slds-p-around_small slds-grid slds-grid_align-spread slds-border_bottom">
+                        <div class="slds-col slds-panel__header-title slds-text-heading_small slds-truncate">
+                            {labels.filters}
+                        </div>
+                        <div class="slds-col">
+                            <lightning-button-icon icon-name="utility:close" data-name="closeQuickFilters" variant="container" size="small" alternative-text={labels.close} title={labels.close} onclick={handleCloseFilters}></lightning-button-icon>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-grid slds-grid_vertical slds-grow slds-p-around_small slds-scrollable quick-filter-items">
+                        <div class="slds-col slds-grid slds-grid_vertical-align-center">
+                            {labels.quickFilters}<lightning-helptext content={labels.quickFiltersHelpText} class="slds-m-left_xx-small slds-m-bottom_xxx-small"></lightning-helptext>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-grid slds-p-around_small slds-border_top">
+                        <div class="slds-col slds-grid">
+                            <div class="slds-col">
+                                <lightning-button name="cancel" label={labels.cancel} onclick={handleClearFilters}></lightning-button>
+                            </div>
+                            <div class="slds-col">
+                                <lightning-button name="clear" label={labels.clearAllFilters} onclick={handleClearFilters}></lightning-button>
+                            </div>
+                        </div>
+                        <div class="sdls-col">
+                            <lightning-button name="apply" label={labels.apply} variant="brand" onclick={handleApplyFilters}></lightning-button>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <template lwc:if={data}>
+                <div class="slds-col slds-border_top slds-scrollable_y body-table-container slds-is-relative">
+                    <tempalte lwc:if={data.length}>
                         <lightning-datatable columns={columns} data={data} key-field="Id" show-row-number-column hide-checkbox-column={viewMode.isCompact} sortable sorted-by={sortConfig.fieldNames} sorted-direction={sortConfig.sortDirections} onresize={handleColumnsResize} onsort={handleColumnsSort}></lightning-datatable>
                         <template lwc:if={isRefresh}>
                             <lightning-spinner alternative-text={labels.loading} variant="brand"></lightning-spinner>
                         </template>
-                    </template>
-                    <template lwc:else>
+                    </tempalte>
+                    <template lwc:elseif={viewMode.isFull}>
                         <c-custom-related-list-no-data-body></c-custom-related-list-no-data-body>
                     </template>
-                </tempalte>
-                <tempalte lwc:else>
+                </div>
+            </template>
+            <tempalte lwc:else>
+                <div class="slds-col slds-scrollable_y body-table-container slds-is-relative">
                     <c-skeleton-table columns={columns} number-of-rows={numberOfSkeletonRows}></c-skeleton-table>
-                </tempalte>
-            </div>
+                </div>
+            </tempalte>
+
             <template lwc:if={viewMode.isCompact}>
                 <template lwc:if={data}>
                     <template lwc:if={data.length}>

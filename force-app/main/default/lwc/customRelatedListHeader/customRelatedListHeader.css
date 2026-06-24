@@ -2,23 +2,6 @@
     --slds-c-card-shadow: none;
 }
 
-.shimmer {
-    background: linear-gradient(90deg, #f3f3f3 25%, #dcdcdc 50%, #f3f3f3 75%);
-    background-size: 400% 100%;
-    animation: shimmer 1.2s ease-in-out infinite;
-    border-radius: 4px;
-    width: 30%;
-    height: 1rem;
-    }
-    @keyframes shimmer {
-    0% {
-        background-position: -400px 0;
-    }
-    100% {
-        background-position: 400px 0;
-    }
-}
-
 .slds-page-header {
     border-radius: var(--slds-g-radius-border-1);
 }
@@ -38,4 +21,22 @@
 
 .slds-media__body.slds-grid.slds-grid_vertical {
     line-height: var(--slds-g-font-lineheight-1);
+    align-self: center;
+}
+
+.shimmer {
+    background: linear-gradient(90deg, #f3f3f3 25%, #dcdcdc 50%, #f3f3f3 75%);
+    background-size: 400% 100%;
+    animation: shimmer 1.2s ease-in-out infinite;
+    border-radius: 4px;
+    width: 30%;
+    height: .75rem;
+    }
+    @keyframes shimmer {
+    0% {
+        background-position: -400px 0;
+    }
+    100% {
+        background-position: 400px 0;
+    }
 }

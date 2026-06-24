@@ -89,7 +89,6 @@ export default class CustomRelatedList extends LightningElement {
     _hasMoreData;
     _columns;
     _breadcrumbs;
-    _showListViewActionBar;
     _sortConfig;
     _lastDataSetAt;
     _lastDataSetAtCheckedAt;
@@ -177,14 +176,6 @@ export default class CustomRelatedList extends LightningElement {
     }
 
     @api
-    get showListViewActionBar() {
-        return this._showListViewActionBar && Array.isArray(this.listViewActions) && !!this.listViewActions?.length;
-    }
-    set showListViewActionBar(value) {
-        this._showListViewActionBar = !!value && value !== 'false';
-    }
-
-    @api
     get title() {
         if (this.viewMode.isCompact) {
             return `${this._title}${this.data ? ` (${this.data.length}${this.hasMoreData ? '+' : ''})` : ''}`;
@@ -266,11 +257,11 @@ export default class CustomRelatedList extends LightningElement {
             numberOfButtons = this.formFactor.isLarge ? 5 : 3;
         }
 
-        return this.listViewActions?.slice(0, numberOfButtons);
+        return this.listViewActions?.slice(0, numberOfButtons) || [];
     }
 
     get listViewActionMenuItems() {
-        return this.listViewActions?.slice(this.listViewActionButtons?.length);
+        return this.listViewActions?.slice(this.listViewActionButtons?.length) || [];
     }
 
     get isDataLoaded() {

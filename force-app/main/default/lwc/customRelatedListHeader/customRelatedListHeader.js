@@ -16,8 +16,7 @@ export default class CustomRelatedListHeader extends LightningElement {
     _mode;
     _type;
 
-    @api
-    isDataLoaded;
+    showSkeleton = true;
 
     @api
     get mode() {
@@ -57,8 +56,23 @@ export default class CustomRelatedListHeader extends LightningElement {
     get listType() {
         return {
             isBasic: this.type === TYPE.basic,
-            isEnhanced: this.type === TYPE.enhanced,
+            isEnhanced: this.type === TYPE.enhanced || this.viewMode.isFull,
             isTiles: this.type === TYPE.tiles
         }
+    }
+
+    hideSkeleton() {
+        console.log('here', 'hideSkeleton')
+        this.showSkeleton = false;
+    }
+
+    handleControlsAdded(event) {
+        const nodes = event.target.assignedNodes({ flatten: true }); 
+        
+        nodes.forEach((node) => { 
+            if (node.nodeType === Node.ELEMENT_NODE) { 
+                node.classList.add('slds-col'); 
+            s} 
+        });
     }
 }

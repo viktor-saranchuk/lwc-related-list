@@ -34,8 +34,12 @@ h2.slds-card__header-title {
     border-top: none;
 }
 
-.body-table-container:has(lightning-data-table) {
-    background-color: var(--slds-g-color-surface-2);
+.body-table-container:has(:not(c-custom-related-list-no-data-body)) {
+    background: transparent;
+}
+
+.body-table-container:empty {
+    display: none;
 }
 
 .quick-filters-pane {
