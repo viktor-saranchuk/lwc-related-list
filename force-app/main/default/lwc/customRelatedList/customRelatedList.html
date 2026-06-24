@@ -105,7 +105,7 @@
             </div>
             <div class="slds-col slds-border_top slds-scrollable_y body-table-container slds-is-relative">
                 <c-custom-related-list-body mode={mode} type={type} columns={columns} is-data-loaded={isDataLoaded} has-data={hasData}>
-                    <div slot="datatable">
+                    <div slot="datatable" has-data={hasData}>
                         <lightning-datatable columns={columns} data={data} key-field="Id" show-row-number-column hide-checkbox-column={viewMode.isCompact} sortable sorted-by={sortConfig.fieldNames} sorted-direction={sortConfig.sortDirections} onresize={handleColumnsResize} onsort={handleColumnsSort}></lightning-datatable>
                         <template lwc:if={isRefresh}>
                             <lightning-spinner alternative-text={labels.loading} variant="brand"></lightning-spinner>

@@ -34,7 +34,7 @@ h2.slds-card__header-title {
     border-top: none;
 }
 
-.body-table-container {
+.body-table-container:has([has-data="true"]) {
     background-color: var(--slds-g-color-surface-2);
 }
 

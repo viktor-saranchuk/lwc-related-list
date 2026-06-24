@@ -1,0 +1,26 @@
+<template>
+    <div class="card-body-desktop slds-is-relative">
+        <table class="slds-table slds-table_bordered slds-table_cell-buffer slds-max-medium-table_stacked">
+            <thead>
+                <tr class="slds-line-height_reset skeleton-table-header-row">
+                    <template for:each={columns} for:item="column">
+                        <th scope="col" key={column.key}>
+                            <div class="slds-truncate" title={column.label}>{column.label}</div>
+                        </th>
+                    </template>
+                </tr>
+            </thead>
+            <tbody class="skeleton-table-body">
+                <template for:each={rows} for:item="row">
+                    <tr key={row} class="slds-line-height_reset skeleton-table-body-row">
+                        <template for:each={columns} for:item="column">
+                            <td data-label={column.label} key={column.key}>
+                                <div class="slds-skeleton shimmer" style="width: 70%; height: 1rem;"></div>
+                            </td>
+                        </template>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+    </div>
+</template>

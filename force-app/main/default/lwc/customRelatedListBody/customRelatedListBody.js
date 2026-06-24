@@ -45,10 +45,7 @@ export default class CustomRelatedListBody extends LightningElement {
 
     @api
     get columns() {
-        return this._columns?.map((item, index) => ({
-            ...item,
-            key: `item-${index}`
-        }));
+        return this._columns;
     }
     set columns(value) {
         if (Array.isArray(value)) {
@@ -79,7 +76,7 @@ export default class CustomRelatedListBody extends LightningElement {
         }
     }
 
-    get skeletonLines() {
-        return Array.from({length: (this.viewMode.isCompact ? 6 : 50) - 1}, (_, i) => i + 1);
+    get numberOfSkeletonRows() {
+        return this.viewMode.isCompact ? 6 : 50;
     }
 }
