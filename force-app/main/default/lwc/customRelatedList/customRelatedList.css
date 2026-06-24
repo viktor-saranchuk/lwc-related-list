@@ -41,26 +41,3 @@ h2.slds-card__header-title {
 .body-table-container:empty {
     display: none;
 }
-
-/*.quick-filters-pane {
-    background-color: var(--slds-g-color-surface-container-1);
-    right: 0;
-    z-index: 2;
-    min-width: 20rem;
-    height: stretch;
-    border-radius: var(--slds-g-radius-border-1);
-}
-
-.quick-filters-pane > *:first-child{
-    max-height: fit-content;
-} 
-
-.quick-filters-pane > *:last-child {
-    max-height: fit-content;
-    background-color: var(--slds-g-color-surface-2);
-    border-top-width: var(--slds-g-sizing-border-2);
-}
-
-.quick-filter-items > * {
-    max-height: fit-content;
-}*/

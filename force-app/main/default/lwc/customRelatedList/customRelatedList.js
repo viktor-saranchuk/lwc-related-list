@@ -389,17 +389,6 @@ export default class CustomRelatedList extends LightningElement {
         console.warn('NOT IMPLEMENTED');
     }
 
-    /*renderedCallback() {
-        if (this.focusQuickFiltersClose) {
-            const button = this.template.querySelector('lightning-button-icon[data-name="closeQuickFilters"]');
-
-            if (button) {
-                button.focus();
-                this.focusQuickFiltersClose = false;
-            }
-        }
-    }*/
-
     disconnectedCallback() {
         if (this._lastDataSetAtCheckedAtTimoutId) {
             clearTimeout(this._lastDataSetAtCheckedAtTimoutId);
