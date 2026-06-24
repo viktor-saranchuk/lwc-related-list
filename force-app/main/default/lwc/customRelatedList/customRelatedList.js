@@ -100,7 +100,7 @@ export default class CustomRelatedList extends LightningElement {
     isResetColumnWidthsDisabled = true;
     isRefresh = false;
     showQuickFilters = false;
-    focusQuickFiltersClose = false;
+    //focusQuickFiltersClose = false;
 
     @api
     get mode() {
@@ -376,20 +376,20 @@ export default class CustomRelatedList extends LightningElement {
         this.sortConfig = event.detail;
     }
 
-    handleCloseFilters() {
+    closeFilters() {
         this.showQuickFilters = !this.showQuickFilters;
         this.template.querySelector(`lightning-button-icon-stateful[data-name="${CONTROLS.showQuickFilters.name}"]`)?.focus();
     }
 
-    handleClearFilters() {
+    clearFilters() {
         console.warn('NOT IMPLEMENTED');
     }
 
-    handleApplyFilters() {
+    applyFilters() {
         console.warn('NOT IMPLEMENTED');
     }
 
-    renderedCallback() {
+    /*renderedCallback() {
         if (this.focusQuickFiltersClose) {
             const button = this.template.querySelector('lightning-button-icon[data-name="closeQuickFilters"]');
 
@@ -398,7 +398,7 @@ export default class CustomRelatedList extends LightningElement {
                 this.focusQuickFiltersClose = false;
             }
         }
-    }
+    }*/
 
     disconnectedCallback() {
         if (this._lastDataSetAtCheckedAtTimoutId) {

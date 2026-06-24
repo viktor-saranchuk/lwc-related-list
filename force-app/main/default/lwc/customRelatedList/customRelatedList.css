@@ -42,7 +42,7 @@ h2.slds-card__header-title {
     display: none;
 }
 
-.quick-filters-pane {
+/*.quick-filters-pane {
     background-color: var(--slds-g-color-surface-container-1);
     right: 0;
     z-index: 2;
@@ -63,4 +63,4 @@ h2.slds-card__header-title {
 
 .quick-filter-items > * {
     max-height: fit-content;
-}
+}*/
