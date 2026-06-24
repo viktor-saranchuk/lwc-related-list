@@ -277,10 +277,6 @@ export default class CustomRelatedList extends LightningElement {
         return !!this.data;
     }
 
-    get hasData() {
-        return !!this.data?.length;
-    }
-
     get isResetColumnSortingDisabled() {
         return this.sortConfig === DEFAULT_SORT_CONFIG;
     }
@@ -326,6 +322,10 @@ export default class CustomRelatedList extends LightningElement {
         }
 
         return updatedAgo;
+    }
+
+    get numberOfSkeletonRows() {
+        return this.viewMode.isCompact ? 6 : 50;
     }
 
     setLastDataSetAtCheckedAt = () => {

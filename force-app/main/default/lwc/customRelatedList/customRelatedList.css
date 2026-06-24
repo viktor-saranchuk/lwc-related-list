@@ -34,7 +34,7 @@ h2.slds-card__header-title {
     border-top: none;
 }
 
-.body-table-container:has([has-data="true"]) {
+.body-table-container:has(lightning-data-table) {
     background-color: var(--slds-g-color-surface-2);
 }
 
