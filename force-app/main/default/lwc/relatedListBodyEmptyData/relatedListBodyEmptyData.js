@@ -5,6 +5,6 @@ const LABELS = {
     body: 'There\'s nothing in your list yet. Try adding a new record.'
 }
 
-export default class CustomRelatedListNoDataBody extends LightningElement {
+export default class RelatedListBodyEmptyData extends LightningElement {
     labels = LABELS;
 }

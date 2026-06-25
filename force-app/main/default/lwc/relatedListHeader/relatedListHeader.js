@@ -12,7 +12,7 @@ const TYPE = {
     tiles: 'tiles'
 }
 
-export default class CustomRelatedListHeader extends LightningElement {
+export default class RelatedListHeader extends LightningElement {
     _mode;
     _type;
 

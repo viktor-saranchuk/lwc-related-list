@@ -82,7 +82,7 @@ const ICON_SIZE = {
     small: 'small',
     medium: 'medium'
 }
-export default class CustomRelatedList extends LightningElement {
+export default class RelatedList extends LightningElement {
     _mode;
     _type;
     _data;

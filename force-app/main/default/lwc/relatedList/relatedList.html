@@ -1,6 +1,6 @@
 <template>
     <div class="slds-tabs_card slds-grid slds-grid_vertical slds-box slds-p-around_none">
-        <c-custom-related-list-header mode={mode} type={type}>
+        <c-related-list-header mode={mode} type={type}>
             <lightning-icon slot="icon" icon-name={iconName} size={iconSize} ></lightning-icon>
 
             <template lwc:if={data}>
@@ -72,7 +72,7 @@
                     </lightning-button-group>
                 </div>
             </template>
-        </c-custom-related-list-header>
+        </c-related-list-header>
 
         <template lwc:if={formFactor.isLarge}>
             <template lwc:if={showQuickFilters}>
@@ -88,13 +88,13 @@
                         </template>
                     </tempalte>
                     <template lwc:elseif={viewMode.isFull}>
-                        <c-custom-related-list-no-data-body></c-custom-related-list-no-data-body>
+                        <c-related-list-body-empty-data></c-related-list-body-empty-data>
                     </template>
                 </div>
             </template>
             <tempalte lwc:else>
                 <div class="slds-col slds-scrollable_y body-table-container slds-is-relative">
-                    <c-skeleton-table columns={columns} number-of-rows={numberOfSkeletonRows}></c-skeleton-table>
+                    <c-related-list-body-initial columns={columns} number-of-rows={numberOfSkeletonRows}></c-related-list-body-initial>
                 </div>
             </tempalte>
 

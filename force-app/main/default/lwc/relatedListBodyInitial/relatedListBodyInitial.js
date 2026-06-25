@@ -1,6 +1,6 @@
 import { LightningElement, api } from 'lwc';
 
-export default class SkeletonTable extends LightningElement {
+export default class RelatedListBodyInitial extends LightningElement {
     _columns;
 
     @api
