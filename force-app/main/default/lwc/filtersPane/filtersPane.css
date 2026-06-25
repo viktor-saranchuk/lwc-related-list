@@ -1,5 +1,6 @@
 :host {
     min-width: 20rem;
+    max-width: 20rem;
     height: inherit;
     display: block;
 }
@@ -22,4 +23,8 @@
 
 .filter-items > * {
     max-height: fit-content;
+}
+
+.minus {
+    margin-top: 1.75rem;
 }

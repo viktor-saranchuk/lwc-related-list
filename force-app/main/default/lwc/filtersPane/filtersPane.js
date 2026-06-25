@@ -5,6 +5,7 @@ import { isPlainObject } from './helper';
 
 export default class FiltersPane extends LightningElement {
     _filters;
+    _draftValues;
 
     labels = LABELS;
     focusClose = true;
@@ -14,8 +15,8 @@ export default class FiltersPane extends LightningElement {
         return this._filters;
     }
     set filters(value) {
-        if (!Array.isArray(value)) {
-            this._filters = value?.filter(({type}) => !type || FILTER_TYPES.includes(type)).map(filter => {
+        if (Array.isArray(value)) {
+            this._filters = value?.filter(({type}) => !type || Object.values(FILTER_TYPES).includes(type)).map(filter => {
                 const type = filter.type || FILTER_TYPES.text;
                 const requiresStartEndRange = [FILTER_TYPES.date, FILTER_TYPES.datetime, FILTER_TYPES.time].includes(type);
                 const requiresMinMaxRange = type === FILTER_TYPES.number;
@@ -23,7 +24,7 @@ export default class FiltersPane extends LightningElement {
 
                 const isFilterValueObject = isPlainObject(filter.value);
 
-                let value;
+                let value = filter.value;
 
                 if (requiresStartEndRange) {
                     value = {
@@ -41,6 +42,7 @@ export default class FiltersPane extends LightningElement {
                 return {
                     ...filter,
                     type,
+                    isGroup: requiresStartEndRange || requiresMinMaxRange || requiresCheckboxGroup,
                     requiresStartEndRange,
                     requiresMinMaxRange,
                     requiresCheckboxGroup,
@@ -67,11 +69,12 @@ export default class FiltersPane extends LightningElement {
     }
 
     handleChange(event) {
-        console.log('here', 'handleChange');
-    }
-
-    handleCommit(event) {
-        console.log('here', 'handleCommit');
+        if (!event.target.checkValidity()) {
+            event.target.value = null;
+            event.target.setCustomValidity('');
+            event.target.reportValidity();
+            return;
+        }
     }
 
     renderedCallback() {

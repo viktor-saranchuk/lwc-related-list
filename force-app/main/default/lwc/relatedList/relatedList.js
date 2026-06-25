@@ -242,6 +242,24 @@ export default class RelatedList extends LightningElement {
         return this.viewMode.isCompact ? 6 : 50;
     }
 
+    get filters() {
+        // TODO: temp values
+        return [
+            {
+                label: 'Name',
+                name: 'name',
+                value: null,
+                type: 'text'
+            },
+            {
+                label: 'Date',
+                name: 'date',
+                value: null,
+                type: 'date'
+            }
+        ];
+    }
+
     setLastDataSetAtCheckedAt = () => {
         this.lastDataSetAtCheckedAt = Date.now();
 
