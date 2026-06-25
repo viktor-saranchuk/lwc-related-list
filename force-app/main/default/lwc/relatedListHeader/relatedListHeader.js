@@ -62,7 +62,6 @@ export default class RelatedListHeader extends LightningElement {
     }
 
     hideSkeleton() {
-        console.log('here', 'hideSkeleton')
         this.showSkeleton = false;
     }
 
@@ -72,7 +71,7 @@ export default class RelatedListHeader extends LightningElement {
         nodes.forEach((node) => { 
             if (node.nodeType === Node.ELEMENT_NODE) { 
                 node.classList.add('slds-col'); 
-            s} 
+            } 
         });
     }
 }

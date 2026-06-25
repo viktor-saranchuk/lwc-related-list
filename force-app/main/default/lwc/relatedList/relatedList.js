@@ -1,90 +1,21 @@
 import { LightningElement, api, wire } from 'lwc';
-import { CurrentPageReference } from "lightning/navigation";
-import FORM_FACTOR from "@salesforce/client/formFactor";
+import { CurrentPageReference } from 'lightning/navigation';
 
-const LABELS = {
-    apply: 'Apply',
-    cancel: 'Cancel',
-    clearAllFilters: 'Clear All Filters',
-    close: 'Close',
-    columnSort: 'Column Sort',
-    filters: 'Filters',
-    listViewControls: 'List View Controls',
-    loading: 'Loading',
-    quickFilters: 'Quick Filters',
-    quickFiltersHelpText: 'Quick filters can\'t be saved and apply only to your current session. Quick filters that you apply don\'t affect anyone else\'s view',
-    refresh: 'Refresh',
-    resetColumnSorting: 'Reset Column Sorting',
-    resetColumnWidths: 'Reset Column Widths',
-    showQuickFilters: 'Show Quick Filters',
-    updatedAFewSecondsAgo: 'Updated a few seconds ago',
-    viewAll: 'View All'
-}
+import {
+    CONTROLS,
+    DEFAULT_NUMBER_OF_ACTION_BUTTONS,
+    DEFAULT_SORT_CONFIG,
+    FORM_FACTOR,
+    ICON_SIZE,
+    LABELS,
+    LIST_TYPE,
+    PAGE_TYPE,
+    VIEW_MODE
+} from './constants'
 
-const PAGE_TYPE = {
-    standardRecordPage: 'standard__recordPage',
-    standardComponent: 'standard__component'
-}
-
-const VIEW_MODE = {
-    compact: 'compact',
-    full: 'full'
-}
-
-const TYPE = {
-    basic: 'basic',
-    enhanced: 'enhanced',
-    tiles: 'tiles'
-}
-
-const CONTROLS = {
-    columnSort: {
-        label: LABELS.columnSort,
-        name: 'columnsort',
-        iconName: 'utility:sort'
-    },
-    listViewControls: {
-        label: LABELS.listViewControls,
-        name: 'listviewcontrols',
-        iconName: 'utility:settings'
-    },
-    refresh: {
-        label: LABELS.refresh,
-        name: 'refresh',
-        iconName: 'utility:refresh'
-    },
-    resetColumnSorting: {
-        label: LABELS.resetColumnSorting,
-        name: 'resetcolumnsorting'
-    },
-    resetColumnWidths: {
-        label: LABELS.resetColumnWidths,
-        name: 'resetcolumnwidths'
-    },
-    showQuickFilters: {
-        label: LABELS.showQuickFilters,
-        name: 'showquickfilters',
-        iconName: 'utility:filterList'
-    }
-}
-
-const DEFAULT_NUMBER_OF_ACTION_BUTTONS = 3;
-
-const DEFAULT_SORT_CONFIG = {
-    isMultiColumnSort: false,
-    fieldName: null,
-    fieldNames: null,
-    sortDirection: null,
-    sortDirections: null
-};
-
-const ICON_SIZE = {
-    small: 'small',
-    medium: 'medium'
-}
 export default class RelatedList extends LightningElement {
     _mode;
-    _type;
+    _listType;
     _data;
     _hasMoreData;
     _columns;
@@ -94,13 +25,13 @@ export default class RelatedList extends LightningElement {
     _lastDataSetAtCheckedAt;
     _lastDataSetAtCheckedAtTimoutId;
 
+    formFactor = FORM_FACTOR;
     labels = LABELS;
     controls = CONTROLS;
     initialColumnWidths;
     isResetColumnWidthsDisabled = true;
     isRefresh = false;
     showQuickFilters = false;
-    //focusQuickFiltersClose = false;
 
     @api
     get mode() {
@@ -119,16 +50,16 @@ export default class RelatedList extends LightningElement {
     }
     
     @api
-    get type() {
-        if (!!this._type) {
-            return this._type;
+    get listType() {
+        if (!!this._listType) {
+            return this._listType;
         }
 
-        return TYPE.basic;
+        return LIST_TYPE.basic;
     }
-    set type(value) {
-        if (value && Object.values(TYPE).includes(value)) {
-            this._type = value;
+    set listType(value) {
+        if (value && Object.values(LIST_TYPE).includes(value)) {
+            this._listType = value;
         }
     }
 
@@ -217,14 +148,6 @@ export default class RelatedList extends LightningElement {
         return ICON_SIZE.medium;
     }
 
-    get formFactor() {
-        return {
-            isSmall: FORM_FACTOR === 'Small',
-            isMedium: FORM_FACTOR === 'Medium',
-            isLarge: FORM_FACTOR === 'Large'
-        }
-    }
-
     get viewMode() {
         return {
             isCompact: this.mode === VIEW_MODE.compact,
@@ -299,17 +222,17 @@ export default class RelatedList extends LightningElement {
         let updatedAgo;
 
         if (diffHours >= 24) {
-            updatedAgo = `Updated long time ago`;
+            updatedAgo = this.labels.updatedLongTimeAgo;
         }  else if (diffHours > 1) {
             updatedAgo = `Updated ${diffHours} hours ago`;
         } else if (diffHours == 1) {
-            updatedAgo = `Updated an hour ago`;
+            updatedAgo = this.labels.updatedAnHourAgo;
         } else if (diffMinutes > 1) {
             updatedAgo = `Updated ${diffMinutes} minutes ago`;
         } else if (diffMinutes == 1) {
-            updatedAgo = `Updated a minute ago`;
+            updatedAgo = this.labels.updatedAMinuteAgo;
         } else {
-            updatedAgo = `Updated a few seconds ago`;
+            updatedAgo = this.labels.updatedAFewSecondsAgo;
         }
 
         return updatedAgo;
@@ -359,7 +282,6 @@ export default class RelatedList extends LightningElement {
             this.dispatchEvent(new CustomEvent('refresh'));
         } else if (event.target.name === CONTROLS.showQuickFilters.name) {
             this.showQuickFilters = !this.showQuickFilters;
-            this.focusQuickFiltersClose = !this.focusQuickFiltersClose;
         }
     }
 

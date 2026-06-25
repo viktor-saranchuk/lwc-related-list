@@ -7,10 +7,10 @@
 .pane {
     border-radius: var(--slds-g-radius-border-1);
     height: inherit;
+    background-color: var(--slds-g-color-surface-container-1);
 }
 
 .pane > *:first-child{
-    background-color: var(--slds-g-color-surface-container-1);
     max-height: fit-content;
 } 
 
