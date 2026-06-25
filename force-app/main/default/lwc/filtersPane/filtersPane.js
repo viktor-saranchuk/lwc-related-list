@@ -1,21 +1,77 @@
-import { LightningElement } from 'lwc';
+import { LightningElement, api } from 'lwc';
 
-import { LABELS } from './constants';
+import { FILTER_TYPES, LABELS, PROP_NAMES } from './constants';
+import { isPlainObject } from './helper';
 
 export default class FiltersPane extends LightningElement {
+    _filters;
+
     labels = LABELS;
     focusClose = true;
+
+    @api
+    get filters() {
+        return this._filters;
+    }
+    set filters(value) {
+        if (!Array.isArray(value)) {
+            this._filters = value?.filter(({type}) => !type || FILTER_TYPES.includes(type)).map(filter => {
+                const type = filter.type || FILTER_TYPES.text;
+                const requiresStartEndRange = [FILTER_TYPES.date, FILTER_TYPES.datetime, FILTER_TYPES.time].includes(type);
+                const requiresMinMaxRange = type === FILTER_TYPES.number;
+                const requiresCheckboxGroup = type === FILTER_TYPES.checkboxgroup;
+
+                const isFilterValueObject = isPlainObject(filter.value);
+
+                let value;
+
+                if (requiresStartEndRange) {
+                    value = {
+                        start: isFilterValueObject ? value.start : value,
+                        end: isFilterValueObject ? value.start : value
+
+                    }
+                } else if (requiresMinMaxRange) {
+                    value = {
+                        min: isFilterValueObject ? value.min : value,
+                        max: isFilterValueObject ? value.max : value
+                    }
+                }
+
+                return {
+                    ...filter,
+                    type,
+                    requiresStartEndRange,
+                    requiresMinMaxRange,
+                    requiresCheckboxGroup,
+                    value
+                };
+            });
+        }
+    }
 
     handleCloseFilters() {
         this.dispatchEvent(new CustomEvent('close'));
     }
 
-    handleClearFilters() {
+    handleCancel() {
+        this.dispatchEvent(new CustomEvent('cancel'));
+    }
+
+    handleClearAllFilters() {
         this.dispatchEvent(new CustomEvent('clearall'));
     }
 
     handleApplyFilters() {
         this.dispatchEvent(new CustomEvent('apply'));
+    }
+
+    handleChange(event) {
+        console.log('here', 'handleChange');
+    }
+
+    handleCommit(event) {
+        console.log('here', 'handleCommit');
     }
 
     renderedCallback() {

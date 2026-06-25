@@ -12,17 +12,103 @@
             <div class="slds-col slds-grid slds-grid_vertical-align-center">
                 {labels.quickFilters}<lightning-helptext content={labels.quickFiltersHelpText} class="slds-m-left_xx-small slds-m-bottom_xxx-small"></lightning-helptext>
             </div>
-            <div class="slds-col slds-grid slds-grid_vertical-align-center">
-                <slot name="filters"></slot>
-            </div>
+            <template for:each={filters} for:item="filter">
+                <div key={filter.name} class="slds-col slds-grid slds-grid_vertical-align-center">
+                    <template lwc:if={requiresStartEndRange}></template>
+                    <template lwc:elseif={requiresMinMaxRange}></template>
+                    <template lwc:elseif={requiresCheckboxGroup}></template>
+                    <template lwc:else>
+                        <lightning-input
+                            accept={filter.accept}
+                            access-key={filter.accessKey}
+                            aria-active-descendant-element={filter.ariaActiveDescendantElement}
+                            aria-auto-complete={filter.ariaAutoComplete}
+                            aria-controls={filter.ariaControls}
+                            aria-described-by={filter.ariaDescribedBy}
+                            aria-details={filter.ariaDetails}
+                            aria-disabled={filter.ariaDisabled}
+                            aria-error-message={filter.ariaErrorMessage}
+                            aria-expanded={filter.ariaExpanded}
+                            aria-has-popup={filter.ariaHasPopup}
+                            aria-invalid={filter.ariaInvalid}
+                            aria-key-shortcuts={filter.ariaKeyShortcuts}
+                            aria-label={filter.ariaLabel}
+                            aria-labelled-by={filter.ariaLabelledBy}
+                            aria-role-description={filter.ariaRoleDescription}
+                            autocomplete={filter.autocomplete}
+                            checked={filter.checked}
+                            clsas={filter.class}
+                            date-access-key={filter.dateAccessKey}
+                            date-aria-controls={filter.dateAriaControls}
+                            date-aria-described-by={filter.dateAriaDescribedBy}
+                            date-aria-details={filter.dateAriaDetails}
+                            date-aria-error-message={filter.dateAriaErrorMessage}
+                            date-aria-label={filter.dateAriaLabel}
+                            date-aria-labelled-by={filter.dateAriaLabelledBy}
+                            date-style={filter.dateStyle}
+                            disabled={filter.disabled}
+                            field-level-help={filter.fieldLevelHelp}
+                            files={filter.files}
+                            format-fraction-digits={filter.formatFractionDigits}
+                            formatter={filter.formatter}
+                            indeterminate={filter.indeterminate}
+                            inputmode={filter.inputmode}
+                            is-loading={filter.isLoading}
+                            label={filter.label}
+                            max={filter.max}
+                            max-length={filter.maxLength}
+                            message-toggle-active={filter.messageToggleActive}
+                            message-toggle-inactive={filter.messageToggleInactive}
+                            message-when-bad-input={filter.messageWhenBadInput}
+                            message-when-pattern-mismatch={filter.messageWhenPatternMismatch}
+                            message-when-range-overflow={filter.messageWhenRangeOverflow}
+                            message-when-range-underflow={filter.messageWhenRangeUnderflow}
+                            message-when-step-mismatch={filter.messageWhenStepMismatch}
+                            message-when-too-long={filter.messageWhenTooLong}
+                            message-when-too-short={filter.messageWhenTooShort}
+                            message-when-type-mismatch={filter.messageWhenTypeMismatch}
+                            message-when-value-missing={filter.messageWhenValueMissing}
+                            min={filter.min}
+                            min-length={filter.minLength}
+                            multiple={filter.multiple}
+                            name={filter.name}
+                            pattern={filter.pattern}
+                            placeholder={filter.placeholder}
+                            read-only={filter.readOnly}
+                            required={filter.required}
+                            role={filter.role}
+                            selection-end={filter.selectionEnd}
+                            selection-start={filter.selectionStart}
+                            step={filter.step}
+                            time-access-key={filter.timeAccessKey}
+                            time-aria-controls={filter.timeAriaControls}
+                            time-aria-described-by={filter.timeAriaDescribedBy}
+                            time-aria-details={filter.timeAriaDetails}
+                            time-aria-error-message={filter.timeAriaErrorMessage}
+                            time-aria-label={filter.timeAriaLabel}
+                            time-aria-labelled-by={filter.timeAriaLabelledBy}
+                            time-step-minutes={filter.timeStepMinutes}
+                            time-style={filter.timeStyle}
+                            timezone={filter.timezone}
+                            type={filter.type}
+                            validity={filter.validity}
+                            value={filter.value}
+                            variant={filter.variant}
+
+                            onchange={handleChange}
+                            oncommit={handleCommit}
+                        ></lightning-input>
+                    </template>
+                </div>
+            </template>
         </div>
         <div class="slds-col slds-grid slds-p-around_small slds-border_top">
             <div class="slds-col slds-grid">
                 <div class="slds-col">
-                    <lightning-button name="cancel" label={labels.cancel} onclick={handleClearFilters}></lightning-button>
+                    <lightning-button name="cancel" label={labels.cancel} onclick={handleCancel}></lightning-button>
                 </div>
                 <div class="slds-col">
-                    <lightning-button name="clear" label={labels.clearAllFilters} onclick={handleClearFilters}></lightning-button>
+                    <lightning-button name="clear" label={labels.clearAllFilters} onclick={handleClearAllFilters}></lightning-button>
                 </div>
             </div>
             <div class="sdls-col">
