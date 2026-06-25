@@ -76,7 +76,12 @@
 
         <template lwc:if={formFactor.isLarge}>
             <template lwc:if={showQuickFilters}>
-                <c-filters-pane onclose={closeFilters} onclearall={clearFilters} onapply={applyFilters}></c-filters-pane>
+                <div>
+                    <div class="slds-is-absolute slds-panel_docked-right quick-filters-pane">
+                        <c-filters-pane onclose={closeFilters} onclearall={clearFilters} onapply={applyFilters}></c-filters-pane>
+                    </div>
+                </div>
+                
             </template>
 
             <template lwc:if={data}>

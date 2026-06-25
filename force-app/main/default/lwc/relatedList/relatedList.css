@@ -41,3 +41,9 @@ h2.slds-card__header-title {
 .body-table-container:empty {
     display: none;
 }
+
+.quick-filters-pane {
+    right: 0;
+    z-index: 2;
+    height: stretch;
+}

@@ -1,22 +1,25 @@
-.quick-filters-pane {
-    background-color: var(--slds-g-color-surface-container-1);
-    right: 0;
-    z-index: 2;
+:host {
     min-width: 20rem;
-    height: stretch;
-    border-radius: var(--slds-g-radius-border-1);
+    height: inherit;
+    display: block;
 }
 
-.quick-filters-pane > *:first-child{
+.pane {
+    border-radius: var(--slds-g-radius-border-1);
+    height: inherit;
+}
+
+.pane > *:first-child{
+    background-color: var(--slds-g-color-surface-container-1);
     max-height: fit-content;
 } 
 
-.quick-filters-pane > *:last-child {
+.pane > *:last-child {
     max-height: fit-content;
     background-color: var(--slds-g-color-surface-2);
     border-top-width: var(--slds-g-sizing-border-2);
 }
 
-.quick-filter-items > * {
+.filter-items > * {
     max-height: fit-content;
 }

@@ -1,5 +1,5 @@
 <template>
-    <div class="slds-is-absolute slds-panel_docked-right slds-grid slds-grid_vertical slds-box slds-p-around_none quick-filters-pane">
+    <div class="slds-grid slds-grid_vertical slds-box slds-p-around_none pane">
         <div class="slds-col slds-p-around_small slds-grid slds-grid_align-spread slds-border_bottom">
             <div class="slds-col slds-panel__header-title slds-text-heading_small slds-truncate">
                 {labels.filters}
@@ -8,7 +8,7 @@
                 <lightning-button-icon icon-name="utility:close" data-name="close" variant="container" size="small" alternative-text={labels.close} title={labels.close} onclick={handleCloseFilters}></lightning-button-icon>
             </div>
         </div>
-        <div class="slds-col slds-grid slds-grid_vertical slds-grow slds-p-around_small slds-scrollable quick-filter-items">
+        <div class="slds-col slds-grid slds-grid_vertical slds-grow slds-p-around_small slds-scrollable filter-items">
             <div class="slds-col slds-grid slds-grid_vertical-align-center">
                 {labels.quickFilters}<lightning-helptext content={labels.quickFiltersHelpText} class="slds-m-left_xx-small slds-m-bottom_xxx-small"></lightning-helptext>
             </div>
