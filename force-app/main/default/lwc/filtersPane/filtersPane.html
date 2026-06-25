@@ -12,6 +12,9 @@
             <div class="slds-col slds-grid slds-grid_vertical-align-center">
                 {labels.quickFilters}<lightning-helptext content={labels.quickFiltersHelpText} class="slds-m-left_xx-small slds-m-bottom_xxx-small"></lightning-helptext>
             </div>
+            <div class="slds-col slds-grid slds-grid_vertical-align-center">
+                <slot name="filters"></slot>
+            </div>
         </div>
         <div class="slds-col slds-grid slds-p-around_small slds-border_top">
             <div class="slds-col slds-grid">

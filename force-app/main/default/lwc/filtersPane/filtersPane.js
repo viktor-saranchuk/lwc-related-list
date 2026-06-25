@@ -4,7 +4,6 @@ import { LABELS } from './constants';
 
 export default class FiltersPane extends LightningElement {
     labels = LABELS;
-
     focusClose = true;
 
     handleCloseFilters() {
