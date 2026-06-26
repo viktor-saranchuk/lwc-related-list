@@ -14,7 +14,7 @@
             </div>
             <template for:each={filters} for:item="filter">
                 <div key={filter.name} class="slds-col slds-size_1-of-1">
-                    <tempalte lwc:if={filter.isGroup}>
+                    <tempalte lwc:if={filter.requiresRange}>
                         <legend class="slds-form-element__label">
                             <b>{filter.label}</b>
                         </legend>
@@ -24,6 +24,8 @@
                             <div class="slds-col">
                                 <lightning-input
                                     class={filter.class}
+                                    data-name={filter.name}
+                                    data-sub-name={propNames.start}
                                     date-access-key={filter.dateAccessKey}
                                     date-style={filter.dateStyle}
                                     field-level-help={filter.fieldLevelHelp}
@@ -43,6 +45,8 @@
                             <div class="slds-col">
                                 <lightning-input
                                     class={filter.class}
+                                    data-name={filter.name}
+                                    data-sub-name={propNames.end}
                                     date-access-key={filter.dateAccessKey}
                                     date-style={filter.dateStyle}
                                     field-level-help={filter.fieldLevelHelp}
@@ -65,6 +69,8 @@
                             <div class="slds-col">
                                 <lightning-input
                                     class={filter.class}
+                                    data-name={filter.name}
+                                    data-sub-name={propNames.min}
                                     field-level-help={filter.fieldLevelHelp}
                                     formatter={filter.formatter}
                                     inputmode={filter.inputmode}
@@ -84,6 +90,8 @@
                             <div class="slds-col">
                                 <lightning-input
                                     class={filter.class}
+                                    data-name={filter.name}
+                                    data-sub-name={propNames.max}
                                     field-level-help={filter.fieldLevelHelp}
                                     formatter={filter.formatter}
                                     inputmode={filter.inputmode}
@@ -101,7 +109,18 @@
                             </div>
                         </div>
                     </template>
-                    <template lwc:elseif={filter.requiresCheckboxGroup}></template>
+                    <template lwc:elseif={filter.requiresCheckboxGroup}>
+                        <lightning-checkbox-group
+                            class={filter.class}
+                            label={filter.label}
+                            name={filter.name}
+                            options={filter.options}
+                            value={filter.value}
+                            variant={filter.variant}
+                            
+                            onchange={handleChange}>
+                        </lightning-checkbox-group>
+                    </template>
                     <template lwc:else>
                         <lightning-input
                             autocomplete={filter.autocomplete}
@@ -127,7 +146,7 @@
                 </div>
             </template>
         </div>
-        <div class="slds-col slds-grid slds-p-around_small slds-border_top">
+        <div class="slds-col slds-grid slds-p-around_small slds-border_top pane-footer">
             <div class="slds-col slds-grid">
                 <div class="slds-col">
                     <lightning-button name="cancel" label={labels.cancel} onclick={handleCancel}></lightning-button>

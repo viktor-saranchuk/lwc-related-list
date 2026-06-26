@@ -13,7 +13,6 @@ export const LABELS = {
 };
 
 export const FILTER_TYPES = {
-    checkbox: 'checkbox',
     checkboxgroup: 'checkboxgroup',
     date: 'date',
     text: 'text',

@@ -1,18 +1,29 @@
-import { LightningElement, api } from 'lwc';
+import { LightningElement, api, track } from 'lwc';
 
 import { FILTER_TYPES, LABELS, PROP_NAMES } from './constants';
-import { isPlainObject } from './helper';
+import { isPlainObject, areArraysEqual, areFilterValuesEqual } from './helper';
+
+const _state = new Map();
 
 export default class FiltersPane extends LightningElement {
     _filters;
-    _draftValues;
+
+    @track
+    _draftFilters;
 
     labels = LABELS;
+    propNames = PROP_NAMES;
     focusClose = true;
 
     @api
+    instanceId;
+
+    @api
     get filters() {
-        return this._filters;
+        return this._filters?.map(filter => ({
+            ...filter,
+            value: structuredClone(this._draftFilters?.[filter.name]?.value ?? filter.value)
+        }));
     }
     set filters(value) {
         if (Array.isArray(value)) {
@@ -24,25 +35,26 @@ export default class FiltersPane extends LightningElement {
 
                 const isFilterValueObject = isPlainObject(filter.value);
 
-                let value = filter.value;
+                let value = filter.value || null;
 
                 if (requiresStartEndRange) {
                     value = {
-                        start: isFilterValueObject ? value.start : value,
-                        end: isFilterValueObject ? value.end : value
-
+                        [PROP_NAMES.start]: isFilterValueObject ? value[PROP_NAMES.start] : value,
+                        [PROP_NAMES.end]: isFilterValueObject ? value[PROP_NAMES.end] : value
                     }
                 } else if (requiresMinMaxRange) {
                     value = {
-                        min: isFilterValueObject ? value.min : value,
-                        max: isFilterValueObject ? value.max : value
+                        [PROP_NAMES.min]: isFilterValueObject ? value[PROP_NAMES.min] : value,
+                        [PROP_NAMES.max]: isFilterValueObject ? value[PROP_NAMES.max] : value
                     }
+                } else if (requiresCheckboxGroup) {
+                    value = value || [];
                 }
 
                 return {
                     ...filter,
                     type,
-                    isGroup: requiresStartEndRange || requiresMinMaxRange || requiresCheckboxGroup,
+                    requiresRange: requiresStartEndRange || requiresMinMaxRange,
                     requiresStartEndRange,
                     requiresMinMaxRange,
                     requiresCheckboxGroup,
@@ -57,24 +69,90 @@ export default class FiltersPane extends LightningElement {
     }
 
     handleCancel() {
-        this.dispatchEvent(new CustomEvent('cancel'));
+        this._draftFilters = {};
+        _state.get(this.instanceId).filters = {};
     }
 
     handleClearAllFilters() {
-        this.dispatchEvent(new CustomEvent('clearall'));
+        this._draftFilters = this.filters.reduce((acc, filter) => {
+            acc[filter.name] = {
+                ...filter
+            }
+            if (filter.requiresStartEndRange) {
+                acc[filter.name].value = {
+                    [PROP_NAMES.start]: null,
+                    [PROP_NAMES.end]: null
+                };
+            } else if (filter.requiresMinMaxRange) {
+                acc[filter.name].value = {
+                    [PROP_NAMES.min]: null,
+                    [PROP_NAMES.max]: null
+                };
+            } else if (filter.requiresCheckboxGroup) {
+                acc[filter.name].value = [];
+            } else {
+                acc[filter.name].value = null
+            }
+
+            return acc;
+        }, {})
+        _state.get(this.instanceId).filters = this._draftFilters;
     }
 
     handleApplyFilters() {
-        this.dispatchEvent(new CustomEvent('apply'));
+        const applied = this.filters;
+        this._filters = applied;
+        this.handleCancel();
+        this.dispatchEvent(new CustomEvent('apply', {detail: {filters: applied}}));
     }
 
     handleChange(event) {
+        event.stopPropagation();
+
         if (!event.target.checkValidity()) {
             event.target.value = null;
             event.target.setCustomValidity('');
             event.target.reportValidity();
             return;
         }
+
+        const filter = this.filters.find(({name}) => name === event.target.name);
+
+        let value = structuredClone(event.detail.value ?? null);
+
+        if (filter.requiresRange) {
+            const pair = [...this.template.querySelectorAll(`[data-name="${event.target.name}"]`)];
+
+            if (event.target.type === FILTER_TYPES.date) {
+                value = {
+                    [PROP_NAMES.start]: pair.find(({dataset: {subName}}) => subName === PROP_NAMES.start).value,
+                    [PROP_NAMES.end]: pair.find(({dataset: {subName}}) => subName === PROP_NAMES.end).value
+                }
+            } else if (event.target.type === FILTER_TYPES.number) {
+                value = {
+                    [PROP_NAMES.min]: pair.find(({dataset: {subName}}) => subName === PROP_NAMES.min).value,
+                    [PROP_NAMES.max]: pair.find(({dataset: {subName}}) => subName === PROP_NAMES.max).value
+                }
+            }
+        } else if (filter.requiresCheckboxGroup) {
+            value = value ?? [];
+        }
+
+        if (areFilterValuesEqual(filter.value, value)) {
+            const { [filter.name]: _, ...rest } = this._draftFilters;
+            this._draftFilters = rest;
+        } else {
+            this._draftFilters = { ...this._draftFilters, [filter.name]: { ...filter, value } };
+        }
+
+        _state.get(this.instanceId).filters = this._draftFilters;
+    }
+
+    connectedCallback() {
+        if (!_state.has(this.instanceId)) {
+            _state.set(this.instanceId, { filters: {} });
+        }
+        this._draftFilters = _state.get(this.instanceId).filters;
     }
 
     renderedCallback() {

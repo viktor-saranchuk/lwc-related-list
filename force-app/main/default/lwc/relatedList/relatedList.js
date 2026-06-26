@@ -25,6 +25,8 @@ export default class RelatedList extends LightningElement {
     _lastDataSetAtCheckedAt;
     _lastDataSetAtCheckedAtTimoutId;
 
+    instanceId = crypto.randomUUID();
+
     formFactor = FORM_FACTOR;
     labels = LABELS;
     controls = CONTROLS;
@@ -305,10 +307,6 @@ export default class RelatedList extends LightningElement {
     closeFilters() {
         this.showQuickFilters = !this.showQuickFilters;
         this.template.querySelector(`lightning-button-icon-stateful[data-name="${CONTROLS.showQuickFilters.name}"]`)?.focus();
-    }
-
-    clearFilters() {
-        console.warn('NOT IMPLEMENTED');
     }
 
     applyFilters() {

@@ -11,18 +11,13 @@
     background-color: var(--slds-g-color-surface-container-1);
 }
 
-.pane > *:first-child{
+.pane > *:first-child, .pane > *:last-child, .filter-items > * {
     max-height: fit-content;
 } 
 
-.pane > *:last-child {
-    max-height: fit-content;
+.pane-footer {
     background-color: var(--slds-g-color-surface-2);
     border-top-width: var(--slds-g-sizing-border-2);
-}
-
-.filter-items > * {
-    max-height: fit-content;
 }
 
 .minus {
