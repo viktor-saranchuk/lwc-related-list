@@ -243,21 +243,7 @@ export default class RelatedList extends LightningElement {
     }
 
     get filters() {
-        // TODO: temp values
-        return [
-            {
-                label: 'Name',
-                name: 'name',
-                value: null,
-                type: 'text'
-            },
-            {
-                label: 'Date',
-                name: 'date',
-                value: null,
-                type: 'date'
-            }
-        ];
+        return [];
     }
 
     setLastDataSetAtCheckedAt = () => {

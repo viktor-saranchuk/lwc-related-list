@@ -16,9 +16,7 @@ export const FILTER_TYPES = {
     checkbox: 'checkbox',
     checkboxgroup: 'checkboxgroup',
     date: 'date',
-    datetime: 'datetime',
     text: 'text',
-    time: 'time',
     tel: 'tel',
     number: 'number'
 };

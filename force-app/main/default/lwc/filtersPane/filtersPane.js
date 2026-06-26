@@ -18,7 +18,7 @@ export default class FiltersPane extends LightningElement {
         if (Array.isArray(value)) {
             this._filters = value?.filter(({type}) => !type || Object.values(FILTER_TYPES).includes(type)).map(filter => {
                 const type = filter.type || FILTER_TYPES.text;
-                const requiresStartEndRange = [FILTER_TYPES.date, FILTER_TYPES.datetime, FILTER_TYPES.time].includes(type);
+                const requiresStartEndRange = type === FILTER_TYPES.date;
                 const requiresMinMaxRange = type === FILTER_TYPES.number;
                 const requiresCheckboxGroup = type === FILTER_TYPES.checkboxgroup;
 
@@ -29,7 +29,7 @@ export default class FiltersPane extends LightningElement {
                 if (requiresStartEndRange) {
                     value = {
                         start: isFilterValueObject ? value.start : value,
-                        end: isFilterValueObject ? value.start : value
+                        end: isFilterValueObject ? value.end : value
 
                     }
                 } else if (requiresMinMaxRange) {

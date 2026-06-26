@@ -26,7 +26,6 @@
                                     class={filter.class}
                                     date-access-key={filter.dateAccessKey}
                                     date-style={filter.dateStyle}
-                                    disabled={filter.disabled}
                                     field-level-help={filter.fieldLevelHelp}
                                     inputmode={filter.inputmode}
                                     label={labels.start}
@@ -34,12 +33,8 @@
                                     min={filter.min}
                                     name={filter.name}
                                     placeholder={filter.placeholder}
-                                    time-access-key={filter.timeAccessKey}
-                                    time-step-minutes={filter.timeStepMinutes}
-                                    time-style={filter.timeStyle}
-                                    timezone={filter.timezone}
                                     type={filter.type}
-                                    value={filter.value}
+                                    value={filter.value.start}
 
                                     onchange={handleChange}
                                 ></lightning-input>
@@ -50,7 +45,6 @@
                                     class={filter.class}
                                     date-access-key={filter.dateAccessKey}
                                     date-style={filter.dateStyle}
-                                    disabled={filter.disabled}
                                     field-level-help={filter.fieldLevelHelp}
                                     inputmode={filter.inputmode}
                                     label={labels.end}
@@ -58,19 +52,55 @@
                                     min={filter.min}
                                     name={filter.name}
                                     placeholder={filter.placeholder}
-                                    time-access-key={filter.timeAccessKey}
-                                    time-step-minutes={filter.timeStepMinutes}
-                                    time-style={filter.timeStyle}
-                                    timezone={filter.timezone}
                                     type={filter.type}
-                                    value={filter.value}
+                                    value={filter.value.end}
 
                                     onchange={handleChange}
                                 ></lightning-input>
                             </div>
                         </div>
                     </template>
-                    <template lwc:elseif={filter.requiresMinMaxRange}></template>
+                    <template lwc:elseif={filter.requiresMinMaxRange}>
+                        <div class="slds-grid slds-gutters_xxx-small slds-grid_vertical-align-start">
+                            <div class="slds-col">
+                                <lightning-input
+                                    class={filter.class}
+                                    field-level-help={filter.fieldLevelHelp}
+                                    formatter={filter.formatter}
+                                    inputmode={filter.inputmode}
+                                    label={labels.min}
+                                    max={filter.max}
+                                    min={filter.min}
+                                    name={filter.name}
+                                    placeholder={filter.placeholder}
+                                    step={filter.step}
+                                    type={filter.type}
+                                    value={filter.value.min}
+
+                                    onchange={handleChange}
+                                ></lightning-input>
+                            </div>
+                            <span class="slds-col minus">-</span>
+                            <div class="slds-col">
+                                <lightning-input
+                                    class={filter.class}
+                                    field-level-help={filter.fieldLevelHelp}
+                                    formatter={filter.formatter}
+                                    inputmode={filter.inputmode}
+                                    label={labels.max}
+                                    max={filter.max}
+                                    min={filter.min}
+                                    name={filter.name}
+                                    placeholder={filter.placeholder}
+                                    step={filter.step}
+                                    type={filter.type}
+                                    value={filter.value.nax}
+
+                                    onchange={handleChange}
+                                ></lightning-input>
+                            </div>
+                        </div>
+                    </template>
                     <template lwc:elseif={filter.requiresCheckboxGroup}></template>
                     <template lwc:else>
                         <lightning-input
