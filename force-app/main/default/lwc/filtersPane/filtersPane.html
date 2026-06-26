@@ -14,11 +14,11 @@
             </div>
             <template for:each={filters} for:item="filter">
                 <div key={filter.name} class="slds-col slds-size_1-of-1">
-                    <tempalte lwc:if={filter.requiresRange}>
+                    <template lwc:if={filter.requiresRange}>
                         <legend class="slds-form-element__label">
                             <b>{filter.label}</b>
                         </legend>
-                    </tempalte>
+                    </template>
                     <template lwc:if={filter.requiresStartEndRange}>
                         <div class="slds-grid slds-gutters_xxx-small slds-grid_vertical-align-start">
                             <div class="slds-col">
@@ -102,7 +102,7 @@
                                     placeholder={filter.placeholder}
                                     step={filter.step}
                                     type={filter.type}
-                                    value={filter.value.nax}
+                                    value={filter.value.max}
 
                                     onchange={handleChange}
                                 ></lightning-input>
@@ -146,18 +146,22 @@
                 </div>
             </template>
         </div>
-        <div class="slds-col slds-grid slds-p-around_small slds-border_top pane-footer">
-            <div class="slds-col slds-grid">
-                <div class="slds-col">
-                    <lightning-button name="cancel" label={labels.cancel} onclick={handleCancel}></lightning-button>
+        <template lwc:if={showFooter}>
+            <div class="slds-col slds-grid slds-p-around_small slds-border_top pane-footer">
+                <div class="slds-col slds-grid">
+                    <template lwc:if={hasDraftFilters}>
+                        <div class="slds-col">
+                            <lightning-button name="cancel" label={labels.cancel} onclick={handleCancel}></lightning-button>
+                        </div>
+                    </template>
+                    <div class="slds-col">
+                        <lightning-button name="clear" label={labels.clearAllFilters} onclick={handleClearAllFilters}></lightning-button>
+                    </div>
                 </div>
-                <div class="slds-col">
-                    <lightning-button name="clear" label={labels.clearAllFilters} onclick={handleClearAllFilters}></lightning-button>
+                <div class="sdls-col">
+                    <lightning-button name="apply" label={labels.apply} variant="brand" disabled={noDraftFilters} onclick={handleApplyFilters}></lightning-button>
                 </div>
             </div>
-            <div class="sdls-col">
-                <lightning-button name="apply" label={labels.apply} variant="brand" onclick={handleApplyFilters}></lightning-button>
-            </div>
-        </div>
+        </template>
     </div>
 </template>

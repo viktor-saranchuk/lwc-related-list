@@ -22,7 +22,11 @@ export default class FiltersPane extends LightningElement {
     get filters() {
         return this._filters?.map(filter => ({
             ...filter,
-            value: structuredClone(this._draftFilters?.[filter.name]?.value ?? filter.value)
+            value: structuredClone(
+                Object.hasOwn(this._draftFilters || {}, filter.name)
+                    ? this._draftFilters[filter.name].value
+                    : filter.value
+            )
         }));
     }
     set filters(value) {
@@ -64,6 +68,32 @@ export default class FiltersPane extends LightningElement {
         }
     }
 
+    get noDraftFilters() {
+        return !Object.values(this._draftFilters || {}).length;
+    }
+
+    get hasDraftFilters() {
+        return !!this._draftFilters && Object.values(this._draftFilters || {}).length;
+    }
+
+    get isFiltersSet() {
+        return this.filters?.some(({type, value}) => {
+            if (type === FILTER_TYPES.date) {
+                return !!(value?.[PROP_NAMES.start] || value?.[PROP_NAMES.end]);
+            } else if (type === FILTER_TYPES.number) {
+                return !!(value?.[PROP_NAMES.min] || value?.[PROP_NAMES.max]);
+            } else if (type === FILTER_TYPES.checkboxgroup) {
+                return !!value?.length
+            }
+
+            return !!value;
+        });
+    }
+
+    get showFooter() {
+        return this.isFiltersSet || this.hasDraftFilters;
+    }
+
     handleCloseFilters() {
         this.dispatchEvent(new CustomEvent('close'));
     }
@@ -95,7 +125,8 @@ export default class FiltersPane extends LightningElement {
             }
 
             return acc;
-        }, {})
+        }, {});
+
         _state.get(this.instanceId).filters = this._draftFilters;
     }
 
