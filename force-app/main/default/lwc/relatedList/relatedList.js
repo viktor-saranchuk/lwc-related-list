@@ -1,5 +1,6 @@
 import { LightningElement, api, wire } from 'lwc';
 import { CurrentPageReference } from 'lightning/navigation';
+import { FILTER_TYPES } from 'c/filtersPane';
 
 import {
     CONTROLS,
@@ -10,7 +11,8 @@ import {
     LABELS,
     LIST_TYPE,
     PAGE_TYPE,
-    VIEW_MODE
+    VIEW_MODE,
+    COLUMN_FILTER_TYPES_MAPPING
 } from './constants'
 
 export default class RelatedList extends LightningElement {
@@ -19,6 +21,7 @@ export default class RelatedList extends LightningElement {
     _data;
     _hasMoreData;
     _columns;
+    _filters;
     _breadcrumbs;
     _sortConfig;
     _lastDataSetAt;
@@ -84,6 +87,29 @@ export default class RelatedList extends LightningElement {
     set columns(value) {
         if (Array.isArray(value)) {
             this._columns = value;
+        }
+    }
+
+    @api
+    get filters() {
+        return this._filters ?? this.columns?.map(column => {
+
+            const type = COLUMN_FILTER_TYPES_MAPPING[column.type ?? FILTER_TYPES.text];
+
+            if (!type) {
+                return null;
+            }
+
+            return {
+                label: column.label,
+                name: column.fieldName,
+                type
+            }
+        })?.filter(Boolean) ?? [];
+    }
+    set filters(value) {
+        if (Array.isArray(value)) {
+            this._filters = value;
         }
     }
 
@@ -244,10 +270,6 @@ export default class RelatedList extends LightningElement {
         return this.viewMode.isCompact ? 6 : 50;
     }
 
-    get filters() {
-        return [];
-    }
-
     setLastDataSetAtCheckedAt = () => {
         this.lastDataSetAtCheckedAt = Date.now();
 
@@ -309,8 +331,9 @@ export default class RelatedList extends LightningElement {
         this.template.querySelector(`lightning-button-icon-stateful[data-name="${CONTROLS.showQuickFilters.name}"]`)?.focus();
     }
 
-    applyFilters() {
-        console.warn('NOT IMPLEMENTED');
+    applyFilters(event) {
+        this.filters = event.detail.filters;
+        this.dispatchEvent(new CustomEvent('applyfilters', {detail: structuredClone(event.detail)}))
     }
 
     disconnectedCallback() {

@@ -23,3 +23,7 @@
 .minus {
     margin-top: 1.75rem;
 }
+
+.clear-button {
+    --slds-c-button-line-height: 0;
+}

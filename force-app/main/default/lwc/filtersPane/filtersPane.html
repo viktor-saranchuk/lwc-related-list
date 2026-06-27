@@ -14,6 +14,9 @@
             </div>
             <template for:each={filters} for:item="filter">
                 <div key={filter.name} class="slds-col slds-size_1-of-1">
+                    <div class={filter.clearableClass}>
+                        <lightning-button variant="base" label={labels.clear} title={labels.clear} disable-animation onclick={handleClear}></lightning-button>
+                    </div>
                     <template lwc:if={filter.requiresRange}>
                         <legend class="slds-form-element__label">
                             <b>{filter.label}</b>

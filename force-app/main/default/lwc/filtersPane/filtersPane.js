@@ -5,6 +5,7 @@ import { isPlainObject, areArraysEqual, areFilterValuesEqual } from './helper';
 
 const _state = new Map();
 
+export { FILTER_TYPES } from './constants';
 export default class FiltersPane extends LightningElement {
     _filters;
 
@@ -26,7 +27,21 @@ export default class FiltersPane extends LightningElement {
                 Object.hasOwn(this._draftFilters || {}, filter.name)
                     ? this._draftFilters[filter.name].value
                     : filter.value
-            )
+            ),
+            get hasValue() {
+                if (this.requiresStartEndRange) {
+                    return !!this.value?.[PROP_NAMES.start] || !!this.value?.[PROP_NAMES.end];
+                } else if (this.requiresMinMaxRange) {
+                    return !!this.value?.[PROP_NAMES.min] || !!this.value?.[PROP_NAMES.max];
+                } else if (this.requiresCheckboxGroup) {
+                    return !!this.value?.length;
+                }
+
+                return !!this.value;
+            },
+            get clearableClass() {
+                return `${this.hasValue ? '' : 'slds-hidden'} clear-button`;
+            }
         }));
     }
     set filters(value) {
@@ -101,6 +116,10 @@ export default class FiltersPane extends LightningElement {
     handleCancel() {
         this._draftFilters = {};
         _state.get(this.instanceId).filters = {};
+    }
+
+    handleClear() {
+        
     }
 
     handleClearAllFilters() {

@@ -51,9 +51,11 @@
                 <div slot="controls" class="slds-p-around_none slds-m-left_xx-small button-icon-wrapper">
                     <lightning-button-icon icon-name={controls.columnSort.iconName} name={controls.columnSort.name} alternative-text={controls.columnSort.label} title={controls.columnSort.label} tooltip={controls.columnSort.label} onclick={handleControlClick}></lightning-button-icon>
                 </div>
-                <div slot="controls" class="slds-p-around_none slds-m-left_xx-small button-icon-wrapper">
-                    <lightning-button-icon-stateful icon-name={controls.showQuickFilters.iconName} data-name={controls.showQuickFilters.name} name={controls.showQuickFilters.name} alternative-text={controls.showQuickFilters.label} title={controls.showQuickFilters.label} tooltip={controls.showQuickFilters.label} selected={showQuickFilters} onclick={handleControlClick}></lightning-button-icon-stateful>
-                </div>
+                <template lwc:if={filters.length}>
+                    <div slot="controls" class="slds-p-around_none slds-m-left_xx-small button-icon-wrapper">
+                        <lightning-button-icon-stateful icon-name={controls.showQuickFilters.iconName} data-name={controls.showQuickFilters.name} name={controls.showQuickFilters.name} alternative-text={controls.showQuickFilters.label} title={controls.showQuickFilters.label} tooltip={controls.showQuickFilters.label} selected={showQuickFilters} onclick={handleControlClick}></lightning-button-icon-stateful>
+                    </div>
+                </template>
             </template>
 
             <template lwc:if={listViewActionButtons.length}>

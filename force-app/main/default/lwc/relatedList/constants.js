@@ -1,4 +1,5 @@
 import formFactor from "@salesforce/client/formFactor";
+import { FILTER_TYPES } from 'c/filtersPane';
 
 export const DEFAULT_NUMBER_OF_ACTION_BUTTONS = 3;
 
@@ -82,3 +83,15 @@ export const CONTROLS = {
         iconName: 'utility:filterList'
     }
 };
+
+export const COLUMN_FILTER_TYPES_MAPPING = {
+    boolean: FILTER_TYPES.checkboxgroup,
+    currency: FILTER_TYPES.number,
+    date: FILTER_TYPES.date,
+    email: FILTER_TYPES.text,
+    number: FILTER_TYPES.number,
+    percent: FILTER_TYPES.number,
+    phone: FILTER_TYPES.tel,
+    text: FILTER_TYPES.text,
+    url: FILTER_TYPES.text
+}

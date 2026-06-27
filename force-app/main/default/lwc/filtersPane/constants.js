@@ -1,6 +1,7 @@
 export const LABELS = {
     apply: 'Apply',
     cancel: 'Cancel',
+    clear: 'Clear',
     clearAllFilters: 'Clear All Filters',
     close: 'Close',
     filters: 'Filters',
