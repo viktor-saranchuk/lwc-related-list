@@ -5,6 +5,7 @@ import { FILTER_TYPES } from 'c/filtersPane';
 import {
     CONTROLS,
     DEFAULT_NUMBER_OF_ACTION_BUTTONS,
+    DEFAULT_COMPACT_PAGE_SIZE,
     DEFAULT_SORT_CONFIG,
     FORM_FACTOR,
     ICON_SIZE,
@@ -20,6 +21,7 @@ export default class RelatedList extends LightningElement {
     _listType;
     _data;
     _hasMoreData;
+    _pageSize;
     _columns;
     _filters;
     _breadcrumbs;
@@ -132,6 +134,16 @@ export default class RelatedList extends LightningElement {
     }
     set hasMoreData(value) {
         this._hasMoreData = value;
+    }
+
+    @api 
+    get pageSize() {
+        return this._pageSize ?? this.viewMode.isCompact ? DEFAULT_COMPACT_PAGE_SIZE :  null;
+    }
+    set pageSize(value) {
+        if (Number.isInteger(value) && value >= 0) {
+            this._pageSize = value;
+        }
     }
 
     @api
@@ -264,10 +276,6 @@ export default class RelatedList extends LightningElement {
         }
 
         return updatedAgo;
-    }
-
-    get numberOfSkeletonRows() {
-        return this.viewMode.isCompact ? 6 : 50;
     }
 
     setLastDataSetAtCheckedAt = () => {

@@ -3,13 +3,14 @@
     height: inherit;
     overflow: hidden;
 
-    border-radius: var(--slds-g-radius-border-2);
+    border-radius: var(--slds-g-radius-border-1);
 
     background-color: var(--slds-g-color-neutral-base-95);
 }
 
 .slds-tabs_card {
     height: inherit;
+    border-radius: inherit;
 }
 
 h2.slds-card__header-title {

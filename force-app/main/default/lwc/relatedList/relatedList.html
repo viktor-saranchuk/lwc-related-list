@@ -101,7 +101,7 @@
             </template>
             <tempalte lwc:else>
                 <div class="slds-col slds-scrollable_y body-table-container slds-is-relative">
-                    <c-related-list-body-initial columns={columns} number-of-rows={numberOfSkeletonRows}></c-related-list-body-initial>
+                    <c-related-list-body-initial columns={columns} number-of-rows={pageSize} show-row-number-column hide-checkbox-column={viewMode.isCompact}></c-related-list-body-initial>
                 </div>
             </tempalte>
 
