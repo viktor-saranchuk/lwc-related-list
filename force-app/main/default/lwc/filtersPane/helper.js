@@ -40,3 +40,5 @@ export const areFilterValuesEqual = (val1, val2) => {
 
     return false;
 }
+
+export const isSet = (v) => Array.isArray(v) ? v.length > 0 : v !== null && v !== undefined && v !== '';

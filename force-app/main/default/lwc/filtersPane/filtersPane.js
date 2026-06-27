@@ -1,7 +1,7 @@
 import { LightningElement, api, track } from 'lwc';
 
 import { FILTER_TYPES, LABELS, PROP_NAMES } from './constants';
-import { isPlainObject, areArraysEqual, areFilterValuesEqual } from './helper';
+import { isPlainObject, areArraysEqual, areFilterValuesEqual, isSet } from './helper';
 
 const _state = new Map();
 
@@ -30,17 +30,17 @@ export default class FiltersPane extends LightningElement {
             ),
             get hasValue() {
                 if (this.requiresStartEndRange) {
-                    return !!this.value?.[PROP_NAMES.start] || !!this.value?.[PROP_NAMES.end];
+                    return isSet(this.value?.[PROP_NAMES.start]) || isSet(this.value?.[PROP_NAMES.end]);
                 } else if (this.requiresMinMaxRange) {
-                    return !!this.value?.[PROP_NAMES.min] || !!this.value?.[PROP_NAMES.max];
+                    return isSet(this.value?.[PROP_NAMES.min]) || isSet(this.value?.[PROP_NAMES.max]);
                 } else if (this.requiresCheckboxGroup) {
-                    return !!this.value?.length;
+                    return isSet(this.value?.length);
                 }
 
-                return !!this.value;
+                return isSet(this.value);
             },
             get clearableClass() {
-                return `${this.hasValue ? '' : 'slds-hidden'} clear-button`;
+                return `${this.hasValue ? '' : 'slds-hidden'} slds-grid clear-button`;
             }
         }));
     }
@@ -91,22 +91,12 @@ export default class FiltersPane extends LightningElement {
         return !!this._draftFilters && Object.values(this._draftFilters || {}).length;
     }
 
-    get isFiltersSet() {
-        return this.filters?.some(({type, value}) => {
-            if (type === FILTER_TYPES.date) {
-                return !!(value?.[PROP_NAMES.start] || value?.[PROP_NAMES.end]);
-            } else if (type === FILTER_TYPES.number) {
-                return !!(value?.[PROP_NAMES.min] || value?.[PROP_NAMES.max]);
-            } else if (type === FILTER_TYPES.checkboxgroup) {
-                return !!value?.length
-            }
-
-            return !!value;
-        });
+    get areFiltersSet() {
+        return this.filters?.some(({hasValue}) => hasValue);
     }
 
     get showFooter() {
-        return this.isFiltersSet || this.hasDraftFilters;
+        return this.areFiltersSet || this.hasDraftFilters;
     }
 
     handleCloseFilters() {
@@ -118,35 +108,47 @@ export default class FiltersPane extends LightningElement {
         _state.get(this.instanceId).filters = {};
     }
 
-    handleClear() {
-        
+    handleClear(event) {
+        delete this._draftFilters[event.target.dataset.for];
+        _state.get(this.instanceId).filters = this._draftFilters;
+
+        const filter = this.filters?.find(({name, hasValue}) => name === event.target.dataset.for && hasValue);
+
+        if (!filter) {
+            return;
+        }
+
+        const draftFilter = {
+            ...filter
+        }
+
+        if (draftFilter.requiresStartEndRange) {
+            draftFilter.value = {
+                [PROP_NAMES.start]: null,
+                [PROP_NAMES.end]: null
+            };
+        } else if (draftFilter.requiresMinMaxRange) {
+            draftFilter.value = {
+                [PROP_NAMES.min]: null,
+                [PROP_NAMES.max]: null
+            };
+        } else if (draftFilter.requiresCheckboxGroup) {
+            draftFilter.value = [];
+        } else {
+            draftFilter.value = null;
+        }
+
+        if (!this._draftFilters) {
+            this._draftFilters = {};
+        }
+
+        this._draftFilters[draftFilter.name] = draftFilter;
+        _state.get(this.instanceId).filters = this._draftFilters;
     }
 
     handleClearAllFilters() {
-        this._draftFilters = this.filters.reduce((acc, filter) => {
-            acc[filter.name] = {
-                ...filter
-            }
-            if (filter.requiresStartEndRange) {
-                acc[filter.name].value = {
-                    [PROP_NAMES.start]: null,
-                    [PROP_NAMES.end]: null
-                };
-            } else if (filter.requiresMinMaxRange) {
-                acc[filter.name].value = {
-                    [PROP_NAMES.min]: null,
-                    [PROP_NAMES.max]: null
-                };
-            } else if (filter.requiresCheckboxGroup) {
-                acc[filter.name].value = [];
-            } else {
-                acc[filter.name].value = null
-            }
+        this.filters.forEach(filter => this.handleClear({target: {dataset: {for: filter.name}}}));
 
-            return acc;
-        }, {});
-
-        _state.get(this.instanceId).filters = this._draftFilters;
     }
 
     handleApplyFilters() {

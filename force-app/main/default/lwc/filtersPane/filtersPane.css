@@ -26,4 +26,7 @@
 
 .clear-button {
     --slds-c-button-line-height: 0;
+    --slds-c-button-shadow-focus: none;
+    --slds-c-button-color-border-active: transparent;
+    outline: none;
 }

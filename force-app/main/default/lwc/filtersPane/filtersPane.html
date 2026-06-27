@@ -13,9 +13,9 @@
                 {labels.quickFilters}<lightning-helptext content={labels.quickFiltersHelpText} class="slds-m-left_xx-small slds-m-bottom_xxx-small"></lightning-helptext>
             </div>
             <template for:each={filters} for:item="filter">
-                <div key={filter.name} class="slds-col slds-size_1-of-1">
+                <div key={filter.name} class="slds-col slds-size_1-of-1 slds-m-bottom_xx-small">
                     <div class={filter.clearableClass}>
-                        <lightning-button variant="base" label={labels.clear} title={labels.clear} disable-animation onclick={handleClear}></lightning-button>
+                        <lightning-button variant="base" class="slds-col_bump-left" label={labels.clear} title={labels.clear} disable-animation data-for={filter.name} onclick={handleClear}></lightning-button>
                     </div>
                     <template lwc:if={filter.requiresRange}>
                         <legend class="slds-form-element__label">
@@ -157,9 +157,11 @@
                             <lightning-button name="cancel" label={labels.cancel} onclick={handleCancel}></lightning-button>
                         </div>
                     </template>
-                    <div class="slds-col">
-                        <lightning-button name="clear" label={labels.clearAllFilters} onclick={handleClearAllFilters}></lightning-button>
-                    </div>
+                    <template lwc:if={areFiltersSet}>
+                        <div class="slds-col">
+                            <lightning-button name="clear" label={labels.clearAllFilters} onclick={handleClearAllFilters}></lightning-button>
+                        </div>
+                    </template>
                 </div>
                 <div class="sdls-col">
                     <lightning-button name="apply" label={labels.apply} variant="brand" disabled={noDraftFilters} onclick={handleApplyFilters}></lightning-button>
