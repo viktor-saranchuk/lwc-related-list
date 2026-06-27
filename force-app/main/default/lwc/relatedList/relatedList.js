@@ -84,11 +84,12 @@ export default class RelatedList extends LightningElement {
 
     @api
     get columns() {
-        const {isCompact, isFull} = this.viewMode;
+        const {isEnhanced} = this.type;
+        const {isFull} = this.viewMode
         return this._columns?.map(column => ({
             ...column, 
-            hideDefaultActions: Object.hasOwn(column, 'hideDefaultActions') ? column.hideDefaultActions : isCompact, 
-            sortable: Object.hasOwn(column, 'sortable') ? column.sortable : (isFull && column.type !== 'action')
+            hideDefaultActions: Object.hasOwn(column, 'hideDefaultActions') ? column.hideDefaultActions : !isEnhanced, 
+            sortable: Object.hasOwn(column, 'sortable') ? column.sortable : (isEnhanced && column.type !== 'action')
         }));
     }
     set columns(value) {
@@ -197,6 +198,14 @@ export default class RelatedList extends LightningElement {
         return {
             isCompact: this.mode === VIEW_MODE.compact,
             isFull: this.mode === VIEW_MODE.full
+        }
+    }
+
+    get type() {
+        return {
+            isBasic: this.listType === LIST_TYPE.basic,
+            isEnhanced: this.listType === LIST_TYPE.enhanced || this.viewMode.isFull,
+            isTiles: this.listType === LIST_TYPE.tiles
         }
     }
 
