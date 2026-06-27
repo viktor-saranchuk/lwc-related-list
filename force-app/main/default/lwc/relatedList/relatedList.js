@@ -84,7 +84,8 @@ export default class RelatedList extends LightningElement {
 
     @api
     get columns() {
-        return this._columns;
+        const {isCompact, isFull} = this.viewMode;
+        return this._columns?.map(column => ({...column, hideDefaultActions: isCompact, sortable: isFull}));
     }
     set columns(value) {
         if (Array.isArray(value)) {
@@ -332,6 +333,10 @@ export default class RelatedList extends LightningElement {
     handleColumnsSort(event) {
         this.dispatchEvent(new CustomEvent('sort', {detail: event.detail}))
         this.sortConfig = event.detail;
+    }
+
+    handleRowAction(event) {
+        this.dispatchEvent(new CustomEvent('rowaction', {detail: structuredClone(event.detail)}))
     }
 
     closeFilters() {
