@@ -85,7 +85,11 @@ export default class RelatedList extends LightningElement {
     @api
     get columns() {
         const {isCompact, isFull} = this.viewMode;
-        return this._columns?.map(column => ({...column, hideDefaultActions: isCompact, sortable: isFull && column.type !== 'action'}));
+        return this._columns?.map(column => ({
+            ...column, 
+            hideDefaultActions: Object.hasOwn(column, 'hideDefaultActions') ? column.hideDefaultActions : isCompact, 
+            sortable: Object.hasOwn(column, 'sortable') ? column.sortable : (isFull && column.type !== 'action')
+        }));
     }
     set columns(value) {
         if (Array.isArray(value)) {
