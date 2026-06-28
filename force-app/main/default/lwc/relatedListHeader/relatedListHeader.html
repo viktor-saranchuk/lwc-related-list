@@ -10,7 +10,7 @@
                         <template lwc:if={viewMode.isFull}>
                             <div class="slds-col">
                                 <tempalte lwc:if={showSkeleton}>
-                                    <div class="slds-skeleton shimmer"></div>
+                                    <c-skeleton class="breadcumbs-skeleton"></c-skeleton>
                                 </tempalte>
                                 <slot name="breadcrumbs" onslotchange={hideSkeleton}></slot>
                             </div>
@@ -36,7 +36,7 @@
                 <template lwc:if={listType.isEnhanced}>
                     <div class="slds-col">
                         <tempalte lwc:if={showSkeleton}>
-                            <div class="slds-skeleton shimmer"></div>
+                            <c-skeleton class="info-skeleton"></c-skeleton>
                         </tempalte>
                         <slot name="info" onslotchange={hideSkeleton}></slot>
                     </div>

@@ -1,10 +1,5 @@
-:host {
-    display: block;
-    width: 100%;
-}
-
 .shimmer {
-    background: linear-gradient(90deg, #f3f3f3 25%, #ecebeb 50%, #f3f3f3 75%);
+    background: linear-gradient(90deg, var(--skeleton-shimmer-color-1,#f3f3f3) 25%, var(--skeleton-shimmer-color-2, #ecebeb) 50%, var(--skeleton-shimmer-color-3, #f3f3f3) 75%);
     background-size: 400% 100%;
     animation: shimmer 1.2s ease-in-out infinite;
     border-radius: 4px;
@@ -16,4 +11,9 @@
     100% {
         background-position: 400px 0;
     }
+}
+
+.slds-skeleton {
+    width: var(--skeleton-width, 100%);
+    height: var(--skeleton-height, 1rem);
 }

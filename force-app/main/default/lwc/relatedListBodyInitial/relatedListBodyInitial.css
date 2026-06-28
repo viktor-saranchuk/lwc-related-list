@@ -1,6 +1,7 @@
 :host {
     -webkit-mask-image: linear-gradient(to bottom, black 30%, transparent 100%);
     mask-image: linear-gradient(to bottom, black 30%, transparent 100%);
+    --skeleton-width: 75%;
 }
 
 .card-body-desktop {
