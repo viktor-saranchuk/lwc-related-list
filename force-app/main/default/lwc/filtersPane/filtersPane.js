@@ -1,6 +1,6 @@
 import { LightningElement, api, track } from 'lwc';
 
-import { FILTER_TYPES, LABELS, PROP_NAMES } from './constants';
+import { FILTER_TYPES, LABELS, PROP_NAMES, PATTERNS } from './constants';
 import { isPlainObject, areArraysEqual, areFilterValuesEqual, isSet } from './helper';
 
 const _state = new Map();
@@ -28,6 +28,7 @@ export default class FiltersPane extends LightningElement {
                     ? this._draftFilters[filter.name].value
                     : filter.value
             ),
+            pattern: filter.pattern ?? PATTERNS[filter.type],
             get hasValue() {
                 if (this.requiresStartEndRange) {
                     return isSet(this.value?.[PROP_NAMES.start]) || isSet(this.value?.[PROP_NAMES.end]);
@@ -148,10 +149,13 @@ export default class FiltersPane extends LightningElement {
 
     handleClearAllFilters() {
         this.filters.forEach(filter => this.handleClear({target: {dataset: {for: filter.name}}}));
-
     }
 
     handleApplyFilters() {
+        if ([...this.template.querySelectorAll('lightning-input')].some(input => !input.checkValidity())) {
+            return;
+        }
+
         const applied = this.filters;
         this._filters = applied;
         this.handleCancel();
@@ -160,8 +164,8 @@ export default class FiltersPane extends LightningElement {
 
     handleChange(event) {
         event.stopPropagation();
-
-        if (!event.target.checkValidity()) {
+        
+        if (event.target.type === FILTER_TYPES.date && !event.target.checkValidity()) {
             event.target.value = null;
             event.target.setCustomValidity('');
             event.target.reportValidity();

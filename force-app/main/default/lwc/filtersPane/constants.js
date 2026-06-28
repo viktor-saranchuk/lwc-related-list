@@ -5,6 +5,7 @@ export const LABELS = {
     clearAllFilters: 'Clear All Filters',
     close: 'Close',
     filters: 'Filters',
+    invalidFormat: 'Invalid Format',
     quickFilters: 'Quick Filters',
     quickFiltersHelpText: 'Quick filters can\'t be saved and apply only to your current session. Quick filters that you apply don\'t affect anyone else\'s view',
     start: 'Start',
@@ -26,4 +27,8 @@ export const PROP_NAMES = {
     end: 'end',
     min: 'min',
     max: 'max'
+}
+
+export const PATTERNS = {
+    tel: '[^a-zA-Z]{0,15}'
 }

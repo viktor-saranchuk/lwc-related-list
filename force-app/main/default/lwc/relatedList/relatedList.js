@@ -17,6 +17,8 @@ import {
     COLUMN_FILTER_TYPES_MAPPING
 } from './constants'
 
+import {areArraysEqual} from './helper'
+
 export default class RelatedList extends LightningElement {
     _mode;
     _type;
@@ -24,9 +26,11 @@ export default class RelatedList extends LightningElement {
     _hasMoreData;
     _pageSize;
     _columns;
+    _initialColumnWidths;
     _filters;
     _breadcrumbs;
     _sortConfig;
+    _initialSortConfig;
     _lastDataSetAt;
     _lastDataSetAtCheckedAt;
     _lastDataSetAtCheckedAtTimoutId;
@@ -36,9 +40,7 @@ export default class RelatedList extends LightningElement {
     formFactor = FORM_FACTOR;
     labels = LABELS;
     controls = CONTROLS;
-    initialColumnWidths;
     isResetColumnWidthsDisabled = true;
-    isRefresh = false;
     showQuickFilters = false;
 
     @api
@@ -76,7 +78,7 @@ export default class RelatedList extends LightningElement {
         return this._data;
     }
     set data(value) {
-        this.isRefresh = false;
+        this.isLoading = false;
         this.lastDataSetAt = Date.now();
         if (Array.isArray(value)) {
             this._data = JSON.parse(JSON.stringify(value));
@@ -184,8 +186,17 @@ export default class RelatedList extends LightningElement {
         };
     }
     set sortConfig(value) {
-        this._sortConfig = value;
+        if (!this._initialSortConfig) {
+            this._initialSortConfig = structuredClone(value);
+        }
+
+        console.log('here', 'setter', this._initialSortConfig)
+
+        this._sortConfig = structuredClone(value);
     }
+
+    @api
+    isLoading;
 
     @api
     iconName;
@@ -261,7 +272,7 @@ export default class RelatedList extends LightningElement {
     }
 
     get isResetColumnSortingDisabled() {
-        return this.sortConfig === DEFAULT_SORT_CONFIG;
+        return areArraysEqual(this._sortConfig?.fieldNames, this._initialSortConfig?.fieldNames) && areArraysEqual(this._sortConfig?.sortDirections, this._initialSortConfig?.sortDirections);
     }
 
     get lastDataSetAt() {
@@ -337,13 +348,11 @@ export default class RelatedList extends LightningElement {
 
     async handleControlClick(event) {
         if (event.detail.value === CONTROLS.resetColumnWidths.name) {
-            this.isResetColumnWidthsDisabled = true;
-            this.columns = [...this.columns];
+            this.handleColumnsResize({detail: {columnWidths: this._initialColumnWidths, isUserTriggered: false}});
         } else if (event.detail.value === CONTROLS.resetColumnSorting.name) {
+            this.sortConfig = structuredClone(this._initialSortConfig);
             this.dispatchEvent(new CustomEvent('sort'))
-            this.sortConfig = null;
         } else if (event.target.name === CONTROLS.refresh.name) {
-            this.isRefresh = true;
             this.dispatchEvent(new CustomEvent('refresh'));
         } else if (event.target.name === CONTROLS.showQuickFilters.name) {
             this.showQuickFilters = !this.showQuickFilters;
@@ -356,15 +365,19 @@ export default class RelatedList extends LightningElement {
                 options: this.sortConfig.calculatedSortOptions,
                 applied: this.sortConfig.calculatedSortApplied
             });
+
+            this.dispatchEvent(new CustomEvent('sort'))
         }
     }
 
     handleColumnsResize(event) {
-        if (!this.initialColumnWidths) {
-            this.initialColumnWidths = event.detail;
-            return;
+        if (!event.detail.isUserTriggered) {
+            this.isResetColumnWidthsDisabled = true;
+            this._initialColumnWidths = event.detail.columnWidths;
         }
-        this.isResetColumnWidthsDisabled = false;
+
+        this.isResetColumnWidthsDisabled = !event.detail.isUserTriggered
+        this.columns = structuredClone(this._columns).map((column, index) => ({...column, initialWidth: event.detail.columnWidths[index]}));
     }
 
     handleColumnsSort(event) {

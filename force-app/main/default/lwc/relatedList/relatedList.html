@@ -92,7 +92,7 @@
                 <div class="slds-col slds-border_top slds-scrollable_y body-table-container slds-is-relative">
                     <tempalte lwc:if={data.length}>
                         <lightning-datatable columns={columns} data={data} key-field="Id" show-row-number-column hide-checkbox-column={viewMode.isCompact} sorted-by={sortConfig.fieldNames} sorted-direction={sortConfig.sortDirections} resize-column-disabled={viewMode.isCompact} onresize={handleColumnsResize} onsort={handleColumnsSort} onrowaction={handleRowAction}></lightning-datatable>
-                        <template lwc:if={isRefresh}>
+                        <template lwc:if={isLoading}>
                             <lightning-spinner alternative-text={labels.loading} variant="brand"></lightning-spinner>
                         </template>
                     </tempalte>
