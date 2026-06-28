@@ -39,7 +39,7 @@ export const LABELS = {
     viewAll: 'View All'
 };
 
-export const LIST_TYPE = {
+export const TYPE = {
     basic: 'basic',
     enhanced: 'enhanced',
     tiles: 'tiles'

@@ -10,7 +10,7 @@ import {
     FORM_FACTOR,
     ICON_SIZE,
     LABELS,
-    LIST_TYPE,
+    TYPE,
     PAGE_TYPE,
     VIEW_MODE,
     COLUMN_FILTER_TYPES_MAPPING
@@ -18,7 +18,7 @@ import {
 
 export default class RelatedList extends LightningElement {
     _mode;
-    _listType;
+    _type;
     _data;
     _hasMoreData;
     _pageSize;
@@ -57,16 +57,16 @@ export default class RelatedList extends LightningElement {
     }
     
     @api
-    get listType() {
-        if (!!this._listType) {
-            return this._listType;
+    get type() {
+        if (!!this._type) {
+            return this._type;
         }
 
-        return LIST_TYPE.basic;
+        return TYPE.basic;
     }
-    set listType(value) {
-        if (value && Object.values(LIST_TYPE).includes(value)) {
-            this._listType = value;
+    set type(value) {
+        if (value && Object.values(TYPE).includes(value)) {
+            this._type = value;
         }
     }
 
@@ -84,7 +84,7 @@ export default class RelatedList extends LightningElement {
 
     @api
     get columns() {
-        const {isEnhanced} = this.type;
+        const {isEnhanced} = this.listType;
         const {isFull} = this.viewMode
         return this._columns?.map(column => ({
             ...column, 
@@ -201,11 +201,11 @@ export default class RelatedList extends LightningElement {
         }
     }
 
-    get type() {
+    get listType() {
         return {
-            isBasic: this.listType === LIST_TYPE.basic,
-            isEnhanced: this.listType === LIST_TYPE.enhanced || this.viewMode.isFull,
-            isTiles: this.listType === LIST_TYPE.tiles
+            isBasic: this.type === TYPE.basic,
+            isEnhanced: this.type === TYPE.enhanced || this.viewMode.isFull,
+            isTiles: this.type === TYPE.tiles
         }
     }
 
