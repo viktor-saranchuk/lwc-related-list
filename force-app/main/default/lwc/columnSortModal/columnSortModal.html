@@ -1,0 +1,27 @@
+<template>
+    <lightning-modal-header label={labels.columnSort}></lightning-modal-header>
+    <lightning-modal-body>
+        <template lwc:if={applied}>
+            <template for:each={applied} for:item="item">
+                <div key={item.name} class="slds-size_full">
+                    <div class="slds-size_full slds-box">
+
+                    </div>
+                </div>
+            </template>
+        </template>
+    </lightning-modal-body>
+    <lightning-modal-footer>
+        <div class="slds-grid slds-grid_align-spread">
+            <div class="slds-col">
+                <lightning-button label={labels.clear} name="clear" disabled={isAppliedEmpty} onclick={handleClear}></lightning-button>
+            </div>
+            <div class="slds-col slds-col_bump-left">
+                <lightning-button label={labels.cancel} name="cancel" onclick={handleCancel}></lightning-button>
+            </div>
+            <div class="slds-col slds-m-left_x-small">
+                <lightning-button label={labels.apply} name="apply" variant="brand" disabled onclick={handleApply}></lightning-button>
+            </div>
+        </div>
+    </lightning-modal-footer>
+</template>

@@ -1,6 +1,7 @@
 import { LightningElement, api, wire } from 'lwc';
 import { CurrentPageReference } from 'lightning/navigation';
 import { FILTER_TYPES } from 'c/filtersPane';
+import ColumnSortModal from 'c/columnSortModal';
 
 import {
     CONTROLS,
@@ -166,7 +167,21 @@ export default class RelatedList extends LightningElement {
 
     @api
     get sortConfig() {
-        return this._sortConfig || DEFAULT_SORT_CONFIG;
+        const columns = this.columns;
+        return {
+            ...(this._sortConfig || DEFAULT_SORT_CONFIG),
+            get calculatedSortApplied() {
+                this.fieldNames?.map((name, index) => {
+                    const direction = this.sortDirections?.[index];
+                    const label = this.labels?.find(({fieldName}) => name === fieldName)?.label ?? columns?.find(({fieldName}) => name === fieldName)?.label;
+
+                    return !!name && !!direction && !!label ? {name, direction, label} : null;
+                }).filter(Boolean) ?? [];
+            },
+            get calculatedSortOptions() {
+                return this.options ?? columns?.map(({label, fieldName, sortable}) => (sortable ? {label, fieldName} : null)).filter(Boolean) ?? [];
+            }
+        };
     }
     set sortConfig(value) {
         this._sortConfig = value;
@@ -320,7 +335,7 @@ export default class RelatedList extends LightningElement {
         this.dispatchEvent(new CustomEvent('action', { detail: { name: event.target.name || event.detail.value } }));
     }
 
-    handleControlClick(event) {
+    async handleControlClick(event) {
         if (event.detail.value === CONTROLS.resetColumnWidths.name) {
             this.isResetColumnWidthsDisabled = true;
             this.columns = [...this.columns];
@@ -332,6 +347,15 @@ export default class RelatedList extends LightningElement {
             this.dispatchEvent(new CustomEvent('refresh'));
         } else if (event.target.name === CONTROLS.showQuickFilters.name) {
             this.showQuickFilters = !this.showQuickFilters;
+        } else if (event.target.name === CONTROLS.columnSort.name) {
+
+            const sortResult = await ColumnSortModal.open({
+                label: CONTROLS.columnSort.label,
+                size: 'small',
+                columnLimit: this.sortConfig.columnLimit,
+                options: this.sortConfig.calculatedSortOptions,
+                applied: this.sortConfig.calculatedSortApplied
+            });
         }
     }
 

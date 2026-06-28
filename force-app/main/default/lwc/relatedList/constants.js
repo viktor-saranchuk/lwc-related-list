@@ -6,11 +6,14 @@ export const DEFAULT_NUMBER_OF_ACTION_BUTTONS = 3;
 export const DEFAULT_COMPACT_PAGE_SIZE = 6;
 
 export const DEFAULT_SORT_CONFIG = {
-    isMultiColumnSort: false,
+    get isMultiColumnSort() {
+        return !!this.fieldNames?.length;
+    },
     fieldName: null,
-    fieldNames: null,
+    fieldNames: [],
     sortDirection: null,
-    sortDirections: null
+    sortDirections: [],
+    columnLimit: null
 };
 
 export const FORM_FACTOR = {

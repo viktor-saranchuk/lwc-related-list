@@ -48,9 +48,11 @@
                 <lightning-button-icon icon-name={controls.refresh.iconName} name={controls.refresh.name} alternative-text={controls.refresh.label} title={controls.refresh.label} tooltip={controls.refresh.label} onclick={handleControlClick}></lightning-button-icon>
             </div>
             <template lwc:if={viewMode.isFull}>
-                <div slot="controls" class="slds-p-around_none slds-m-left_xx-small button-icon-wrapper">
-                    <lightning-button-icon icon-name={controls.columnSort.iconName} name={controls.columnSort.name} alternative-text={controls.columnSort.label} title={controls.columnSort.label} tooltip={controls.columnSort.label} onclick={handleControlClick}></lightning-button-icon>
-                </div>
+                <template lwc:if={sortConfig.calculatedSortOptions.length}>
+                    <div slot="controls" class="slds-p-around_none slds-m-left_xx-small button-icon-wrapper">
+                        <lightning-button-icon icon-name={controls.columnSort.iconName} name={controls.columnSort.name} alternative-text={controls.columnSort.label} title={controls.columnSort.label} tooltip={controls.columnSort.label} onclick={handleControlClick}></lightning-button-icon>
+                    </div>
+                </template>
                 <template lwc:if={filters.length}>
                     <div slot="controls" class="slds-p-around_none slds-m-left_xx-small button-icon-wrapper">
                         <lightning-button-icon-stateful icon-name={controls.showQuickFilters.iconName} data-name={controls.showQuickFilters.name} name={controls.showQuickFilters.name} alternative-text={controls.showQuickFilters.label} title={controls.showQuickFilters.label} tooltip={controls.showQuickFilters.label} selected={showQuickFilters} onclick={handleControlClick}></lightning-button-icon-stateful>
@@ -89,7 +91,7 @@
             <template lwc:if={data}>
                 <div class="slds-col slds-border_top slds-scrollable_y body-table-container slds-is-relative">
                     <tempalte lwc:if={data.length}>
-                        <lightning-datatable columns={columns} data={data} key-field="Id" show-row-number-column hide-checkbox-column={viewMode.isCompact} sortable sorted-by={sortConfig.fieldNames} sorted-direction={sortConfig.sortDirections} resize-column-disabled={viewMode.isCompact} onresize={handleColumnsResize} onsort={handleColumnsSort} onrowaction={handleRowAction}></lightning-datatable>
+                        <lightning-datatable columns={columns} data={data} key-field="Id" show-row-number-column hide-checkbox-column={viewMode.isCompact} sorted-by={sortConfig.fieldNames} sorted-direction={sortConfig.sortDirections} resize-column-disabled={viewMode.isCompact} onresize={handleColumnsResize} onsort={handleColumnsSort} onrowaction={handleRowAction}></lightning-datatable>
                         <template lwc:if={isRefresh}>
                             <lightning-spinner alternative-text={labels.loading} variant="brand"></lightning-spinner>
                         </template>
