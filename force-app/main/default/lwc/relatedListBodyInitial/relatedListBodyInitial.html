@@ -1,6 +1,6 @@
 <template>
     <div class="card-body-desktop slds-is-relative slds-border_top">
-        <lightning-datatable columns={columns} data={rows} disabled-rows={disabledRows} key-field="index" show-row-number-column={showRowNumberColumn} hide-checkbox-column={hideCheckboxColumn}>
+        <lightning-datatable columns={columns} data={rows} disabled-rows={disabledRows} key-field="index" show-row-number-column={showRowNumberColumn} hide-checkbox-column={hideCheckboxColumn} resize-column-disabled>
             <c-skeleton-cell-type slot="customdatatypes"></c-skeleton-cell-type>
         </lightning-datatable>
     </div>

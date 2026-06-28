@@ -14,9 +14,12 @@ export default class RelatedListBodyInitial extends LightningElement {
 
     @api
     get columns() {
-        return this._columns?.map((item, index) => ({
-            ...item,
-            type: TABLE_TYPE__SKELETON
+        return this._columns?.map((column) => ({
+            ...column,
+            type: TABLE_TYPE__SKELETON,
+            hideDefaultActions: true,
+            sortable: false,
+            initialWidth: Object.hasOwn(column, 'initialWidth') ? column.initialWidth : (column.type === 'action' ? 50 : undefined)
         }));
     }
     set columns(value) {
