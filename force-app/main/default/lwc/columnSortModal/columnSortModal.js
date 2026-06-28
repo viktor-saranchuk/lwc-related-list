@@ -17,7 +17,7 @@ export default class ColumnSortModal extends LightningModal {
         return this._applied ?? [{DEFAULT_SORT_DIRECTION}];
     }
     set applied(value) {
-        if (Array.isArray(value) && !value.length) {
+        if (Array.isArray(value) && !!value.length) {
             this._applied = value;
         }
     }

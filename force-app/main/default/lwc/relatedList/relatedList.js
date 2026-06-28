@@ -173,7 +173,7 @@ export default class RelatedList extends LightningElement {
         return {
             ...(this._sortConfig || DEFAULT_SORT_CONFIG),
             get calculatedSortApplied() {
-                this.fieldNames?.map((name, index) => {
+                return this.fieldNames?.map((name, index) => {
                     const direction = this.sortDirections?.[index];
                     const label = this.labels?.find(({fieldName}) => name === fieldName)?.label ?? columns?.find(({fieldName}) => name === fieldName)?.label;
 
@@ -355,7 +355,6 @@ export default class RelatedList extends LightningElement {
         } else if (event.target.name === CONTROLS.showQuickFilters.name) {
             this.showQuickFilters = !this.showQuickFilters;
         } else if (event.target.name === CONTROLS.columnSort.name) {
-
             const sortResult = await ColumnSortModal.open({
                 label: CONTROLS.columnSort.label,
                 size: 'small',
@@ -364,6 +363,7 @@ export default class RelatedList extends LightningElement {
                 applied: this.sortConfig.calculatedSortApplied
             });
 
+            //todo assign sortconfig
             this.dispatchEvent(new CustomEvent('sort'))
         }
     }
@@ -379,8 +379,8 @@ export default class RelatedList extends LightningElement {
     }
 
     handleColumnsSort(event) {
-        this.dispatchEvent(new CustomEvent('sort', {detail: event.detail}))
         this.sortConfig = event.detail;
+        this.dispatchEvent(new CustomEvent('sort', {detail: event.detail}))
     }
 
     handleRowAction(event) {
