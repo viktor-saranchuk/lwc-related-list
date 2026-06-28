@@ -190,8 +190,6 @@ export default class RelatedList extends LightningElement {
             this._initialSortConfig = structuredClone(value);
         }
 
-        console.log('here', 'setter', this._initialSortConfig)
-
         this._sortConfig = structuredClone(value);
     }
 
