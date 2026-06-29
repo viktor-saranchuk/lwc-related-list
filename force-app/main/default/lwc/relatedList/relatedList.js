@@ -181,7 +181,7 @@ export default class RelatedList extends LightningElement {
                 }).filter(Boolean) ?? [];
             },
             get calculatedSortOptions() {
-                return this.options ?? columns?.map(({label, fieldName, sortable}) => (sortable ? {label, fieldName} : null)).filter(Boolean) ?? [];
+                return this.options ?? columns?.map(({label, fieldName, sortable}) => (sortable ? {label, value: fieldName} : null)).filter(Boolean) ?? [];
             }
         };
     }

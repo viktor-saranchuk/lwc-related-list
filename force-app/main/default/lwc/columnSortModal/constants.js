@@ -9,6 +9,7 @@ export const LABELS = {
     descending: 'Descending',
     moveSortColumnDown: 'Move sort column down',
     moveSortColumnUp: 'Move sort column up',
+    selectColumn: 'Select a column',
     selectColumnOrDeleteSortItem: 'Select a column or delete this sort item.',
     selectColumnThatYouHaventSelected: 'Select a column that you haven’t already selected.',
     sortBy: 'Sort by',
@@ -17,4 +18,9 @@ export const LABELS = {
 
 export const DEFAULT_COLUMN_LIMIT = 5;
 
-export const DEFAULT_SORT_DIRECTION = 'asc';
+export const DEFAULT_DIRECTION = 'asc';
+
+export const DIRECTION_OPTIONS = [
+    {label: 'Ascending', value: 'asc'},
+    {label: 'Descending', value: 'desc'}
+];
