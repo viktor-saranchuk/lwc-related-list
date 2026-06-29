@@ -353,7 +353,7 @@ export default class RelatedList extends LightningElement {
         } else if (event.target.name === CONTROLS.showQuickFilters.name) {
             this.showQuickFilters = !this.showQuickFilters;
         } else if (event.target.name === CONTROLS.columnSort.name) {
-            const sortResult = await ColumnSortModal.open({
+            const result = await ColumnSortModal.open({
                 label: CONTROLS.columnSort.label,
                 size: 'small',
                 columnLimit: this.sortConfig.columnLimit,
@@ -361,8 +361,11 @@ export default class RelatedList extends LightningElement {
                 applied: this.sortConfig.calculatedSortApplied
             });
 
-            //todo assign sortconfig
-            this.dispatchEvent(new CustomEvent('sort'))
+            if (result) {
+                //todo assign sortconfig
+                console.log('here', sortResult)
+                this.dispatchEvent(new CustomEvent('sort'))
+            }
         }
     }
 

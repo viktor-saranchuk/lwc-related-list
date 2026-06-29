@@ -1,10 +1,12 @@
 :host {
-    display: block;
-    height: inherit;
+    --component-height: var(--radio-group-height, 2rem);
+    --component-line-height: var(--radio-group-line-height, 2rem);
+
+    height: var(--component-height);
+    line-height: var(--component-line-height);
 }
 
 .radio-group {
-    height: stretch;
     width: max-content;
     gap: var(--radio-group-gap, var(--slds-g-spacing-4, 1rem));
 }

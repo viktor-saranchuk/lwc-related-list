@@ -3,7 +3,7 @@
     <lightning-modal-body>
         <template lwc:if={applied}>
             <template iterator:it={applied}>
-                <div key={it.value.value} class="slds-size_full">
+                <div key={it.value.key} class="slds-size_full">
                     <h2 class="slds-p-vertical_x-small">
                         <b>
                             <template lwc:if={it.first}>
@@ -16,11 +16,11 @@
                     </h2>
                     <div class="slds-grid slds-box">
                         <lightning-button-group>
-                            <lightning-button-icon icon-name="utility:arrowup" variant="border-filled" alternative-text="Up" disabled={it.value.upDisabled} onclick={moveUp}></lightning-button-icon>
-                            <lightning-button-icon icon-name="utility:arrowdown" variant="border-filled" alternative-text="Down" disabled={it.value.downDisabled} onclick={moveDown}></lightning-button-icon>
+                            <lightning-button-icon icon-name="utility:arrowup" data-index={it.index} variant="border-filled" alternative-text="Up" disabled={it.value.upDisabled} onclick={moveUp}></lightning-button-icon>
+                            <lightning-button-icon icon-name="utility:arrowdown" data-index={it.index} variant="border-filled" alternative-text="Down" disabled={it.value.downDisabled} onclick={moveDown}></lightning-button-icon>
                         </lightning-button-group>
-                        <div class="slds-col slds-p-left_small">
-                            <lightning-combobox name="option" data-index={it.index} label="" variant="label-hidden" placeholder={labels.selectColumn} options={options} value={it.value.value} onchange={changeColumn}></lightning-combobox>
+                        <div class="slds-col slds-size_5-of-12 slds-p-left_small">
+                            <lightning-combobox name="option" data-index={it.index} label="" variant="label-hidden" placeholder={labels.selectColumn} options={options} value={it.value.value} required message-when-value-missing={labels.selectColumnOrDeleteSortItem} onchange={changeColumn}></lightning-combobox>
                         </div>
                         <c-radio-group class="slds-col slds-p-left_small" name={it.value.value} data-index={it.index} options={directions} value={it.value.direction} onchange={changeDirection}></c-radio-group>
                         <div class="slds-col_bump-left slds-p-top_xx-small slds-p-left_small">
@@ -29,18 +29,31 @@
                     </div>
                 </div>
             </template>
+            <div class="slds-grid slds-grid_align-spread slds-grid_vertical-align-center slds-p-around_x-small">
+                <div class="slds-col">
+                    <lightning-button variant="base" label={labels.addSortColumn} title={labels.addSortColumn} icon-name="utility:add" disabled={addSortColumnDisabled} onclick={addItem}></lightning-button>
+                </div>
+                <div class="slds-col">
+                    <template lwc:if={limitReached}>
+                        <span class="slds-text-color_destructive">{columnLimit} {labels.columnLimitReached}</span>
+                    </template>
+                    <tempalte lwc:else>
+                        <span>{columnLimit} {labels.columnLimit}</span>
+                    </tempalte>
+                </div>
+            </div>
         </template>
     </lightning-modal-body>
     <lightning-modal-footer>
         <div class="slds-grid slds-grid_align-spread">
             <div class="slds-col">
-                <lightning-button label={labels.clear} name="clear" disabled={isAppliedEmpty} onclick={handleClear}></lightning-button>
+                <lightning-button label={labels.clear} name="clear" disabled={clearDisabled} onclick={handleClear}></lightning-button>
             </div>
             <div class="slds-col slds-col_bump-left">
                 <lightning-button label={labels.cancel} name="cancel" onclick={handleCancel}></lightning-button>
             </div>
             <div class="slds-col slds-m-left_x-small">
-                <lightning-button label={labels.apply} name="apply" variant="brand" disabled onclick={handleApply}></lightning-button>
+                <lightning-button label={labels.apply} name="apply" variant="brand" disabled={applyDisabled} onclick={handleApply}></lightning-button>
             </div>
         </div>
     </lightning-modal-footer>
