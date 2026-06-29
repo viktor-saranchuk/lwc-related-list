@@ -1,0 +1,10 @@
+<template>
+    <div class="slds-grid slds-wrap slds-grid_vertical-align-center radio-group">
+        <template for:each={options} for:item="option" >
+            <label key={option.value} class="slds-grid radio-option">
+                <input type="radio" name={instanceId} value={option.value} checked={option.checked} onchange={handleChange}/>
+                {option.label}
+            </label>
+        </template>
+    </div>
+</template>

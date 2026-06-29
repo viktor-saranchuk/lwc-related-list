@@ -3,7 +3,7 @@
     <lightning-modal-body>
         <template lwc:if={applied}>
             <template iterator:it={applied}>
-                <div key={it.value.name} class="slds-size_full">
+                <div key={it.value.value} class="slds-size_full">
                     <h2 class="slds-p-vertical_x-small">
                         <b>
                             <template lwc:if={it.first}>
@@ -19,11 +19,12 @@
                             <lightning-button-icon icon-name="utility:arrowup" variant="border-filled" alternative-text="Up" disabled={it.value.upDisabled} onclick={moveUp}></lightning-button-icon>
                             <lightning-button-icon icon-name="utility:arrowdown" variant="border-filled" alternative-text="Down" disabled={it.value.downDisabled} onclick={moveDown}></lightning-button-icon>
                         </lightning-button-group>
-                        <div class="slds-col">
-                            <lightning-combobox name="option" label="" variant="label-hidden" placeholder={labels.selectColumn} options={options} value={it.value.name}></lightning-combobox>
+                        <div class="slds-col slds-p-left_small">
+                            <lightning-combobox name="option" data-index={it.index} label="" variant="label-hidden" placeholder={labels.selectColumn} options={options} value={it.value.value} onchange={changeColumn}></lightning-combobox>
                         </div>
-                        <div class="slds-col_bump-left slds-p-top_xx-small">
-                            <lightning-button-icon icon-name="utility:delete" variant="bare" alternative-text="Delete" disabled={it.value.deleteDisabled} onclick={deleteItem}></lightning-button-icon>
+                        <c-radio-group class="slds-col slds-p-left_small" name={it.value.value} data-index={it.index} options={directions} value={it.value.direction} onchange={changeDirection}></c-radio-group>
+                        <div class="slds-col_bump-left slds-p-top_xx-small slds-p-left_small">
+                            <lightning-button-icon icon-name="utility:delete" data-index={it.index} variant="bare" alternative-text="Delete" disabled={it.value.deleteDisabled} onclick={deleteItem}></lightning-button-icon>
                         </div>                
                     </div>
                 </div>

@@ -173,12 +173,10 @@ export default class RelatedList extends LightningElement {
         return {
             ...(this._sortConfig || DEFAULT_SORT_CONFIG),
             get calculatedSortApplied() {
-                return this.fieldNames?.map((name, index) => {
-                    const direction = this.sortDirections?.[index];
-                    const label = this.labels?.find(({fieldName}) => name === fieldName)?.label ?? columns?.find(({fieldName}) => name === fieldName)?.label;
-
-                    return !!name && !!direction && !!label ? {name, direction, label} : null;
-                }).filter(Boolean) ?? [];
+                return this.fieldNames?.map((name, index) => (!!name && !!this.sortDirections?.[index] ? {
+                    value: name, 
+                    direction: this.sortDirections?.[index]
+                } : null)).filter(Boolean) ?? [];
             },
             get calculatedSortOptions() {
                 return this.options ?? columns?.map(({label, fieldName, sortable}) => (sortable ? {label, value: fieldName} : null)).filter(Boolean) ?? [];
@@ -349,7 +347,7 @@ export default class RelatedList extends LightningElement {
             this.handleColumnsResize({detail: {columnWidths: this._initialColumnWidths, isUserTriggered: false}});
         } else if (event.detail.value === CONTROLS.resetColumnSorting.name) {
             this.sortConfig = structuredClone(this._initialSortConfig);
-            this.dispatchEvent(new CustomEvent('sort'))
+            this.dispatchEvent(new CustomEvent('sort'));
         } else if (event.target.name === CONTROLS.refresh.name) {
             this.dispatchEvent(new CustomEvent('refresh'));
         } else if (event.target.name === CONTROLS.showQuickFilters.name) {

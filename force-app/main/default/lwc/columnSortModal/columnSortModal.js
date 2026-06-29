@@ -8,15 +8,16 @@ export default class ColumnSortModal extends LightningModal {
     _columnLimit;
 
     labels = LABELS;
-    directionOptions = DIRECTION_OPTIONS;
+    directions = DIRECTION_OPTIONS;
 
     @api
     options;
 
     @api
     get applied() {
-        const last = (this._applied ?? [{direction: DEFAULT_DIRECTION}]).length - 1;
-        return (this._applied ?? [{direction: DEFAULT_DIRECTION}]).map((item, index) => ({
+        const items = this._applied ?? [{direction: DEFAULT_DIRECTION}];
+        const last = items.length - 1;
+        return (items).map((item, index) => ({
             ...item,
             upDisabled: index === 0,
             downDisabled: index === last,
@@ -51,8 +52,22 @@ export default class ColumnSortModal extends LightningModal {
 
     }
 
-    deleteItem() {
+    changeColumn(event) {
+        this._applied[+event.target.dataset.index] = {
+            ...structuredClone(this.options.find(({value}) => value === event.detail.value)),
+            direction: this._applied[+event.target.dataset.index].direction
+        };
+        this.applied = [...this._applied];
+    }
+    
+    changeDirection(event) {
+        this._applied[+event.target.dataset.index].direction = event.detail.value;
+        this.applied = [...this._applied];
+    }
 
+    deleteItem(event) {
+        this._applied.splice(+event.target.dataset.index, 1);
+        this.applied = [...this._applied];
     }
 
     handleClear() {

@@ -1,0 +1,15 @@
+:host {
+    display: block;
+    height: inherit;
+}
+
+.radio-group {
+    height: stretch;
+    width: max-content;
+    gap: var(--radio-group-gap, var(--slds-g-spacing-4, 1rem));
+}
+
+.radio-option {
+    gap: var(--radio-option-gap, var(--slds-g-spacing-1, .25rem));
+    cursor: pointer;
+}
