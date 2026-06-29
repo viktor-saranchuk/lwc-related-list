@@ -347,7 +347,7 @@ export default class RelatedList extends LightningElement {
             this.handleColumnsResize({detail: {columnWidths: this._initialColumnWidths, isUserTriggered: false}});
         } else if (event.detail.value === CONTROLS.resetColumnSorting.name) {
             this.sortConfig = structuredClone(this._initialSortConfig);
-            this.dispatchEvent(new CustomEvent('sort'));
+            this.dispatchEvent(new CustomEvent('sort', {detail: this._initialSortConfig}));
         } else if (event.target.name === CONTROLS.refresh.name) {
             this.dispatchEvent(new CustomEvent('refresh'));
         } else if (event.target.name === CONTROLS.showQuickFilters.name) {
@@ -362,9 +362,16 @@ export default class RelatedList extends LightningElement {
             });
 
             if (result) {
-                //todo assign sortconfig
-                console.log('here', sortResult)
-                this.dispatchEvent(new CustomEvent('sort'))
+                const newSortConfig = Object.create(
+                    Object.getPrototypeOf(DEFAULT_SORT_CONFIG),
+                    Object.getOwnPropertyDescriptors(DEFAULT_SORT_CONFIG)
+                );
+                newSortConfig.fieldNames = result.map(({value}) => value);
+                newSortConfig.sortDirections = result.map(({direction}) => direction);
+                newSortConfig.isMultiColumnSort = newSortConfig.fieldNames.length > 1;
+
+                this.sortConfig = newSortConfig;
+                this.dispatchEvent(new CustomEvent('sort', {detail: newSortConfig}));
             }
         }
     }
