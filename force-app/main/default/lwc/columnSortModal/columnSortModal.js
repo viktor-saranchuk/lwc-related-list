@@ -84,7 +84,7 @@ export default class ColumnSortModal extends LightningModal {
         this.applied = applied;
     }
 
-    moveDown() {
+    moveDown(event) {
         const index = +event.target.dataset.index;
         const applied = [...this._applied];
         [applied[index], applied[index + 1]] = [applied[index + 1], applied[index]];
