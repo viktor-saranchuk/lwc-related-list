@@ -78,7 +78,24 @@
             </template>
         </c-related-list-header>
 
-        <template lwc:if={formFactor.isLarge}>
+        <template lwc:if={listType.isTiles}>
+            <lightning-layout multiple-rows>
+                <template lwc:if={data}>
+                    <template for:each={data} for:item="record">
+                        <lightning-layout-item key={record.Id} size="12" small-device-size="12" medium-device-size="6" large-device-size="4">
+                            <lightning-tile label={record.Id} href="https://www.google.com" type="media" actions={recordActions} class="slds-var-p-horizontal_medium slds-var-p-vertical_xx-small">
+                                <lightning-icon slot="media" icon-name={iconName}></lightning-icon>
+                                <p class="slds-truncate" title={record.Id}>{record.Id}</p>
+                            </lightning-tile>
+                        </lightning-layout-item>
+                    </template>
+                </template>
+                <template lwc:else>
+                    SKELETON
+                </template>
+            </lightning-layout>
+        </template>
+        <template lwc:if={listType.isTable}>
             <template lwc:if={showQuickFilters}>
                 <div>
                     <div class="slds-is-absolute slds-panel_docked-right quick-filters-pane">
@@ -91,7 +108,7 @@
             <template lwc:if={data}>
                 <div class="slds-col slds-border_top slds-scrollable_y body-table-container slds-is-relative">
                     <tempalte lwc:if={data.length}>
-                        <lightning-datatable column-widths-mode="auto" min-column-width="100" columns={columns} data={data} key-field="Id" show-row-number-column hide-checkbox-column={viewMode.isCompact} sorted-by={sortConfig.fieldNames} sorted-direction={sortConfig.sortDirections} resize-column-disabled={listType.isNotEnhanced} onresize={handleColumnsResize} onsort={handleColumnsSort} onrowaction={handleRowAction}></lightning-datatable>
+                        <lightning-datatable column-widths-mode={columnWidthMode} min-column-width="100" columns={columns} data={data} key-field="Id" show-row-number-column hide-checkbox-column={viewMode.isCompact} sorted-by={sortConfig.fieldNames} sorted-direction={sortConfig.sortDirections} resize-column-disabled={listType.isNotEnhanced} onresize={handleColumnsResize} onsort={handleColumnsSort} onrowaction={handleRowAction}></lightning-datatable>
                         <template lwc:if={isLoading}>
                             <lightning-spinner alternative-text={labels.loading} variant="brand"></lightning-spinner>
                         </template>
@@ -115,14 +132,6 @@
                         </div>
                     </template>
                 </template>
-            </template>
-        </template>
-        <template lwc:else>
-            <template lwc:if={viewMode.isCompact}>
-                MOBILE COMPACT
-            </template>
-            <template lwc:if={viewMode.isFull}>
-                MOBILE FULL
             </template>
         </template>
     </div>

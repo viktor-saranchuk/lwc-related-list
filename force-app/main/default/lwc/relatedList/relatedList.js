@@ -20,6 +20,8 @@ import {
 import {areArraysEqual} from './helper'
 
 export default class RelatedList extends LightningElement {
+    /** private properties */
+
     _mode;
     _type;
     _data;
@@ -42,6 +44,8 @@ export default class RelatedList extends LightningElement {
     controls = CONTROLS;
     isResetColumnWidthsDisabled = true;
     showQuickFilters = false;
+
+    /** public properties */
 
     @api
     get mode() {
@@ -87,11 +91,11 @@ export default class RelatedList extends LightningElement {
 
     @api
     get columns() {
-        const {isEnhanced} = this.listType;
+        const {isEnhanced, isNotEnhanced} = this.listType;
         const {isFull} = this.viewMode
         return this._columns?.map(column => ({
             ...column, 
-            hideDefaultActions: Object.hasOwn(column, 'hideDefaultActions') ? column.hideDefaultActions : !isEnhanced, 
+            hideDefaultActions: Object.hasOwn(column, 'hideDefaultActions') ? column.hideDefaultActions : isNotEnhanced, 
             sortable: Object.hasOwn(column, 'sortable') ? column.sortable : (isEnhanced && column.type !== 'action')
         }));
     }
@@ -203,8 +207,12 @@ export default class RelatedList extends LightningElement {
     @api
     listViewActions;
 
+    /** wire adaptors */
+
     @wire(CurrentPageReference)
     currentPageReference;
+
+    /** calculated properties (getters) */
 
     get iconSize() {
         if (this.viewMode.isCompact) {
@@ -224,11 +232,20 @@ export default class RelatedList extends LightningElement {
     }
 
     get listType() {
+        const type = this.type;
+        const formFactor = this.formFactor;
+        const viewMode = this.viewMode;
         return {
-            isBasic: this.type === TYPE.basic,
-            isEnhanced: this.type === TYPE.enhanced || this.viewMode.isFull,
-            isTiles: this.type === TYPE.tiles,
-            get isNotEnhanced() { return !this.isEnhanced; }
+            get isBasic() { return formFactor.isLarge && type === TYPE.basic },
+            get isEnhanced() { return formFactor.isLarge && (type === TYPE.enhanced || viewMode.isFull)  },
+            get isTiles() { 
+                return (formFactor.isSmall && viewMode.isFull) ||
+                (formFactor.isMedium && (viewMode.isFull || type === TYPE.tiles)) ||
+                (formFactor.isLarge && (viewMode.isCompact && type === TYPE.tiles)) ||
+                false
+            },
+            get isNotEnhanced() { return !this.isEnhanced; },
+            get isTable() { return this.isBasic || this.isEnhanced }
         }
     }
 
@@ -262,10 +279,6 @@ export default class RelatedList extends LightningElement {
 
     get listViewActionMenuItems() {
         return this.listViewActions?.slice(this.listViewActionButtons?.length) || [];
-    }
-
-    get isDataLoaded() {
-        return !!this.data;
     }
 
     get isResetColumnSortingDisabled() {
@@ -315,6 +328,16 @@ export default class RelatedList extends LightningElement {
         return updatedAgo;
     }
 
+    get columnWidthMode() {
+        return this.viewMode.isFull && this.listType.isEnhanced ? 'fixed' : 'auto';
+    }
+
+    get recordActions() {
+        return this.columns?.find(({type}) => type === 'action')?.typeAttributes?.rowActions?.map(action => ({...action, value: action.name})) || [];
+    }
+
+    /** methods */
+
     setLastDataSetAtCheckedAt = () => {
         this.lastDataSetAtCheckedAt = Date.now();
 
@@ -338,6 +361,8 @@ export default class RelatedList extends LightningElement {
 
         this._lastDataSetAtCheckedAtTimoutId = setTimeout(this.setLastDataSetAtCheckedAt, delay);
     }
+
+    /** event handlers */
 
     handleActionClick(event) {
         this.dispatchEvent(new CustomEvent('action', { detail: { name: event.target.name || event.detail.value } }));
@@ -405,6 +430,8 @@ export default class RelatedList extends LightningElement {
         this.filters = event.detail.filters;
         this.dispatchEvent(new CustomEvent('applyfilters', {detail: structuredClone(event.detail)}))
     }
+
+    /** lifecycle hooks */
 
     disconnectedCallback() {
         if (this._lastDataSetAtCheckedAtTimoutId) {
