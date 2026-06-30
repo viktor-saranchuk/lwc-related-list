@@ -81,7 +81,7 @@ export default class RelatedList extends LightningElement {
         this.isLoading = false;
         this.lastDataSetAt = Date.now();
         if (Array.isArray(value)) {
-            this._data = JSON.parse(JSON.stringify(value));
+            this._data = value;
         }
     }
 
@@ -227,7 +227,8 @@ export default class RelatedList extends LightningElement {
         return {
             isBasic: this.type === TYPE.basic,
             isEnhanced: this.type === TYPE.enhanced || this.viewMode.isFull,
-            isTiles: this.type === TYPE.tiles
+            isTiles: this.type === TYPE.tiles,
+            get isNotEnhanced() { return !this.isEnhanced; }
         }
     }
 
