@@ -3,12 +3,58 @@
         <template lwc:if={data}>
             <template for:each={data} for:item="tile">
                 <lightning-layout-item key={tile.id} size="12" small-device-size="12" medium-device-size="6" large-device-size="4" class="slds-p-around_medium tile">
-                    <div class="slds-grid">
+                    <div class="slds-grid slds-gutters_x-small">
                         <div class="slds-col">
                             <lightning-icon icon-name={iconName}></lightning-icon>
                         </div>
                         <div class="slds-col">
-                            <p><lightning-formatted-url label={tile.title.label} href={tile.title.value}></lightning-formatted-url></p>
+                            <p><lightning-formatted-url label={tile.title.label} value={tile.title.value}></lightning-formatted-url></p>
+                            <dl class="slds-list_horizontal slds-wrap">
+                                <template for:each={tile.fields} for:item="field">
+                                    <dt key={field.column.label} class="slds-item_label slds-text-color_weak slds-truncate" title={field.column.label}>{field.column.label}:</dt>
+                                    <dd key={field.column.fieldName} class="slds-item_detail slds-truncate" title={field.value}>
+                                        
+                                        <template lwc:if={field.isBoolean}>
+                                            <template lwc:if={field.value}><lightning-icon icon-name="utility:check"></lightning-icon></template>
+                                        </template>
+                                        <template lwc:if={field.isDate}>
+                                            <lightning-formatted-date-time
+                                                date-style={field.column.typeAttributes.dateStyle}
+                                                day={field.column.typeAttributes.day}
+                                                era={field.column.typeAttributes.era}
+                                                hour={field.column.typeAttributes.hour}
+                                                hour12={field.column.typeAttributes.hour12}
+                                                minute={field.column.typeAttributes.minute}
+                                                month={field.column.typeAttributes.month}
+                                                second={field.column.typeAttributes.second}
+                                                time-zone={field.column.typeAttributes.timeZone}
+                                                time-zone-name={field.column.typeAttributes.timeZoneName}
+                                                value={field.value}
+                                                weekday={field.column.typeAttributes.weekday}
+                                                year={field.column.typeAttributes.year}
+                                            ></lightning-formatted-date-time>
+                                        </template>
+                                        <template lwc:if={field.isEmail}>
+
+                                        </template>
+                                        <template lwc:if={field.isLocation}>
+
+                                        </template>
+                                        <template lwc:if={field.isNumber}>
+
+                                        </template>
+                                        <template lwc:if={field.isPhone}>
+
+                                        </template>
+                                        <template lwc:if={field.isUrl}>
+
+                                        </template>
+                                        <template lwc:if={field.isText}>
+
+                                        </template>
+                                    </dd>
+                                </template>
+                            </dl>
                         </div>
                         <div class="slds-col">
                             <template lwc:if={tile.actions}>

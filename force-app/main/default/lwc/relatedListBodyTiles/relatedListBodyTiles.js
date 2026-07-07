@@ -12,7 +12,7 @@ export default class RelatedListBodyTiles extends LightningElement {
     @api
     get data() {
         const rowActions = this.columns?.find(({ type }) => type === 'action')?.typeAttributes?.rowActions;
-        return createTileData(this._data, rowActions);
+        return createTileData(this._data, rowActions, this.columns);
     }
     set data(value) {
         if (Array.isArray(value)) {
