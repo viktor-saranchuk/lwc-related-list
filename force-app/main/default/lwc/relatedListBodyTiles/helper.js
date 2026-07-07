@@ -1,3 +1,5 @@
+import { UNSUPPORTED_FIELDS, UNSUPPORTED_COLUMN_TYPES, SUPPORTED_COLUMN_TYPES } from './constants';
+
 export const createTileData = (data, rowActions, columns) => {
     return data.map(record => ({
         record,
@@ -14,7 +16,7 @@ export const createTileData = (data, rowActions, columns) => {
         get fields() {
             return columns?.filter(
                 ({fieldName, type}) => 
-                    !['Id', 'Name'].includes(fieldName) && !['action', 'button', 'button-icon'].includes(type)
+                    !UNSUPPORTED_FIELDS.includes(fieldName) && !UNSUPPORTED_COLUMN_TYPES.includes(type)
             ).slice(0, 3).map(
                 column => ({
                     column: {
@@ -22,29 +24,33 @@ export const createTileData = (data, rowActions, columns) => {
                         typeAttributes: column.typeAttributes ?? {}
                     },
                     value: record[column.fieldName],
+                    label: record[column?.typeAttributes?.label?.fieldName],
+                    tooltip: record[column?.typeAttributes?.toolip?.fieldName],
+                    latitude: record[column?.typeAttributes?.latitude?.fieldName],
+                    longitude: record[column?.typeAttributes?.longitude?.fieldName],
                     get isBoolean() {
-                        return column.type === 'boolean';
+                        return column.type === SUPPORTED_COLUMN_TYPES.boolean;
                     },
                     get isDate() {
-                        return column.type === 'date';
+                        return column.type === SUPPORTED_COLUMN_TYPES.date;
                     },
                     get isEmail() {
-                        return column.type === 'email';
+                        return column.type === SUPPORTED_COLUMN_TYPES.email;
                     },
                     get isLocation() {
-                        return column.type === 'location';
+                        return column.type === SUPPORTED_COLUMN_TYPES.location;
                     },
                     get isNumber() {
-                        return ['currency', 'number', 'percent'].includes(column.type);
+                        return [SUPPORTED_COLUMN_TYPES.currency, SUPPORTED_COLUMN_TYPES.number, SUPPORTED_COLUMN_TYPES.percent].includes(column.type);
                     },
                     get isPhone() {
-                        return column.type === 'phone';
+                        return column.type === SUPPORTED_COLUMN_TYPES.phone;
                     },
                     get isUrl() {
-                        return column.type === 'url';
+                        return column.type === SUPPORTED_COLUMN_TYPES.url;
                     },
                     get isText() {
-                        return !(this.isBoolean || this.isDate || this.isEmail || this.isLocation || this.isNumber || this.isPhone || this.isUrl);
+                        return SUPPORTED_COLUMN_TYPES.text || !(this.isBoolean || this.isDate || this.isEmail || this.isLocation || this.isNumber || this.isPhone || this.isUrl);
                     }
                 })
             );

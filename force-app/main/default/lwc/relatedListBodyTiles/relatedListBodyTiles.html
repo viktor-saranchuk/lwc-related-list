@@ -35,22 +35,47 @@
                                             ></lightning-formatted-date-time>
                                         </template>
                                         <template lwc:if={field.isEmail}>
-
+                                            <lightning-formatted-email
+                                                hide-icon="true"
+                                                label={field.label}
+                                                value={field.value}
+                                            ></lightning-formatted-email>
                                         </template>
                                         <template lwc:if={field.isLocation}>
-
+                                            <lightning-formatted-location
+                                                latitude={field.latitude}
+                                                longitude={field.longitude}
+                                            ></lightning-formatted-location>
                                         </template>
                                         <template lwc:if={field.isNumber}>
-
+                                            <lightning-formatted-number
+                                                currency-code={field.column.typeAttributes.currencyCode}
+                                                currency-display-as={field.column.typeAttributes.currencyDisplayAs}
+                                                format-style={field.column.typeAttributes.formatStyle}
+                                                maximum-fraction-digits={field.column.typeAttributes.maximumFractionDigits}
+                                                maximum-significant-digits={field.column.typeAttributes.maximumSignificantDigits}
+                                                minimum-fraction-digits={field.column.typeAttributes.minimumFractionDigits}
+                                                minimum-integer-digits={field.column.typeAttributes.minimumIntegerDigits}
+                                                minimum-significant-digits={field.column.typeAttributes.minimumSignificantDigits}
+                                                value={field.value}
+                                            ></lightning-formatted-number>
                                         </template>
                                         <template lwc:if={field.isPhone}>
-
+                                            <lightning-formatted-phone value={field.value}></lightning-formatted-phone>
                                         </template>
                                         <template lwc:if={field.isUrl}>
-
+                                            <lightning-formatted-url
+                                                label={field.label}
+                                                target={field.column.typeAttributes.target}
+                                                tooltip={field.column.typeAttributes.tooltip}
+                                                value={field.value}
+                                            ></lightning-formatted-url>
                                         </template>
                                         <template lwc:if={field.isText}>
-
+                                            <lightning-formatted-text 
+                                                value={field.value}
+                                                linkify={field.column.typeAttributes.linkify}
+                                            ></lightning-formatted-text>
                                         </template>
                                     </dd>
                                 </template>
