@@ -4,6 +4,7 @@
 
 .slds-page-header {
     border-radius: var(--slds-g-radius-border-1);
+    min-height: var(--slds-g-sizing-11);
 }
 
 .slds-page-header.no-bottom-border-radius {
@@ -22,6 +23,10 @@
 .slds-media__body.slds-grid.slds-grid_vertical {
     line-height: var(--slds-g-font-lineheight-1);
     align-self: center;
+}
+
+.slds-media {
+    min-height: var(--slds-g-sizing-9);
 }
 
 c-skeleton {
