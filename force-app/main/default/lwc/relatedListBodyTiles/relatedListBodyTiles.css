@@ -13,6 +13,8 @@ lightning-layout-item.tile .slds-col:first-child, lightning-layout-item.tile .sl
 
 lightning-layout.slds-border_bottom:has(c-skeleton) {
     border-bottom: none;
+    -webkit-mask-image: linear-gradient(to bottom, black 30%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 30%, transparent 100%);
 }
 
 c-skeleton.skeleton-body.odd-skeleton {
