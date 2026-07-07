@@ -88,9 +88,7 @@
                         <c-filters-pane instance-id={instanceId} filters={filters} onclose={closeFilters} onapply={applyFilters}></c-filters-pane>
                     </div>
                 </div>
-                
             </template>
-
             <template lwc:if={data}>
                 <div class="slds-col slds-border_top slds-scrollable_y body-table-container slds-is-relative">
                     <tempalte lwc:if={data.length}>
@@ -109,14 +107,14 @@
                     <c-related-list-body-initial columns={columns} number-of-rows={pageSize} show-row-number-column hide-checkbox-column={viewMode.isCompact}></c-related-list-body-initial>
                 </div>
             </tempalte>
+        </template>
 
-            <template lwc:if={viewMode.isCompact}>
-                <template lwc:if={data}>
-                    <template lwc:if={data.length}>
-                        <div class="slds-card__footer slds-m-top_none">
-                            <lightning-formatted-url value={viewAllUrl} label={labels.viewAll}></lightning-formatted-url>
-                        </div>
-                    </template>
+        <template lwc:if={viewMode.isCompact}>
+            <template lwc:if={data}>
+                <template lwc:if={data.length}>
+                    <div class="slds-card__footer slds-m-top_none">
+                        <lightning-formatted-url value={viewAllUrl} label={labels.viewAll}></lightning-formatted-url>
+                    </div>
                 </template>
             </template>
         </template>
