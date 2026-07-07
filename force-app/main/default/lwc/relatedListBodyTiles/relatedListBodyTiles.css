@@ -1,0 +1,3 @@
+lightning-layout-item.tile .slds-col:first-child, lightning-layout-item.tile .slds-col:last-child {
+    max-width: fit-content;
+}

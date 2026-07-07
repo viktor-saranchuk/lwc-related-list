@@ -79,48 +79,7 @@
         </c-related-list-header>
 
         <template lwc:if={listType.isTiles}>
-            <lightning-layout multiple-rows>
-                <template lwc:if={data}>
-                    <template for:each={data} for:item="tile">
-                        <lightning-layout-item key={tile.id} size="12" small-device-size="12" medium-device-size="6" large-device-size="4" class="slds-p-around_medium tile">
-                            <div class="slds-grid">
-                                <div class="slds-col">
-                                    <lightning-icon icon-name={iconName}></lightning-icon>
-                                </div>
-                                <div class="slds-col">
-                                    <p><lightning-formatted-url label={tile.title.label} href={tile.title.value}></lightning-formatted-url></p>
-                                </div>
-                                <div class="slds-col">
-                                    <template lwc:if={tile.actions}>
-                                        <lightning-button-menu icon-size="x-small" menu-alignment="auto">
-                                            <template for:each={tile.actions} for:item="action">
-                                                <lightning-menu-item 
-                                                    key={action.name}
-                                                    value={action.name}
-                                                    label={action.label}
-                                                    disabled={action.disabled}
-                                                    checked={action.checked}
-                                                    download={action.download}
-                                                    draft-alternative-text={action.dtaftAlternativeText}
-                                                    href={action.href}
-                                                    icon-name={action.iconName}
-                                                    icon-type={action.iconType}
-                                                    is-draft={action.isDraft}
-                                                    prefix-icon-name={action.prefixIconName}
-                                                    target={action.target}>
-                                                </lightning-menu-item>
-                                            </template>
-                                        </lightning-button-menu>
-                                    </template>
-                                </div>
-                            </div>
-                        </lightning-layout-item>
-                    </template>
-                </template>
-                <template lwc:else>
-                    SKELETON
-                </template>
-            </lightning-layout>
+            <c-related-list-body-tiles data={data} columns={columns} icon-name={iconName}></c-related-list-body-tiles>
         </template>
         <template lwc:if={listType.isTable}>
             <template lwc:if={showQuickFilters}>

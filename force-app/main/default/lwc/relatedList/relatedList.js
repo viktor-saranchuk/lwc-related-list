@@ -17,7 +17,7 @@ import {
     COLUMN_FILTER_TYPES_MAPPING
 } from './constants'
 
-import {areArraysEqual, calculateDelay, createTileData} from './helper'
+import {areArraysEqual, calculateDelay} from './helper'
 
 export default class RelatedList extends LightningElement {
     /** private properties */
@@ -79,11 +79,6 @@ export default class RelatedList extends LightningElement {
 
     @api
     get data() {
-        if (this.listType.isTiles) {
-            const rowActions = this.columns?.find(({ type }) => type === 'action')?.typeAttributes?.rowActions;
-            return createTileData(this._data, rowActions);
-        }
-
         return this._data;
     }
     set data(value) {
