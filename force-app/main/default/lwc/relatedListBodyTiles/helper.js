@@ -1,7 +1,7 @@
 import { UNSUPPORTED_FIELDS, UNSUPPORTED_COLUMN_TYPES, SUPPORTED_COLUMN_TYPES } from './constants';
 
 export const createTileData = (data, rowActions, columns) => {
-    return data.map(record => ({
+    return data?.map(record => ({
         record,
         actions: getTileRowActions(record, rowActions),
         get id() {

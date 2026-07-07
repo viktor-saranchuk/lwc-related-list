@@ -79,7 +79,7 @@
         </c-related-list-header>
 
         <template lwc:if={listType.isTiles}>
-            <c-related-list-body-tiles data={data} columns={columns} icon-name={iconName} onrowaction={handleRowAction}></c-related-list-body-tiles>
+            <c-related-list-body-tiles data={data} columns={columns} number-of-rows-initial={pageSize} icon-name={iconName} onrowaction={handleRowAction}></c-related-list-body-tiles>
         </template>
         <template lwc:if={listType.isTable}>
             <template lwc:if={showQuickFilters}>

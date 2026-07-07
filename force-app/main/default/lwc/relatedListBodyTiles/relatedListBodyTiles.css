@@ -1,3 +1,20 @@
 lightning-layout-item.tile .slds-col:first-child, lightning-layout-item.tile .slds-col:last-child {
     max-width: fit-content;
 }
+
+.skeleton-icon {
+    --skeleton-width: 2rem;
+    --skeleton-height: 2rem;
+}
+
+.skeleton-body {
+    --skeleton-height: .75rem;
+}
+
+lightning-layout.slds-border_bottom:has(c-skeleton) {
+    border-bottom: none;
+}
+
+c-skeleton.skeleton-body.odd-skeleton {
+    --skeleton-width: 50%;
+}

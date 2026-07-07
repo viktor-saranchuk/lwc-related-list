@@ -36,8 +36,8 @@ export default class RelatedListBodyInitial extends LightningElement {
     hideCheckboxColumn;
 
     get rows() {
-    return Array.from({ length: this.numberOfRows ?? this._numberOfRows }, (_, i) => ({ index: i }));
-}
+        return Array.from({ length: this.numberOfRows ?? this._numberOfRows }, (_, i) => ({ index: i }));
+    }
 
     get disabledRows() {
         return this.rows?.map(({index}) => index) ?? [];

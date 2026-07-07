@@ -7,6 +7,9 @@ export default class RelatedListBodyTiles extends LightningElement {
     _columns;
 
     @api
+    numberOfRowsInitial;
+
+    @api
     iconName;
 
     @api
@@ -28,6 +31,10 @@ export default class RelatedListBodyTiles extends LightningElement {
         if (Array.isArray(value)) {
             this._columns = value;
         }
+    }
+
+    get rowsInitial() {
+        return Array.from({ length: this.numberOfRowsInitial ?? 0 }, (_, i) => ({ index: i }));
     }
 
     handleSelect(event) {

@@ -109,7 +109,30 @@
             </template>
         </template>
         <template lwc:else>
-            SKELETON
+            <template for:each={rowsInitial} for:item="row">
+                <lightning-layout-item key={row.index} size="12" small-device-size="12" medium-device-size="6" large-device-size="4" class="slds-p-around_medium tile">
+                    <div class="slds-grid slds-gutters_x-small">
+                        <div class="slds-col">
+                            <c-skeleton class="skeleton-icon"></c-skeleton>
+                        </div>
+                        <div class="slds-col">
+                            <div class="slds-m-top_x-small">
+                                <c-skeleton class="skeleton-body odd-skeleton"></c-skeleton>
+                            </div>
+                            <div class="slds-m-top_x-small">
+                                <c-skeleton class="skeleton-body"></c-skeleton>
+                            </div>
+                            <div class="slds-m-top_x-small">
+                                <c-skeleton class="skeleton-body odd-skeleton"></c-skeleton>
+                            </div>
+                            <div class="slds-m-top_x-small">
+                                <c-skeleton class="skeleton-body"></c-skeleton>
+                            </div>
+                        </div>
+                        <div class="slds-col"></div>
+                    </div>
+                </lightning-layout-item>
+            </template>
         </template>
     </lightning-layout>
 </template>
