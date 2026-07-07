@@ -17,7 +17,7 @@ import {
     COLUMN_FILTER_TYPES_MAPPING
 } from './constants'
 
-import {areArraysEqual} from './helper'
+import {areArraysEqual, calculateDelay, createTileData} from './helper'
 
 export default class RelatedList extends LightningElement {
     /** private properties */
@@ -79,6 +79,11 @@ export default class RelatedList extends LightningElement {
 
     @api
     get data() {
+        if (this.listType.isTiles) {
+            const rowActions = this.columns?.find(({ type }) => type === 'action')?.typeAttributes?.rowActions;
+            return createTileData(this._data, rowActions);
+        }
+
         return this._data;
     }
     set data(value) {
@@ -258,7 +263,7 @@ export default class RelatedList extends LightningElement {
             `${this.data.length}${this.hasMoreData ? '+' : ''} item${this.data.length !== 1 ? 's' : ''}`,
             `${
                 !!this.sortConfig.fieldNames?.length
-                ? `Sorted by ${this.columns.filter(({fieldName}) => this.sortConfig.fieldNames.includes(fieldName)).map(({label}) => label).join(', ')}`
+                ? `Sorted by ${this.columns?.filter(({fieldName}) => this.sortConfig?.fieldNames?.includes(fieldName)).map(({label}) => label).join(', ')}`
                 : ''
             }`,
             this.dataUpdatedAgo
@@ -332,10 +337,6 @@ export default class RelatedList extends LightningElement {
         return this.viewMode.isFull && this.listType.isEnhanced ? 'fixed' : 'auto';
     }
 
-    get recordActions() {
-        return this.columns?.find(({type}) => type === 'action')?.typeAttributes?.rowActions?.map(action => ({...action, value: action.name})) || [];
-    }
-
     /** methods */
 
     setLastDataSetAtCheckedAt = () => {
@@ -345,21 +346,11 @@ export default class RelatedList extends LightningElement {
             clearTimeout(this._lastDataSetAtCheckedAtTimoutId);
         }
 
-        const diffMs = this.lastDataSetAtCheckedAt - this.lastDataSetAt;
-        const diffMinutes = Math.floor(diffMs / (1000 * 60));
-        const diffHours = Math.floor(diffMinutes / 60);
+        const delay = calculateDelay(this.lastDataSetAtCheckedAt - this.lastDataSetAt);
 
-        let delay;
-
-        if (diffHours < 1) {
-            delay = 1000 * 60;
-        } else if (diffHours < 24) {
-            delay = 1000 * 60 * 60;
-        } else {
-            return;
+        if (!!delay) {
+            this._lastDataSetAtCheckedAtTimoutId = setTimeout(this.setLastDataSetAtCheckedAt, delay);
         }
-
-        this._lastDataSetAtCheckedAtTimoutId = setTimeout(this.setLastDataSetAtCheckedAt, delay);
     }
 
     /** event handlers */

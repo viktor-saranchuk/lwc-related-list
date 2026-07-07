@@ -48,3 +48,7 @@ h2.slds-card__header-title {
     z-index: 2;
     height: stretch;
 }
+
+lightning-layout-item.tile .slds-col:first-child, lightning-layout-item.tile .slds-col:last-child {
+    max-width: fit-content;
+}
