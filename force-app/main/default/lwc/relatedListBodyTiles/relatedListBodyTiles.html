@@ -2,12 +2,12 @@
     <lightning-layout multiple-rows class="slds-border_top slds-border_bottom">
         <template lwc:if={data}>
             <template for:each={data} for:item="tile">
-                <lightning-layout-item key={tile.id} size="12" small-device-size="12" medium-device-size="6" large-device-size="4" class="slds-p-around_medium tile">
-                    <div class="slds-grid slds-gutters_x-small">
+                <lightning-layout-item key={tile.id} size="12" small-device-size="12" medium-device-size="6" large-device-size="4" class="tile" padding="around-medium">
+                    <div class="slds-grid">
                         <div class="slds-col">
                             <lightning-icon icon-name={iconName}></lightning-icon>
                         </div>
-                        <div class="slds-col">
+                        <div class="slds-col slds-m-horizontal_x-small details">
                             <p><lightning-formatted-url label={tile.title.label} value={tile.title.value}></lightning-formatted-url></p>
                             <dl class="slds-list_horizontal slds-wrap">
                                 <template for:each={tile.fields} for:item="field">
@@ -110,7 +110,7 @@
         </template>
         <template lwc:else>
             <template for:each={rowsInitial} for:item="row">
-                <lightning-layout-item key={row.index} size="12" small-device-size="12" medium-device-size="6" large-device-size="4" class="slds-p-around_medium tile">
+                <lightning-layout-item key={row.index} size="12" small-device-size="12" medium-device-size="6" large-device-size="4" class="tile" padding="around-medium">
                     <div class="slds-grid slds-gutters_x-small">
                         <div class="slds-col">
                             <c-skeleton class="skeleton-icon"></c-skeleton>
