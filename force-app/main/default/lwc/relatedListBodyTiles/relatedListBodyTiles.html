@@ -17,7 +17,7 @@
                                         <template lwc:if={field.isBoolean}>
                                             <template lwc:if={field.value}><lightning-icon icon-name="utility:check"></lightning-icon></template>
                                         </template>
-                                        <template lwc:if={field.isDate}>
+                                        <template lwc:elseif={field.isDate}>
                                             <lightning-formatted-date-time
                                                 date-style={field.column.typeAttributes.dateStyle}
                                                 day={field.column.typeAttributes.day}
@@ -34,20 +34,20 @@
                                                 year={field.column.typeAttributes.year}
                                             ></lightning-formatted-date-time>
                                         </template>
-                                        <template lwc:if={field.isEmail}>
+                                        <template lwc:elseif={field.isEmail}>
                                             <lightning-formatted-email
                                                 hide-icon="true"
                                                 label={field.label}
                                                 value={field.value}
                                             ></lightning-formatted-email>
                                         </template>
-                                        <template lwc:if={field.isLocation}>
+                                        <template lwc:elseif={field.isLocation}>
                                             <lightning-formatted-location
                                                 latitude={field.latitude}
                                                 longitude={field.longitude}
                                             ></lightning-formatted-location>
                                         </template>
-                                        <template lwc:if={field.isNumber}>
+                                        <template lwc:elseif={field.isNumber}>
                                             <lightning-formatted-number
                                                 currency-code={field.column.typeAttributes.currencyCode}
                                                 currency-display-as={field.column.typeAttributes.currencyDisplayAs}
@@ -60,10 +60,10 @@
                                                 value={field.value}
                                             ></lightning-formatted-number>
                                         </template>
-                                        <template lwc:if={field.isPhone}>
+                                        <template lwc:elseif={field.isPhone}>
                                             <lightning-formatted-phone value={field.value}></lightning-formatted-phone>
                                         </template>
-                                        <template lwc:if={field.isUrl}>
+                                        <template lwc:elseif={field.isUrl}>
                                             <lightning-formatted-url
                                                 label={field.label}
                                                 target={field.column.typeAttributes.target}
@@ -71,7 +71,7 @@
                                                 value={field.value}
                                             ></lightning-formatted-url>
                                         </template>
-                                        <template lwc:if={field.isText}>
+                                        <template lwc:elseif={field.isText}>
                                             <lightning-formatted-text 
                                                 value={field.value}
                                                 linkify={field.column.typeAttributes.linkify}
