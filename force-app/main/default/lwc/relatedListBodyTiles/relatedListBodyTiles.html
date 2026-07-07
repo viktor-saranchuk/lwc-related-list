@@ -12,7 +12,7 @@
                         </div>
                         <div class="slds-col">
                             <template lwc:if={tile.actions}>
-                                <lightning-button-menu icon-size="x-small" menu-alignment="auto">
+                                <lightning-button-menu data-id={tile.id} icon-size="x-small" menu-alignment="auto" onselect={handleSelect}>
                                     <template for:each={tile.actions} for:item="action">
                                         <lightning-menu-item 
                                             key={action.name}

@@ -29,4 +29,14 @@ export default class RelatedListBodyTiles extends LightningElement {
             this._columns = value;
         }
     }
+
+    handleSelect(event) {
+        const tile = this.data.find(({id}) => id === event.target.dataset.id);
+        this.dispatchEvent(new CustomEvent('rowaction', {
+            detail: {
+                action: tile.actions.find(({name}) => name === event.detail.value),
+                row: tile.record
+            }
+        }));
+    }
 }
