@@ -30,9 +30,9 @@ lightning-layout {
     container-name: tileGrid;
 }
 
-@container tileGrid (max-width: 600px) {
+@container tileGrid (max-width: 768px) {
   lightning-layout-item { width: 100%; }
 }
-@container tileGrid (min-width: 601px) and (max-width: 900px) {
+@container tileGrid (min-width: 769px) and (max-width: 900px) {
   lightning-layout-item { width: 50%; }
 }
