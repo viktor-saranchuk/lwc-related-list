@@ -236,16 +236,16 @@ export default class RelatedList extends LightningElement {
         const formFactor = this.formFactor;
         const viewMode = this.viewMode;
         return {
-            get isBasic() { return formFactor.isLarge && type === TYPE.basic },
-            get isEnhanced() { return formFactor.isLarge && (type === TYPE.enhanced || viewMode.isFull)  },
+            get isBasic() { return formFactor.isLarge && type === TYPE.basic; },
+            get isEnhanced() { return formFactor.isLarge && (type === TYPE.enhanced || viewMode.isFull);  },
             get isTiles() { 
                 return (formFactor.isSmall && viewMode.isFull) ||
                 (formFactor.isMedium && (viewMode.isFull || type === TYPE.tiles)) ||
                 (formFactor.isLarge && (viewMode.isCompact && type === TYPE.tiles)) ||
-                false
+                false;
             },
             get isNotEnhanced() { return !this.isEnhanced; },
-            get isTable() { return this.isBasic || this.isEnhanced }
+            get isTable() { return this.isBasic || this.isEnhanced; }
         }
     }
 

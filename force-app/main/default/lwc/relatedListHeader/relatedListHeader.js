@@ -54,10 +54,24 @@ export default class RelatedListHeader extends LightningElement {
     }
 
     get listType() {
+        const type = this.type;
+        const formFactor = this.formFactor;
+        const viewMode = this.viewMode;
         return {
-            isBasic: this.type === TYPE.basic,
-            isEnhanced: this.type === TYPE.enhanced || this.viewMode.isFull,
-            isTiles: this.type === TYPE.tiles
+            get isBasic() { return formFactor.isLarge && type === TYPE.basic; },
+            get isEnhanced() { return formFactor.isLarge && (type === TYPE.enhanced || viewMode.isFull);  },
+            get isTiles() { 
+                return (formFactor.isSmall && viewMode.isFull) ||
+                (formFactor.isMedium && (viewMode.isFull || type === TYPE.tiles)) ||
+                (formFactor.isLarge && (viewMode.isCompact && type === TYPE.tiles)) ||
+                false;
+            },
+            get isCompactBasic() {
+                return viewMode.isCompact && type === TYPE.basic;
+            },
+            get isCompactTiles() {
+                return viewMode.isCompact && type === TYPE.tiles;
+            }
         }
     }
 

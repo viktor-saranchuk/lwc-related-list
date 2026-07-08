@@ -21,6 +21,10 @@ lightning-layout.slds-border_bottom:has(c-skeleton) {
     mask-image: linear-gradient(to bottom, black 30%, transparent 100%);
 }
 
+lightning-layout.slds-border_top.slds-border_bottom:not(:has(lightning-layout)) {
+    display: none;
+}
+
 c-skeleton.skeleton-body.odd-skeleton {
     --skeleton-width: 50%;
 }
