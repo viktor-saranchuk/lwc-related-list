@@ -81,29 +81,31 @@
                                 </template>
                             </dl>
                         </div>
-                        <div class="slds-col">
-                            <template lwc:if={tile.actions}>
-                                <lightning-button-menu data-id={tile.id} icon-size="x-small" menu-alignment="auto" onselect={handleSelect}>
-                                    <template for:each={tile.actions} for:item="action">
-                                        <lightning-menu-item 
-                                            key={action.name}
-                                            value={action.name}
-                                            label={action.label}
-                                            disabled={action.disabled}
-                                            checked={action.checked}
-                                            download={action.download}
-                                            draft-alternative-text={action.dtaftAlternativeText}
-                                            href={action.href}
-                                            icon-name={action.iconName}
-                                            icon-type={action.iconType}
-                                            is-draft={action.isDraft}
-                                            prefix-icon-name={action.prefixIconName}
-                                            target={action.target}>
-                                        </lightning-menu-item>
-                                    </template>
-                                </lightning-button-menu>
-                            </template>
-                        </div>
+                        <tempalte lwc:if={formFactor.isLarge}>
+                            <div class="slds-col">
+                                <template lwc:if={tile.actions}>
+                                    <lightning-button-menu data-id={tile.id} icon-size="x-small" menu-alignment="auto" onselect={handleSelect}>
+                                        <template for:each={tile.actions} for:item="action">
+                                            <lightning-menu-item 
+                                                key={action.name}
+                                                value={action.name}
+                                                label={action.label}
+                                                disabled={action.disabled}
+                                                checked={action.checked}
+                                                download={action.download}
+                                                draft-alternative-text={action.dtaftAlternativeText}
+                                                href={action.href}
+                                                icon-name={action.iconName}
+                                                icon-type={action.iconType}
+                                                is-draft={action.isDraft}
+                                                prefix-icon-name={action.prefixIconName}
+                                                target={action.target}>
+                                            </lightning-menu-item>
+                                        </template>
+                                    </lightning-button-menu>
+                                </template>
+                            </div>
+                        </tempalte>
                     </div>
                 </lightning-layout-item>
             </template>

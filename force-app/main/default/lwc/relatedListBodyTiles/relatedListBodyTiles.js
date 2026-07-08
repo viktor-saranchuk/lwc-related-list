@@ -1,4 +1,5 @@
 import { LightningElement, api } from 'lwc';
+import FORM_FACTOR from "@salesforce/client/formFactor";
 
 import { createTileData } from './helper'
 
@@ -35,6 +36,14 @@ export default class RelatedListBodyTiles extends LightningElement {
 
     get rowsInitial() {
         return Array.from({ length: this.numberOfRowsInitial ?? 0 }, (_, i) => ({ index: i }));
+    }
+
+    get formFactor() {
+        return {
+            isSmall: FORM_FACTOR === 'Small',
+            isMedium: FORM_FACTOR === 'Medium',
+            isLarge: FORM_FACTOR === 'Large'
+        }
     }
 
     handleSelect(event) {

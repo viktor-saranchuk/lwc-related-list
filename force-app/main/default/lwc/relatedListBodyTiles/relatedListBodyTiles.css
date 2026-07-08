@@ -24,3 +24,15 @@ lightning-layout.slds-border_bottom:has(c-skeleton) {
 c-skeleton.skeleton-body.odd-skeleton {
     --skeleton-width: 50%;
 }
+
+lightning-layout {
+    container-type: inline-size;
+    container-name: tileGrid;
+}
+
+@container tileGrid (max-width: 600px) {
+  lightning-layout-item { width: 100%; }
+}
+@container tileGrid (min-width: 601px) and (max-width: 900px) {
+  lightning-layout-item { width: 50%; }
+}
